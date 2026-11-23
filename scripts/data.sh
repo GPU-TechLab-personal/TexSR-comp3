@@ -74,6 +74,10 @@ case "${1:-}" in
     need "$HOST/matsynth" "bash scripts/data.sh import ../TexSR-comp2 (or evalset)"
     need "$HOST/deeptex/matsynth_grouped/verify_report.json" "bash scripts/data.sh import ../TexSR-comp2 (or grouped)"
     ( cd docker && $DC run --rm -T dataprep python variants/deeptex/matsynth/matsynth_make_pairs.py --check-eval )
+    # A copied record's meta still names the pair folder it was built from; point it at the
+    # copy (old value kept). The verifier below then compares every PNG string against it.
+    ( cd docker && $DC run --rm -T dataprep python variants/util/rebase_grouped_root.py \
+        --tfrecord $GROUPED --root $DATA/datasets/matsynth )
     ( cd docker && $DC run --rm -T deeptex python /workspace/variants/deeptex/render_loss/build/texsr_verify_grouped.py \
         --tfrecord $GROUPED --root $DATA/datasets/matsynth ) ;;
   evalset)

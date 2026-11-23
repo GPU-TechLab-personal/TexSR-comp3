@@ -21,7 +21,7 @@ clashes: the paper trains a single network on all five channel types
 
 WHY THESE PAIRS MATCH THE EVALUATION
 ------------------------------------
-The 12 evaluation materials under runs/matsynth were built by
+The 12 evaluation materials under /data/TexSR-data/matsynth were built by
 scripts/common/matsynth_extract.py --mode resize: each source map (4096^2 or
 2048^2) is area-decimated to 512^2 for GT and, separately, to 128^2 for LR. The
 pairs here are built by calling THAT SCRIPT'S functions in the same order -
@@ -29,7 +29,7 @@ degrade() below is extract_row()'s resize branch - and then encoded with
 map_encode.to_rgb8, which deeptex_compare.load_as_rgb01 also calls. So the network
 trains on exactly the degradation and the byte encoding it is evaluated on.
 --check-eval proves it rather than asserting it: it rebuilds the 12 from the test
-shard and compares every pixel against runs/matsynth.
+shard and compares every pixel against /data/TexSR-data/matsynth.
 
 This also retires a mismatch the textures_db arm has: there, LR is bicubic
 (texsr_make_pairs.py) while the MatSynth eval LR is area.
@@ -302,7 +302,7 @@ def check_eval(args, eval_names):
         print("[FAIL] %d file(s) differ - training pairs would not match the eval degradation"
               % len(bad))
         return 1
-    print("[PASS] training-pair degradation is pixel-identical to runs/matsynth "
+    print("[PASS] training-pair degradation is pixel-identical to the evaluation set "
           "on all %d files" % (seen * len(MAPS) * 2))
     return 0
 
