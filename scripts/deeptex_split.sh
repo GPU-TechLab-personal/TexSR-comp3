@@ -24,8 +24,9 @@ LOGS=runs/logs
 mkdir -p "$LOGS" runs/cache/nv
 if docker compose version >/dev/null 2>&1; then DC="docker compose"; else DC="docker-compose"; fi
 [ -f docker/.env ] || { echo "docker/.env missing: cp docker/.env.example docker/.env" >&2; exit 1; }
-DAS=$(sed -n 's/^DAS_ROOT=//p' docker/.env | tail -1)
-VERIFY=${DAS%/}/TexSR-data/deeptex/matsynth_grouped/verify_report.json
+DATA_ROOT=$(sed -n 's/^DATA_ROOT=//p' docker/.env | tail -1)
+[ -n "$DATA_ROOT" ] || { echo "docker/.env has no DATA_ROOT (it was renamed from DAS_ROOT): cp docker/.env.example docker/.env" >&2; exit 1; }
+VERIFY=${DATA_ROOT%/}/TexSR-data/deeptex/matsynth_grouped/verify_report.json
 
 arm_name() {
   case "${1:-}" in

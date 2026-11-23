@@ -11,7 +11,7 @@ Docker 메모리 설정, Windows 업데이트 재부팅 막기 등 PC 준비는 
 git clone --recursive https://github.com/GPU-TechLab-personal/TexSR-comp3.git
 cd TexSR-comp3
 
-# 데이터 위치 설정 (기본값 DAS_ROOT=D:/ -> D:\MatSynth, D:\TexSR-data)
+# 데이터 위치 설정 (기본값 DATA_ROOT=D:/ -> D:\MatSynth, D:\TexSR-data)
 cp docker/.env.example docker/.env
 
 

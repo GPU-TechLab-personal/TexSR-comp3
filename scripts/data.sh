@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# The data every arm shares, on the data drive (DAS_ROOT in docker/.env, D:/ on the lab PC):
+# The data every arm shares, on the data drive (DATA_ROOT in docker/.env, D:/ on the lab PC):
 #
-#   <DAS_ROOT>/TexSR-data/                          (/data/TexSR-data in the containers)
+#   <DATA_ROOT>/TexSR-data/                          (/data/TexSR-data in the containers)
 #     matsynth/                     evaluation set: 12 materials, LR input + 512 GT
 #     datasets/matsynth/            512/128 training pairs <map>/{HR,LRx4}/, _meta/, pairs_manifest.json
 #     deeptex/matsynth_grouped/     grouped TFRecord (one material's 5 maps per Example) + verify_report.json
@@ -27,9 +27,10 @@ cd "$REPO"
 LOGS=runs/logs
 mkdir -p "$LOGS"
 if docker compose version >/dev/null 2>&1; then DC="docker compose"; else DC="docker-compose"; fi
-[ -f docker/.env ] || { echo "docker/.env missing: cp docker/.env.example docker/.env and set DAS_ROOT" >&2; exit 1; }
-DAS=$(sed -n 's/^DAS_ROOT=//p' docker/.env | tail -1)
-HOST=${DAS%/}/TexSR-data              # host side
+[ -f docker/.env ] || { echo "docker/.env missing: cp docker/.env.example docker/.env and set DATA_ROOT" >&2; exit 1; }
+DATA_ROOT=$(sed -n 's/^DATA_ROOT=//p' docker/.env | tail -1)
+[ -n "$DATA_ROOT" ] || { echo "docker/.env has no DATA_ROOT (it was renamed from DAS_ROOT): cp docker/.env.example docker/.env" >&2; exit 1; }
+HOST=${DATA_ROOT%/}/TexSR-data              # host side
 DATA=/data/TexSR-data                 # container side
 GROUPED=$DATA/deeptex/matsynth_grouped/matsynth_grouped_lrx4.tfrecord
 

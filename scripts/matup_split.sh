@@ -21,8 +21,9 @@ LOGS=runs/logs
 mkdir -p "$LOGS"
 if docker compose version >/dev/null 2>&1; then DC="docker compose"; else DC="docker-compose"; fi
 [ -f docker/.env ] || { echo "docker/.env missing: cp docker/.env.example docker/.env" >&2; exit 1; }
-DAS=$(sed -n 's/^DAS_ROOT=//p' docker/.env | tail -1)
-EVAL=${DAS%/}/TexSR-data/matsynth
+DATA_ROOT=$(sed -n 's/^DATA_ROOT=//p' docker/.env | tail -1)
+[ -n "$DATA_ROOT" ] || { echo "docker/.env has no DATA_ROOT (it was renamed from DAS_ROOT): cp docker/.env.example docker/.env" >&2; exit 1; }
+EVAL=${DATA_ROOT%/}/TexSR-data/matsynth
 DRIVER=/workspace/variants/matup_split/driver.py
 
 detached() {  # stage, shell command

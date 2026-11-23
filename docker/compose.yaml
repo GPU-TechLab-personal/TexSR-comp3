@@ -3,7 +3,7 @@
 #
 # Container paths are fixed, so every path in the code and configs is valid on any host:
 #   /workspace -> this repository (code, submodules, configs, runs/)
-#   /data      -> DAS_ROOT from .env (the data drive, D:/ on the lab PC):
+#   /data      -> DATA_ROOT from .env (the data drive, D:/ on the lab PC):
 #                 /data/MatSynth/data/*.parquet   MatSynth as downloaded (read only by convention)
 #                 /data/TexSR-data/               everything derived from it - evaluation set,
 #                                                 training pairs, grouped TFRecord, baseline
@@ -34,7 +34,7 @@ services:
     working_dir: /workspace
     volumes:
       - ..:/workspace
-      - ${DAS_ROOT:-./_das_placeholder}:/data
+      - ${DATA_ROOT:-./_data_root_placeholder}:/data
     stdin_open: true
     tty: true
 
@@ -50,7 +50,7 @@ services:
       CUDA_CACHE_MAXSIZE: "4294967296"
     volumes:
       - ..:/workspace
-      - ${DAS_ROOT:-./_das_placeholder}:/data
+      - ${DATA_ROOT:-./_data_root_placeholder}:/data
     shm_size: "8gb"
     <<: *gpu
     stdin_open: true
@@ -63,7 +63,7 @@ services:
     working_dir: /workspace/external/matup_egsr
     volumes:
       - ..:/workspace
-      - ${DAS_ROOT:-./_das_placeholder}:/data
+      - ${DATA_ROOT:-./_data_root_placeholder}:/data
     # MatUp's DataLoader uses num_workers=8, pin_memory=True: the default 64 MB
     # /dev/shm kills the workers with a bus error.
     shm_size: "8gb"

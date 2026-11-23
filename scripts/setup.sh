@@ -56,11 +56,12 @@ common() {
   docker info >/dev/null 2>&1 || die "docker is not running (start Docker Desktop) or needs sudo"
   [ -n "$DC" ] || die "neither 'docker compose' nor 'docker-compose' is available"
   echo "compose: $($DC version | head -1)"
-  [ -f docker/.env ] || die "docker/.env missing: cp docker/.env.example docker/.env and set DAS_ROOT"
-  local das n; das=$(sed -n 's/^DAS_ROOT=//p' docker/.env | tail -1)
-  n=$(ls "$das"/MatSynth/data/*.parquet 2>/dev/null | wc -l)
-  echo "DAS_ROOT=$das   MatSynth parquet files: $n (431 train + 8 test when complete)"
-  echo "data root $das/TexSR-data: $(ls "$das"/TexSR-data 2>/dev/null | tr '
+  [ -f docker/.env ] || die "docker/.env missing: cp docker/.env.example docker/.env and set DATA_ROOT"
+  local root n; root=$(sed -n 's/^DATA_ROOT=//p' docker/.env | tail -1)
+  [ -n "$root" ] || die "docker/.env has no DATA_ROOT (it was renamed from DAS_ROOT): cp docker/.env.example docker/.env"
+  n=$(ls "$root"/MatSynth/data/*.parquet 2>/dev/null | wc -l)
+  echo "DATA_ROOT=$root   MatSynth parquet files: $n (431 train + 8 test when complete)"
+  echo "data root $root/TexSR-data: $(ls "$root"/TexSR-data 2>/dev/null | tr '
 ' ' ')(bash scripts/data.sh status)"
 
   step "common: submodules"

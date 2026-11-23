@@ -16,7 +16,7 @@ comp3 holds only what the split experiment needs. The maths, and what differs fr
   - `runs/matsynth/`: the evaluation set
   - `runs/datasets/matsynth/`: the pairs
   - `runs/deeptex/datasets/matsynth_grouped/`: the grouped TFRecord
-- **comp3:** all of it is under `<DAS_ROOT>/TexSR-data/` (D:/TexSR-data on the lab PC; `/data/TexSR-data` in the containers), next to MatSynth. This is the rule from now on: datasets and other data do not go inside a checkout.
+- **comp3:** all of it is under `<DATA_ROOT>/TexSR-data/` (D:/TexSR-data on the lab PC; `/data/TexSR-data` in the containers), next to MatSynth. This is the rule from now on: datasets and other data do not go inside a checkout.
 
 | what | comp2 | comp3 |
 |---|---|---|
