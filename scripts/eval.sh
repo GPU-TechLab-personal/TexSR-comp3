@@ -6,10 +6,13 @@
 #   bash scripts/eval.sh infer [NAME]          DeepTex arms -> runs/eval/<NAME>/maps/<arm>/   (deeptex container, detached)
 #                                              every arm of variants/eval/arms.py whose checkpoint exists;
 #                                              a missing checkpoint is skipped with a warning
+#   bash scripts/eval.sh montage [NAME] [ARGS] every arm vs GT as pictures -> runs/eval/<NAME>/montage/
+#                                              (matup container, detached; needs infer, not score);
+#                                              ARGS go to montage.py, e.g. --seeds 0,1,2 --zoom 64 --zoom-at 200,120
 #   bash scripts/eval.sh score [NAME] [ARGS]   bilinear + MatUp + every metric -> runs/eval/<NAME>/{report.json,summary.md}
 #                                              (matup container, detached); ARGS go to evaluate.py, e.g. --no-perceptual
 #   bash scripts/eval.sh status                what is running, log tails, what each stage has written
-#   bash scripts/eval.sh stop STAGE            stop a detached stage (infer / score)
+#   bash scripts/eval.sh stop STAGE            stop a detached stage (infer / montage / score)
 #
 # Detached stages run in a container named eval_<stage>; closing the terminal does not stop them.
 # Logs: runs/logs/eval_<stage>.log (EXIT code on the last line when it ends).
@@ -49,6 +52,10 @@ detached() {  # stage, service, shell command
 case "$STAGE" in
   infer)
     detached infer deeptex "python /workspace/variants/eval/infer_deeptex.py --name $NAME" ;;
+  montage)
+    EXTRA=""
+    for a in "$@"; do EXTRA="$EXTRA '${a//\'/}'"; done
+    detached montage matup "python /workspace/variants/eval/montage.py --name $NAME$EXTRA" ;;
   score)
     EXTRA=""
     for a in "$@"; do EXTRA="$EXTRA '${a//\'/}'"; done
@@ -59,7 +66,7 @@ case "$STAGE" in
     # `stop infer` parses "infer" as NAME above
     docker stop "eval_${NAME:?}" ;;
   status)
-    for s in infer score; do
+    for s in infer montage score; do
       n=eval_$s
       [ -n "$(docker ps -aq -f "name=^${n}$")" ] || continue
       docker inspect -f "== $n: {{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} started={{.State.StartedAt}}" "$n"
@@ -71,6 +78,7 @@ case "$STAGE" in
       for a in "$d"maps/*/; do
         [ -d "$a" ] && echo "   maps $(basename "$a"): $(ls -d "$a"*/ 2>/dev/null | wc -l) material(s)"
       done
+      [ -d "$d/montage" ] && echo "   montage: $(ls "$d"montage/*_zoom.png 2>/dev/null | wc -l) material(s), $(ls "$d"montage/overview_*.png 2>/dev/null | wc -l) overview(s)"
       [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
     done
     for d in runs/deeptex/deeptex_split_nb23/checkpoints/esrgan_40k runs/deeptex/deeptex_split_nb7/checkpoints/esrgan_40k; do

@@ -17,10 +17,10 @@ The formulas, what differs from the original papers and why, are in **[docs/SPLI
 | `scripts/data.sh` | the data drive: import comp2's data, or build it from MatSynth |
 | `scripts/deeptex_split.sh` | DeepTex split: unit test, parameter counts, smoke, 40k training |
 | `scripts/matup_split.sh` | MatUp shared / split MLP on the 12 evaluation materials |
-| `scripts/eval.sh` | every arm on the 12 evaluation materials: map and render metrics |
+| `scripts/eval.sh` | every arm on the 12 evaluation materials: montages (`montage`), map and render metrics (`score`) |
 | `variants/deeptex/split/` | the joint split trainer, group packing, tests |
 | `variants/matup_split/` | SplitMLP, the MatUp wrapper, the run driver |
-| `variants/eval/` | inference and metrics for every arm |
+| `variants/eval/` | inference, montages (`montage.py`, `sheets.py`) and metrics for every arm |
 | `D:/TexSR-data/` | data (outside the repository): evaluation set, pairs, grouped TFRecord, baseline checkpoints |
 | `runs/` | everything a run produces (gitignored except `runs/eval/*/{report.json,summary.md}`) |
 
