@@ -78,7 +78,10 @@ case "$STAGE" in
       for a in "$d"maps/*/; do
         [ -d "$a" ] && echo "   maps $(basename "$a"): $(ls -d "$a"*/ 2>/dev/null | wc -l) material(s)"
       done
-      [ -d "$d/montage" ] && echo "   montage: $(ls "$d"montage/*_zoom.png 2>/dev/null | wc -l) material(s), $(ls "$d"montage/overview_*.png 2>/dev/null | wc -l) overview(s)"
+      for e in deeptex_shared_vs_split matup_shared_vs_split; do
+        [ -d "$d/montage" ] && n=$(ls "$d"montage/${e}_*_zoom.png 2>/dev/null | wc -l) && [ "$n" -gt 0 ] && \
+          echo "   montage $e: $n material(s), $(ls "$d"montage/${e}_overview_*.png 2>/dev/null | wc -l) overview(s)"
+      done
       [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
     done
     for d in runs/deeptex/deeptex_split_nb23/checkpoints/esrgan_40k runs/deeptex/deeptex_split_nb7/checkpoints/esrgan_40k; do

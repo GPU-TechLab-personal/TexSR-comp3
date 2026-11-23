@@ -30,22 +30,32 @@ map) on comp3's evaluation code, with the comp3 conventions:
            inferno, GT-invalid texels grey. The PSNR in its corner is that render's
            over the GT-valid texels of the cell (the whole crop, or the zoom window).
 
-ROWS     GT | bilinear | DeepTex shared, split nb23, split nb7 | MatUp shared s<k>,
-         split s<k> for each --seeds k (default 0 = MatUp as released). An arm with
-         no output at all is left out (warning); one missing a material draws n/a.
+EXPERIMENTS  one set of sheets each, the experiment in every file name (<exp>):
+  deeptex_shared_vs_split   GT | bilinear | DeepTex shared (renloss_21), split nb23,
+                            split nb7
+  matup_shared_vs_split     GT | bilinear | MatUp shared MLP s<k>, split MLP s<k> for
+                            each --seeds k (default 0 = MatUp as released)
+  An arm with no output at all is left out (warning); one missing a material is left
+  out of that material's sheets (--keep-missing draws an n/a row instead). An
+  experiment with no arm at all writes nothing.
 
 OUTPUTS  <eval-root>/<name>/montage/
-  <material>.png        the whole crop; the zoom window outlined in yellow
-  <material>_zoom.png   the same rows and columns on the zoom window, texels enlarged
-                        (nearest). Window: --zoom texels square, at --zoom-at y,x
-                        (top-left, crop coordinates) or, by default, where the GT
-                        EVAL_LIGHT render has the most |grad| (sheets.busiest_window).
-  overview_<key>.png    materials down, rows across, for key in baseColor, normal,
-                        roughness, metallic, render (EVAL_LIGHT), error (heat)
-  montage.json          per material: border, crop, zoom window, sources, EVAL PSNR
-                        (whole crop) per row, missing rows
+  <exp>_<material>.png        the whole crop; the zoom window outlined in yellow
+  <exp>_<material>_zoom.png   the same rows and columns on the zoom window, texels
+                              enlarged (nearest). Window: --zoom texels square, at
+                              --zoom-at y,x (top-left, crop coordinates) or, by
+                              default, where the GT EVAL_LIGHT render has the most
+                              |grad| (sheets.busiest_window); the same for both
+                              experiments.
+  <exp>_overview_<key>.png    materials down, rows across, for key in baseColor,
+                              normal, roughness, metallic, render (EVAL_LIGHT), error
+  montage.json                per material: border, crop, zoom window, sources, EVAL
+                              PSNR (whole crop) per row, missing rows, files
+  The first version's names (<material>.png, <material>_zoom.png, overview_<key>.png)
+  are removed when their replacements are written.
 """
 import argparse
+import glob
 import json
 import os
 import sys
@@ -72,6 +82,13 @@ OV_KEYS = list(MAP4) + ["render", "error"]
 HEADS = list(MAP4) + ["render EVAL_LIGHT (67 deg)", "render held-out grazing",
                       "|render - GT| x%g (EVAL)" % S.HEAT_GAIN]
 GROUP = {"gt": "gt", "bilinear": "bilinear", "deeptex": "deeptex", "matup": "matup"}
+# One set of sheets per experiment: (file-name prefix, row group, title). GT and
+# bilinear (SHARED_GROUPS) head every experiment's sheets.
+EXPERIMENTS = (
+    ("deeptex_shared_vs_split", "deeptex", "DeepTextures: shared vs split"),
+    ("matup_shared_vs_split", "matup", "MatUp: shared vs split MLP"),
+)
+SHARED_GROUPS = ("gt", "bilinear")
 
 
 def label(col):
@@ -202,16 +219,29 @@ def process(mat_dir, cols, args, device, lights):
 
 # ------------------------------------------------------------------- pictures
 
+def in_experiment(group, exp_group):
+    return group in SHARED_GROUPS or group == exp_group
+
+
+def remove_if(path):
+    if os.path.isfile(path):
+        os.remove(path)
+
+
 def write_material(out, info, rows, mask_hw, args):
+    """One full and one zoom sheet per experiment that has a row for this material;
+    returns {row key: row} for the overviews."""
     name, side = info["material"], info["side"]
     gt_eval = rows[0]["eval"]
     zm = info["zoom"]
     box = (zm["y0"], zm["x0"], zm["size"])
     present = [r for r in rows if r is not None]
+    for old in (name + ".png", name + "_zoom.png"):   # the first version's file names
+        remove_if(os.path.join(out, old))
 
-    def sheet_rows(size, cut):
+    def sheet_rows(sel, size, cut):
         out_rows = []
-        for r in present:
+        for r in sel:
             if r["kind"] == "missing":
                 cells = [S.placeholder(size, ["no output"])] * len(HEADS)
             else:
@@ -219,25 +249,32 @@ def write_material(out, info, rows, mask_hw, args):
             out_rows.append((r["label"], r["group"], cells))
         return out_rows
 
-    full_rows = sheet_rows(args.cell, None)
-    for c in full_rows[0][2][:6]:                     # the GT row: where the zoom is
-        S.draw_box(c, box, side)
     notes = ["%d^2 crop (MatUp's %d px rim removed from every row). Every arm rendered with "
              "the GT height; MatUp's renderer, raw maps." % (side, info["border"]),
              "Heat: |render - GT| x%g under EVAL_LIGHT (%.2f saturates), grey = GT-invalid "
-             "texels; PSNR over the cell's GT-valid texels. Yellow box = the _zoom sheet."
-             % (S.HEAT_GAIN, 1.0 / S.HEAT_GAIN)]
-    S.write_png(os.path.join(out, name + ".png"),
-                S.sheet("%s  -  %s" % (name, args.name), notes, HEADS, full_rows, args.cell))
-
+             "texels; PSNR over the cell's GT-valid texels. Yellow box = the area the _zoom "
+             "sheet enlarges." % (S.HEAT_GAIN, 1.0 / S.HEAT_GAIN)]
     znotes = ["Zoom: texels [%d:%d, %d:%d] of the %d^2 crop (%s), enlarged x%.1f with "
               "nearest - every screen block is one texel." % (
                   zm["y0"], zm["y0"] + zm["size"], zm["x0"], zm["x0"] + zm["size"], side,
                   zm["rule"], args.zoom_cell / float(zm["size"])),
-              notes[1].replace(" Yellow box = the _zoom sheet.", "")]
-    S.write_png(os.path.join(out, name + "_zoom.png"),
-                S.sheet("%s  -  zoom  -  %s" % (name, args.name), znotes, HEADS,
-                        sheet_rows(args.zoom_cell, box), args.zoom_cell))
+              notes[1].split(" Yellow box")[0]]
+    info["files"] = []
+    for prefix, exp_group, title in EXPERIMENTS:
+        sel = [r for r in present if in_experiment(r["group"], exp_group)]
+        if not any(r["group"] == exp_group for r in sel):
+            continue
+        full_rows = sheet_rows(sel, args.cell, None)
+        for c in full_rows[0][2][:6]:                 # the GT row: where the zoom is
+            S.draw_box(c, box, side)
+        f_full, f_zoom = "%s_%s.png" % (prefix, name), "%s_%s_zoom.png" % (prefix, name)
+        S.write_png(os.path.join(out, f_full),
+                    S.sheet("%s  -  %s  -  %s" % (title, name, args.name), notes, HEADS,
+                            full_rows, args.cell))
+        S.write_png(os.path.join(out, f_zoom),
+                    S.sheet("%s  -  %s  -  zoom  -  %s" % (title, name, args.name), znotes,
+                            HEADS, sheet_rows(sel, args.zoom_cell, box), args.zoom_cell))
+        info["files"] += [f_full, f_zoom]
     return {r["key"]: r for r in present}
 
 
@@ -272,9 +309,10 @@ def main():
     ap.add_argument("--matup-root", default=A.MATUP_RUNS)
     ap.add_argument("--seeds", default="0", help="MatUp seed indices k shown (default 0)")
     ap.add_argument("--material", default="", help="one material (default: all)")
-    ap.add_argument("--cell", type=int, default=256, help="cell size of <material>.png")
+    ap.add_argument("--cell", type=int, default=256, help="cell size of <exp>_<material>.png")
     ap.add_argument("--zoom", type=int, default=96, help="zoom window, texels square")
-    ap.add_argument("--zoom-cell", type=int, default=288, help="cell size of <material>_zoom.png")
+    ap.add_argument("--zoom-cell", type=int, default=288,
+                    help="cell size of <exp>_<material>_zoom.png")
     ap.add_argument("--zoom-at", default="", help="y,x top-left of the zoom window (crop coords)")
     ap.add_argument("--ov-cell", type=int, default=160, help="cell size of the overviews")
     ap.add_argument("--no-overview", action="store_true")
@@ -322,12 +360,22 @@ def main():
                     ov[k].append((info["material"], cells[k]))
 
     if not args.no_overview and not args.material:
-        for k in OV_KEYS:
-            what = {"render": "render EVAL_LIGHT (GT height)",
-                    "error": "|render - GT| x%g EVAL_LIGHT, EVAL PSNR" % S.HEAT_GAIN}.get(k, k)
-            S.write_png(os.path.join(out, "overview_%s.png" % k),
-                        S.overview("%s  -  %s  -  %d materials" % (what, args.name, len(ov[k])),
-                                   ov[k], heads, groups, args.ov_cell))
+        for old in glob.glob(os.path.join(out, "overview_*.png")):   # first version's names
+            os.remove(old)
+        for prefix, exp_group, title in EXPERIMENTS:
+            idx = [i for i, g in enumerate(groups) if in_experiment(g, exp_group)]
+            if not any(groups[i] == exp_group for i in idx):
+                continue
+            for k in OV_KEYS:
+                what = {"render": "render EVAL_LIGHT (GT height)",
+                        "error": "|render - GT| x%g EVAL_LIGHT, EVAL PSNR" % S.HEAT_GAIN
+                        }.get(k, k)
+                rows_k = [(mat, [cells[i] for i in idx]) for mat, cells in ov[k]]
+                S.write_png(os.path.join(out, "%s_overview_%s.png" % (prefix, k)),
+                            S.overview("%s  -  %s  -  %s  -  %d materials" % (
+                                title, what, args.name, len(rows_k)),
+                                rows_k, [heads[i] for i in idx], [groups[i] for i in idx],
+                                args.ov_cell))
 
     with open(os.path.join(out, "montage.json"), "w") as fh:
         json.dump(rc.clean({"name": args.name, "rows": keys, "displays": heads,
