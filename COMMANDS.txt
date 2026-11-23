@@ -1,0 +1,119 @@
+TexSR-comp3 실행 명령어 모음 (연구실 PC: Windows + RTX 5090)
+=====================================================================
+맵 그룹 분할 실험 (docs/SPLIT_THEORY.md). 명령은 전부 "Git Bash"에서, 레포 폴더(TexSR-comp3)에서 실행합니다.
+오래 걸리는 단계는 컨테이너로 따로 떠서 돌기 때문에 Git Bash 창이나 원격 데스크톱을 닫아도 계속 진행됩니다.
+Docker 메모리 설정, Windows 업데이트 재부팅 막기 등 PC 준비는 comp2 COMMANDS.txt [0]과 같습니다.
+
+
+[1] 코드 받기
+---------------------------------------------------------------------
+# 서브모듈(DeepTextures, esrgan-tf2, MatUp, KAIR)까지 같이 받음
+git clone --recursive https://github.com/GPU-TechLab-personal/TexSR-comp3.git
+cd TexSR-comp3
+
+# 데이터 위치 설정 (기본값 DAS_ROOT=D:/ -> D:\MatSynth, D:\TexSR-data)
+cp docker/.env.example docker/.env
+
+
+[2] 환경 설치 (이미지 빌드 + 가중치 + GPU 확인)
+---------------------------------------------------------------------
+# 실패하거나 끊겨도 같은 명령을 다시 실행하면 이어서 진행. 끝에 OK / FAILED 요약
+#   data      dataprep 이미지
+#   deeptex   deeptex 이미지 (TF 2.10). 처음 한 번 5090용 커널을 즉석 컴파일함 (7~10분 멈춘 것처럼 보임, 정상)
+#   matup     MatUp SwinIR-L 가중치 + matup 이미지 (lpips, flip 포함)
+mkdir -p runs/logs && bash scripts/setup.sh 2>&1 | tee -a runs/logs/setup.log
+
+
+[3] 데이터 - 앞으로 데이터는 전부 D:\TexSR-data 에 둡니다 (레포 안에 두지 않음)
+---------------------------------------------------------------------
+# D:\TexSR-data\
+#   matsynth\                          평가 재질 12개 (LR 입력 + 512 GT)
+#   datasets\matsynth\                 512/128 학습 쌍
+#   deeptex\matsynth_grouped\          grouped TFRecord (+ verify_report.json)
+#   checkpoints\deeptex_renloss_21\    공유 기준 모델 체크포인트 (comp2에서 학습한 것)
+
+# 3-1 comp2가 만든 데이터를 복사 (robocopy, 끊기면 다시 실행하면 이어서)
+#     인자는 comp2 레포 폴더 경로
+bash scripts/data.sh import ../TexSR-comp2
+
+# 3-2 복사본 검증: 학습 쌍 열화 == 평가 열화 [PASS], grouped TFRecord 바이트 검증 PASS
+bash scripts/data.sh verify
+
+# 상태 (무엇이 D:\TexSR-data 에 있는지)
+bash scripts/data.sh status
+
+# (comp2 데이터가 없을 때만) MatSynth에서 새로 만들기: evalset -> check -> pairs -> grouped
+#   bash scripts/data.sh evalset
+#   bash scripts/data.sh check
+#   bash scripts/data.sh pairs        (1시간 안팎, 백그라운드)
+#   bash scripts/data.sh grouped      (백그라운드)
+
+
+[4] DeepTex 분할 학습 (세 네트워크 공동 학습, nb=23 / nb=7)
+---------------------------------------------------------------------
+# 4-1 분할 수식 검사 (CPU, 1분): gradient 분리/공동학습 식, 파라미터 수, 그룹 묶기. 끝에 OK
+bash scripts/deeptex_split.sh test
+
+# 4-2 파라미터 수 확인 (nb23: 16,697,987 x 3, nb7: 5,187,203 x 3, 끝에 OK 표시)
+bash scripts/deeptex_split.sh params
+
+# 4-3 200 step 시험 학습 (끝에 EXIT 0, [metrics]의 steps_per_sec / gpu_mem_mb 확인)
+bash scripts/deeptex_split.sh smoke nb23
+bash scripts/deeptex_split.sh smoke nb7
+
+# 4-4 본 학습 40k step - 한 번에 하나씩 (끊기면 다시 실행 -> 마지막 체크포인트부터)
+bash scripts/deeptex_split.sh train nb23
+bash scripts/deeptex_split.sh train nb7
+
+# 진행 상황 / 로그 / 중지
+bash scripts/deeptex_split.sh status
+tail -f runs/logs/deeptex_split_nb23_train.log
+bash scripts/deeptex_split.sh stop train nb23
+
+# (comp2 체크포인트를 못 가져왔을 때만) 공유 기준 모델 재학습 - comp2와 같은 설정
+#   bash scripts/deeptex_split.sh train shared
+#   이때 체크포인트는 runs/deeptex/deeptex_renloss_21/checkpoints/esrgan_40k (평가 때 경로 지정)
+
+
+[5] MatUp 공유 / 분할 MLP (평가 재질 12개 x seed 3개)
+---------------------------------------------------------------------
+# DeepTex 학습과 같이 돌려도 되지만 느려짐. VRAM이 부족하면 하나씩
+# 5-1 SplitMLP 검사 (파라미터 수 309,511 / 408,839, 채널 분리). 끝에 OK
+bash scripts/matup_split.sh test
+
+# 5-2 재질마다 LR 렌더 + SwinIR-L x4 렌더를 한 번만 만들어 캐시 (백그라운드, 재질당 1분 안팎)
+bash scripts/matup_split.sh prep
+
+# 5-3 최적화: 12 재질 x {matup_shared, matup_split} x seed {0,1,2} = 72회 (백그라운드, 회당 1~2분)
+#     끊기면 다시 실행 -> 끝난 run은 건너뜀
+bash scripts/matup_split.sh optim
+
+# 진행 상황 / 로그 / 중지
+bash scripts/matup_split.sh status
+tail -f runs/logs/matup_split_optim.log
+bash scripts/matup_split.sh stop optim
+
+
+[6] 평가 (평가 재질 12개, 모든 arm)
+---------------------------------------------------------------------
+# 6-1 DeepTex arm 추론 (공유 renloss_21, 분할 nb23 / nb7 중 체크포인트가 있는 것)
+bash scripts/eval.sh infer
+
+# 6-2 지표 계산: 맵 PSNR/SSIM/normal 각도, 렌더 PSNR/l2,1/LPIPS/FLIP (모든 arm height = GT)
+bash scripts/eval.sh score
+
+# 진행 상황
+bash scripts/eval.sh status
+
+# 결과를 다른 PC로 (.gitignore가 runs/eval/*/report.json, summary.md만 올림)
+git add runs/eval && git commit -m "split results" && git push
+
+
+[결과 위치]
+---------------------------------------------------------------------
+runs/logs/                                         단계별 로그 (끝에 EXIT 코드)
+runs/deeptex/deeptex_split_nb23/checkpoints/       분할 nb=23 체크포인트 (30k/35k/40k)
+runs/deeptex/deeptex_split_nb7/checkpoints/        분할 nb=7 체크포인트
+runs/matup_split/cache/<재질>/                      MatUp LR 렌더, SwinIR 렌더 캐시
+runs/matup_split/<arm>/s<k>/<재질>/                 MatUp 결과 맵 (+ run.json)
+runs/eval/<이름>/                                   report.json, summary.md, maps/

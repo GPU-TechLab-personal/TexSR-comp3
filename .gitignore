@@ -1,0 +1,20 @@
+# everything a run produces (checkpoints, caches, logs, outputs) ...
+runs/*
+# ... except the evaluation summaries (numbers and tables, no images), so results
+# travel with git: runs/eval/<name>/{report.json,summary.md}
+!runs/eval/
+runs/eval/*
+!runs/eval/*/
+runs/eval/*/*
+!runs/eval/*/report.json
+!runs/eval/*/summary.md
+# data lives outside the repository (D:/TexSR-data, see COMMANDS.txt)
+# host-specific
+docker/.env
+# weights fetched at setup
+*.pth
+*.ckpt
+*.pt
+*.safetensors
+__pycache__/
+*.pyc

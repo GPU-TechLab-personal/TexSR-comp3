@@ -1,0 +1,72 @@
+# Run every command from this directory, so compose picks up ./.env
+#   cd docker && docker compose build
+#
+# Container paths are fixed, so every path in the code and configs is valid on any host:
+#   /workspace -> this repository (code, submodules, configs, runs/)
+#   /data      -> DAS_ROOT from .env (the data drive, D:/ on the lab PC):
+#                 /data/MatSynth/data/*.parquet   MatSynth as downloaded (read only by convention)
+#                 /data/TexSR-data/               everything derived from it - evaluation set,
+#                                                 training pairs, grouped TFRecord, baseline
+#                                                 checkpoints (docs/DEVIATIONS.md 2)
+#
+# GPU: built and tested for an RTX 50-series (Blackwell, sm_120) - see docs/DEVIATIONS.md.
+#   deeptex  TF 2.10.1 / CUDA 11.2, the pinned DeepTextures stack. No sm_120 kernels:
+#            the driver JIT-compiles TF's PTX on first use (~7-10 min, measured on an
+#            RTX 5080). The compiled kernels are kept in runs/cache/nv, so only the
+#            first container start of a fresh checkout pays that.
+#   matup    torch 2.7.1 / CUDA 12.8 (upstream pins torch 2.0.0, which has no sm_120).
+name: texsr
+
+x-gpu: &gpu
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
+services:
+  # MatSynth parquet -> PNG pairs. No GPU. Writes only under /data/TexSR-data.
+  dataprep:
+    build: ./dataprep
+    image: texsr/dataprep:py3.11
+    working_dir: /workspace
+    volumes:
+      - ..:/workspace
+      - ${DAS_ROOT:-./_das_placeholder}:/data
+    stdin_open: true
+    tty: true
+
+  # DeepTextures (+ MatUp render loss) training and inference.
+  deeptex:
+    build: ./deeptex
+    image: texsr/deeptex:tf2.10.1
+    working_dir: /workspace/external/DeepTextures
+    environment:
+      # Keep the driver's PTX->sm_120 JIT output between containers (default cache
+      # is inside the container and 256 MB, which TF overflows and recompiles).
+      CUDA_CACHE_PATH: /workspace/runs/cache/nv
+      CUDA_CACHE_MAXSIZE: "4294967296"
+    volumes:
+      - ..:/workspace
+      - ${DAS_ROOT:-./_das_placeholder}:/data
+    shm_size: "8gb"
+    <<: *gpu
+    stdin_open: true
+    tty: true
+
+  # MatUp (EGSR 2024), Blackwell build.
+  matup:
+    build: ./matup
+    image: texsr/matup:torch2.7.1-cu128
+    working_dir: /workspace/external/matup_egsr
+    volumes:
+      - ..:/workspace
+      - ${DAS_ROOT:-./_das_placeholder}:/data
+    # MatUp's DataLoader uses num_workers=8, pin_memory=True: the default 64 MB
+    # /dev/shm kills the workers with a bus error.
+    shm_size: "8gb"
+    <<: *gpu
+    stdin_open: true
+    tty: true

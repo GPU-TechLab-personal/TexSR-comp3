@@ -1,0 +1,20 @@
+# external/matup_egsr/requirements.txt (@ c74ec99) with the changes needed to build
+# today. torch / torchvision come from the base image (2.7.1 / cu128) and are NOT
+# reinstalled here, so pip cannot swap in a CPU or older-CUDA wheel.
+einops
+matplotlib
+numpy<2
+opencv-python<5
+setuptools
+tensorboard
+tqdm
+natsort
+PyYAML
+scikit-image
+lpips
+pandas
+# sr_modules/SwinIR/models/network_swinir.py imports timm.models.layers (removed in timm 1.0)
+timm<0.9
+# sr_modules/SwinIR/main_test_swinir.py imports requests at module top level
+requests
+flip-evaluator==1.6.0.1

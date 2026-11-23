@@ -1,0 +1,4 @@
+# The shell scripts run inside Linux containers and in Git Bash: keep LF.
+*.sh text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf
