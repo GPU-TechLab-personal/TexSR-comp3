@@ -118,7 +118,8 @@ bash scripts/eval.sh score
 # 진행 상황
 bash scripts/eval.sh status
 
-# 결과를 다른 PC로 (.gitignore가 runs/eval/*/report.json, summary.md만 올림)
+# 결과를 다른 PC로 (.gitignore가 runs/eval/*/report.json, summary.md, montage/만 올림. maps/는 안 올라감)
+# external/matup_egsr (untracked content) 표시는 SwinIR 가중치 등이라 add 하지 않음
 git add runs/eval && git commit -m "split results" && git push
 
 

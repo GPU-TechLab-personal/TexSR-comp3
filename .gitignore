@@ -1,13 +1,15 @@
 # everything a run produces (checkpoints, caches, logs, outputs) ...
 runs/*
-# ... except the evaluation summaries (numbers and tables, no images), so results
-# travel with git: runs/eval/<name>/{report.json,summary.md}
+# ... except the evaluation summaries (numbers and tables) and the montages, so
+# results travel with git: runs/eval/<name>/{report.json,summary.md,montage/}
+# (the SR maps under runs/eval/<name>/maps/ stay local)
 !runs/eval/
 runs/eval/*
 !runs/eval/*/
 runs/eval/*/*
 !runs/eval/*/report.json
 !runs/eval/*/summary.md
+!runs/eval/*/montage/
 # data lives outside the repository (D:/TexSR-data, see COMMANDS.txt)
 # host-specific
 docker/.env
