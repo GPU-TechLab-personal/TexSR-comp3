@@ -72,6 +72,15 @@ tail -f runs/logs/deeptex_split_nb7_train.log
 bash scripts/deeptex_split.sh stop train nb23
 bash scripts/deeptex_split.sh stop train nb7
 
+# 4-5 배치 비교: nb7을 재질 8개/step으로 (네트워크마다 업데이트당 8장, 기존은 2장)
+#     40k step이라 nb7보다 데이터를 4배 더 봄 -> nb7(B=2)과 비교해 배치 효과를 봄
+#     먼저 smoke로 메모리/속도 확인 (OOM이면 yaml의 render.light_chunks: 4)
+bash scripts/deeptex_split.sh smoke nb7b8
+bash scripts/deeptex_split.sh train nb7b8
+tail -f runs/logs/deeptex_split_nb7_b8_train.log
+bash scripts/deeptex_split.sh stop train nb7b8
+#     끝나면 [6] 평가를 다시: infer -> montage -> score (새 arm "DeepTex split nb7 x3 B=8"이 추가됨)
+
 # (comp2 체크포인트를 못 가져왔을 때만) 공유 기준 모델 재학습 - comp2와 같은 설정
 #   bash scripts/deeptex_split.sh train shared
 #   이때 체크포인트는 runs/deeptex/deeptex_renloss_21/checkpoints/esrgan_40k (평가 때 경로 지정)
@@ -128,6 +137,7 @@ git add runs/eval && git commit -m "split results" && git push
 runs/logs/                                         단계별 로그 (끝에 EXIT 코드)
 runs/deeptex/deeptex_split_nb23/checkpoints/       분할 nb=23 체크포인트 (30k/35k/40k)
 runs/deeptex/deeptex_split_nb7/checkpoints/        분할 nb=7 체크포인트
+runs/deeptex/deeptex_split_nb7_b8/checkpoints/     분할 nb=7, 재질 8개/step 체크포인트
 runs/matup_split/cache/<재질>/                      MatUp LR 렌더, SwinIR 렌더 캐시
 runs/matup_split/<arm>/s<k>/<재질>/                 MatUp 결과 맵 (+ run.json)
 runs/eval/<이름>/                                   report.json, summary.md, maps/, montage/

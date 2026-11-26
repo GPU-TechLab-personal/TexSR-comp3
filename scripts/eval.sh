@@ -84,7 +84,7 @@ case "$STAGE" in
       done
       [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
     done
-    for d in runs/deeptex/deeptex_split_nb23/checkpoints/esrgan_40k runs/deeptex/deeptex_split_nb7/checkpoints/esrgan_40k; do
+    for d in runs/deeptex/deeptex_split_nb23/checkpoints/esrgan_40k runs/deeptex/deeptex_split_nb7/checkpoints/esrgan_40k \n             runs/deeptex/deeptex_split_nb7_b8/checkpoints/esrgan_40k; do
       [ -d "$d" ] && echo "checkpoints $d: $(ls "$d" | grep -o 'ckpt-[0-9]*' | sort -u | tr '\n' ' ')"
     done
     for a in matup_shared matup_split; do

@@ -10,6 +10,8 @@
 #   bash scripts/deeptex_split.sh stop STAGE ARM   stop a detached stage
 #
 # ARM: nb23 | nb7   (deeptex_split_nb23 / deeptex_split_nb7)
+#      nb7b8        deeptex_split_nb7_b8: nb7 with 8 materials per step (8 images per network
+#                   per update instead of 2; 4x the data of nb7 in 40k steps)
 #      shared       deeptex_renloss_21 retrained here - only if comp2's checkpoint cannot be
 #                   imported (bash scripts/data.sh import); same config and trainer as comp2
 #
@@ -32,8 +34,9 @@ arm_name() {
   case "${1:-}" in
     nb23) echo deeptex_split_nb23 ;;
     nb7) echo deeptex_split_nb7 ;;
+    nb7b8) echo deeptex_split_nb7_b8 ;;
     shared) echo deeptex_renloss_21 ;;
-    *) echo "ARM must be nb23, nb7 or shared" >&2; exit 1 ;;
+    *) echo "ARM must be nb23, nb7, nb7b8 or shared" >&2; exit 1 ;;
   esac
 }
 
@@ -87,7 +90,7 @@ case "${1:-}" in
   stop)
     docker stop "$(arm_name "${3:-}")_${2:?stage: smoke or train}" ;;
   status)
-    for a in nb23 nb7 shared; do
+    for a in nb23 nb7 nb7b8 shared; do
       for s in smoke train; do
         n=$(arm_name $a)_$s
         [ -n "$(docker ps -aq -f "name=^${n}$")" ] || continue

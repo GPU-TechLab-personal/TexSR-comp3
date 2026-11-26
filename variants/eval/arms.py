@@ -11,11 +11,13 @@ Report column order (summary.md, report.json):
   deeptex_renloss_21    shared DeepTextures G (RRDB nb=23) + render loss, TF
   deeptex_split_nb23    three G's (a / n / rm), nb=23 each, trained jointly
   deeptex_split_nb7     three G's, nb=7 each
+  deeptex_split_nb7_b8  the same with 8 materials per step (4x the data of nb7)
   matup_shared_s0..s2   MatUp, one MLP per material (MatUp as released), seed k
   matup_split_s0..s2    MatUp, three group MLPs per material, seed k
 
 Pairs (split vs its shared counterpart, paired per material):
   deeptex_split_nb23 - deeptex_renloss_21, deeptex_split_nb7 - deeptex_renloss_21,
+  deeptex_split_nb7_b8 - deeptex_renloss_21 (not data-matched: 4x the crops),
   matup_split_s<k> - matup_shared_s<k> for every seed k.
 """
 
@@ -54,14 +56,21 @@ DEEPTEX = {
         "cfg": "/workspace/variants/deeptex/split/deeptex_split_nb7.yaml",
         "ckpt_dir": "/workspace/runs/deeptex/deeptex_split_nb7/checkpoints/esrgan_40k",
     },
+    "deeptex_split_nb7_b8": {
+        "kind": "split",
+        "cfg": "/workspace/variants/deeptex/split/deeptex_split_nb7_b8.yaml",
+        "ckpt_dir": "/workspace/runs/deeptex/deeptex_split_nb7_b8/checkpoints/esrgan_40k",
+    },
 }
-DEEPTEX_ORDER = ("deeptex_renloss_21", "deeptex_split_nb23", "deeptex_split_nb7")
+DEEPTEX_ORDER = ("deeptex_renloss_21", "deeptex_split_nb23", "deeptex_split_nb7",
+                 "deeptex_split_nb7_b8")
 
 DISPLAY = {
     "bilinear": "bilinear",
     "deeptex_renloss_21": "DeepTex shared (renloss_21, nb23)",
     "deeptex_split_nb23": "DeepTex split nb23 x3",
     "deeptex_split_nb7": "DeepTex split nb7 x3",
+    "deeptex_split_nb7_b8": "DeepTex split nb7 x3 B=8",
     "matup_shared": "MatUp shared MLP",
     "matup_split": "MatUp split MLP",
 }
@@ -88,7 +97,8 @@ def columns(seeds=SEEDS):
 def pairs(seeds=SEEDS):
     """(split key, shared key) in report order."""
     out = [("deeptex_split_nb23", "deeptex_renloss_21"),
-           ("deeptex_split_nb7", "deeptex_renloss_21")]
+           ("deeptex_split_nb7", "deeptex_renloss_21"),
+           ("deeptex_split_nb7_b8", "deeptex_renloss_21")]
     out += [(matup_key("matup_split", s), matup_key("matup_shared", s)) for s in seeds]
     return out
 

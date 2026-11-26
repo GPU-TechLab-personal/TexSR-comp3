@@ -32,7 +32,7 @@ map) on comp3's evaluation code, with the comp3 conventions:
 
 EXPERIMENTS  one set of sheets each, the experiment in every file name (<exp>):
   deeptex_shared_vs_split   GT | bilinear | DeepTex shared (renloss_21), split nb23,
-                            split nb7
+                            split nb7, split nb7 B=8 (each when its maps exist)
   matup_shared_vs_split     GT | bilinear | MatUp shared MLP s<k>, split MLP s<k> for
                             each --seeds k (default 0 = MatUp as released)
   An arm with no output at all is left out (warning); one missing a material is left
