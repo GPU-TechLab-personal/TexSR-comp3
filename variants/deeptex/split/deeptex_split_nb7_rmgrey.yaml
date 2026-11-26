@@ -1,0 +1,93 @@
+# Split arm deeptex_split_nb7_rmgrey: deeptex_split_nb7 with rm_loss: grey.
+# Three group generators (albedo / normal / [0,R,M]), RRDB nb=7 each, trained JOINTLY
+# through one render loss (split/train.py, docs/SPLIT_THEORY.md A2).
+#
+# Why: in deeptex_split_nb7 the RM generator's pixel / VGG / RaGAN terms see ONE packed
+# [0, R, M] pseudo-colour image per material, which is not what the shared run's losses
+# see (a GGG roughness image and a GGG metallic image). VGG and D mix the three channels,
+# so R's loss depended on M and on the constant 0 channel. Here they see the two GGG
+# images (2B per step), exactly as in deeptex_renloss_21; the network, its input and the
+# render term are unchanged.
+#
+# EXACT DIFF against deeptex_split_nb7.yaml, and only these:
+#   rm_loss                added, grey
+#   w_render_groups.rm     16.6666667 -> 25.0   (kappa_rm 5/3 -> 5/2, SPLIT_THEORY A2-7)
+#   checkpoint_root/log_root  -> /workspace/runs/deeptex/deeptex_split_nb7_rmgrey/...
+# Batch 2 materials, seed 1, crop stream, 40k steps: paired with renloss_21 and nb7.
+
+# general setting
+batch_size: 2               # materials per step; each group network sees 2 images
+input_size: 32
+gt_size: 128
+ch_size: 3
+scale: 4
+sub_name: 'esrgan_40k'
+pretrain_name: './checkpoints/'
+
+seed: 1
+
+checkpoint_root: '/workspace/runs/deeptex/deeptex_split_nb7_rmgrey/checkpoints'
+log_root: '/workspace/runs/deeptex/deeptex_split_nb7_rmgrey/logs'
+
+# generator setting (per group)
+network_G:
+    nf: 64
+    nb: 7
+
+# dataset setting
+train_dataset:
+    path: '/data/TexSR-data/deeptex/matsynth_grouped/matsynth_grouped_lrx4.tfrecord'
+    grouped: True
+    using_bin: True
+    using_flip: True
+    using_rot: True
+
+# RM losses on the GGG roughness and metallic images (split/train.py loss_images)
+rm_loss: grey
+
+# training setting
+niter: 40000
+
+lr_G: !!float 1e-4
+lr_D: !!float 1e-4
+lr_steps: [50000, 100000, 200000, 300000]
+lr_rate: 0.5
+
+adam_beta1_G: 0.9
+adam_beta2_G: 0.99
+adam_beta1_D: 0.9
+adam_beta2_D: 0.99
+
+w_pixel: !!float 1e-2
+pixel_criterion: l1
+
+w_feature: 1.0
+feature_criterion: l1
+
+w_gan: !!float 5e-3
+gan_type: ragan
+
+save_steps: 5000
+
+# Render weight per group = kappa_g x 10.0 (deeptex_renloss_21's calibrated w_render).
+# kappa equalises the loss normalisation with the shared run (SPLIT_THEORY A2-5):
+#   a, n : the shared pixel/feature/gan means run over 5B images, a group's over B -> x5
+#   rm   : grey loss images -> 2B images against the shared run's 5B -> x5/2 on the own
+#          terms per image; R feeds all three channels of its GGG image while the render
+#          gradient is 3x the shared run's per channel -> kappa_rm = (5/2 x 3) / 3 = 5/2
+w_render_groups:
+    a: !!float 50.0
+    n: !!float 50.0
+    rm: !!float 25.0
+
+render:
+    n_lights: 100
+    light_radius: !!float 1.4
+    intensity: !!float 8.0
+    disp_val: !!float 0.01
+    min_roughness: !!float 0.045
+    min_alpha: !!float 2.0e-3
+    nz_min: !!float 1.0e-3
+    mask_min_norm: !!float 0.1
+    normal_norm_floor: !!float 1.0e-4
+    light_chunks: 1                     # 4 = recompute_grad memory fallback (same value)

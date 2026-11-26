@@ -19,6 +19,11 @@ Each sub-MLP keeps MatUp's width (hid_layer_width 128), depth (hid_layer_size
 4), tile width and non-linearity; only num_in / num_out change. Parameters:
 shared 309,511; split 161,027 + 123,906 + 123,906 = 408,839 (x1.32: most
 parameters sit in the 17x17 first layer, whose input channels the groups divide).
+
+Parameter-matched variants (docs/SPLIT_THEORY.md B1-3): the three sub-MLPs' hidden
+width h is changed (depth 4, tile 17 kept); total = 9 h^2 + 2042 h + 7.
+  WIDTHS["x1"] = 104 -> 309,719 (1.001x shared, like DeepTex nb7)
+  WIDTHS["x3"] = 227 -> 927,302 (2.996x shared, like DeepTex nb23)
 """
 
 import torch
@@ -26,6 +31,28 @@ import torch
 from matup.model import FullyConnected
 
 GROUP_CHANNELS = (("a", (0, 1, 2)), ("n", (4, 5)), ("rm", (3, 6)))
+WIDTHS = {"x1": 104, "x3": 227}
+
+
+def mlp_params(n_in, n_out, width, depth=4, tile=17):
+    """FullyConnected's parameter count (matup/model.py): tile x tile conv, depth-1 1x1, 1x1 out."""
+    return (tile * tile * n_in * width + width) + (depth - 1) * (width * width + width)         + (width * n_out + n_out)
+
+
+def split_params(width, depth=4, tile=17):
+    return sum(mlp_params(len(ch), len(ch), width, depth, tile) for _, ch in GROUP_CHANNELS)
+
+
+def with_width(width):
+    """SplitMLP whose sub-MLPs use `width` instead of the hidden_layer_size MatUp passes."""
+    def build(*a, **k):
+        if "hidden_layer_size" in k:
+            k["hidden_layer_size"] = width
+        else:
+            a = list(a)
+            a[4] = width
+        return SplitMLP(*a, **k)
+    return build
 
 
 def _inverse(order):

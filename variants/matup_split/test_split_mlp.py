@@ -9,6 +9,8 @@
 3. channel isolation: perturbing one group's input channels changes only that
    group's output channels (the split MLP never sees another group's maps)
 4. output placement: each sub-MLP's output lands on its own channels
+5. width variants: split_params == the built count for x1 (309,719) and x3 (927,302),
+   and with_width keeps the 7 -> 7 contract
 """
 
 import os
@@ -21,7 +23,8 @@ sys.path.insert(0, REPO)
 import torch  # noqa: E402
 
 from matup.model import FullyConnected  # noqa: E402
-from variants.matup_split.split_mlp import GROUP_CHANNELS, SplitMLP, count_params  # noqa: E402
+from variants.matup_split.split_mlp import (GROUP_CHANNELS, WIDTHS, SplitMLP,  # noqa: E402
+                                            count_params, split_params, with_width)
 
 KW = dict(num_in=7, num_out=7, tile_width=17, nb_hidden_layers=4, hidden_layer_size=128,
           non_lin="LeakyReLU")
@@ -50,6 +53,15 @@ def main():
     for g, ch in GROUP_CHANNELS:
         sub = split.nets[g](x[:, list(ch)])
         assert torch.allclose(y0[:, list(ch)], sub), g
+
+    assert split_params(128) == 408839
+    want = {"x1": 309719, "x3": 927302}
+    for key, w in WIDTHS.items():
+        m = with_width(w)(**KW)
+        n = count_params(m)
+        print("split %s width=%d params=%d (%.3fx shared)" % (key, w, n, n / 309511.0))
+        assert n == split_params(w) == want[key], (key, n)
+        assert m(x).shape == (4, 7, 1, 1)
     print("OK")
 
 

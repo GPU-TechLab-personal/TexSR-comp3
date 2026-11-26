@@ -12,13 +12,19 @@ Report column order (summary.md, report.json):
   deeptex_split_nb23    three G's (a / n / rm), nb=23 each, trained jointly
   deeptex_split_nb7     three G's, nb=7 each
   deeptex_split_nb7_b8  the same with 8 materials per step (4x the data of nb7)
+  deeptex_split_nb23_rmgrey, deeptex_split_nb7_rmgrey
+                        rm's pixel / VGG / D losses on GGG roughness and metallic images
+                        (rm_loss: grey, SPLIT_THEORY A2-7)
   matup_shared_s0..s2   MatUp, one MLP per material (MatUp as released), seed k
-  matup_split_s0..s2    MatUp, three group MLPs per material, seed k
+  matup_split_s0..s2    MatUp, three group MLPs per material (width 128, 1.32x), seed k
+  matup_split_x1_s<k>, matup_split_x3_s<k>
+                        the same at width 104 (1.00x) / 227 (3.00x the shared MLP)
 
 Pairs (split vs its shared counterpart, paired per material):
   deeptex_split_nb23 - deeptex_renloss_21, deeptex_split_nb7 - deeptex_renloss_21,
   deeptex_split_nb7_b8 - deeptex_renloss_21 (not data-matched: 4x the crops),
-  matup_split_s<k> - matup_shared_s<k> for every seed k.
+  deeptex_split_nb*_rmgrey - deeptex_renloss_21,
+  matup_split*_s<k> - matup_shared_s<k> for every split arm and seed k.
 """
 
 import os
@@ -30,7 +36,8 @@ MATSYNTH_ROOT = "/data/TexSR-data/matsynth"
 MATUP_RUNS = "/workspace/runs/matup_split"
 
 SEEDS = (0, 1, 2)
-MATUP_ARMS = ("matup_shared", "matup_split")
+MATUP_ARMS = ("matup_shared", "matup_split", "matup_split_x1", "matup_split_x3")
+MATUP_SPLIT_ARMS = MATUP_ARMS[1:]
 
 # DeepTextures arms: config, default checkpoint dir, and how the generator(s) sit
 # in the tf.train.Checkpoint.
@@ -61,9 +68,19 @@ DEEPTEX = {
         "cfg": "/workspace/variants/deeptex/split/deeptex_split_nb7_b8.yaml",
         "ckpt_dir": "/workspace/runs/deeptex/deeptex_split_nb7_b8/checkpoints/esrgan_40k",
     },
+    "deeptex_split_nb23_rmgrey": {
+        "kind": "split",
+        "cfg": "/workspace/variants/deeptex/split/deeptex_split_nb23_rmgrey.yaml",
+        "ckpt_dir": "/workspace/runs/deeptex/deeptex_split_nb23_rmgrey/checkpoints/esrgan_40k",
+    },
+    "deeptex_split_nb7_rmgrey": {
+        "kind": "split",
+        "cfg": "/workspace/variants/deeptex/split/deeptex_split_nb7_rmgrey.yaml",
+        "ckpt_dir": "/workspace/runs/deeptex/deeptex_split_nb7_rmgrey/checkpoints/esrgan_40k",
+    },
 }
 DEEPTEX_ORDER = ("deeptex_renloss_21", "deeptex_split_nb23", "deeptex_split_nb7",
-                 "deeptex_split_nb7_b8")
+                 "deeptex_split_nb7_b8", "deeptex_split_nb23_rmgrey", "deeptex_split_nb7_rmgrey")
 
 DISPLAY = {
     "bilinear": "bilinear",
@@ -71,8 +88,12 @@ DISPLAY = {
     "deeptex_split_nb23": "DeepTex split nb23 x3",
     "deeptex_split_nb7": "DeepTex split nb7 x3",
     "deeptex_split_nb7_b8": "DeepTex split nb7 x3 B=8",
+    "deeptex_split_nb23_rmgrey": "DeepTex split nb23 x3 RM grey",
+    "deeptex_split_nb7_rmgrey": "DeepTex split nb7 x3 RM grey",
     "matup_shared": "MatUp shared MLP",
     "matup_split": "MatUp split MLP",
+    "matup_split_x1": "MatUp split MLP 1x",
+    "matup_split_x3": "MatUp split MLP 3x",
 }
 
 
@@ -90,7 +111,7 @@ def columns(seeds=SEEDS):
         for s in seeds:
             cols.append({"key": matup_key(arm, s), "kind": "matup", "arm": arm, "seed": s,
                          "display": "%s s%d" % (DISPLAY[arm], s),
-                         "split": arm == "matup_split"})
+                         "split": arm in MATUP_SPLIT_ARMS})
     return cols
 
 
@@ -98,8 +119,11 @@ def pairs(seeds=SEEDS):
     """(split key, shared key) in report order."""
     out = [("deeptex_split_nb23", "deeptex_renloss_21"),
            ("deeptex_split_nb7", "deeptex_renloss_21"),
-           ("deeptex_split_nb7_b8", "deeptex_renloss_21")]
-    out += [(matup_key("matup_split", s), matup_key("matup_shared", s)) for s in seeds]
+           ("deeptex_split_nb7_b8", "deeptex_renloss_21"),
+           ("deeptex_split_nb23_rmgrey", "deeptex_renloss_21"),
+           ("deeptex_split_nb7_rmgrey", "deeptex_renloss_21")]
+    out += [(matup_key(arm, s), matup_key("matup_shared", s))
+            for arm in MATUP_SPLIT_ARMS for s in seeds]
     return out
 
 

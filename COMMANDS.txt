@@ -81,6 +81,15 @@ tail -f runs/logs/deeptex_split_nb7_b8_train.log
 bash scripts/deeptex_split.sh stop train nb7b8
 #     끝나면 [6] 평가를 다시: infer -> montage -> score (새 arm "DeepTex split nb7 x3 B=8"이 추가됨)
 
+# 4-6 RM 손실 수정: RM 네트워크의 pixel/VGG/D 손실을 [0,R,M] 묶음 이미지가 아니라
+#     회색 roughness, 회색 metallic 이미지로 계산 (공유 모델과 같은 방식, w_rm 25)
+#     배치 2, seed 1, 40k로 기존 nb23 / nb7과 짝이 맞음. 먼저 4-1 test (rm grey 검사 포함)
+bash scripts/deeptex_split.sh test
+bash scripts/deeptex_split.sh smoke nb7grey
+bash scripts/deeptex_split.sh train nb7grey
+bash scripts/deeptex_split.sh train nb23grey
+tail -f runs/logs/deeptex_split_nb7_rmgrey_train.log
+
 # (comp2 체크포인트를 못 가져왔을 때만) 공유 기준 모델 재학습 - comp2와 같은 설정
 #   bash scripts/deeptex_split.sh train shared
 #   이때 체크포인트는 runs/deeptex/deeptex_renloss_21/checkpoints/esrgan_40k (평가 때 경로 지정)
@@ -89,15 +98,18 @@ bash scripts/deeptex_split.sh stop train nb7b8
 [5] MatUp 공유 / 분할 MLP (평가 재질 12개 x seed 3개)
 ---------------------------------------------------------------------
 # DeepTex 학습과 같이 돌려도 되지만 느려짐. VRAM이 부족하면 하나씩
-# 5-1 SplitMLP 검사 (파라미터 수 309,511 / 408,839, 채널 분리). 끝에 OK
+# 5-1 SplitMLP 검사 (파라미터 수 309,511 / 408,839, 1배 309,719 / 3배 927,302, 채널 분리). 끝에 OK
 bash scripts/matup_split.sh test
 
 # 5-2 재질마다 LR 렌더 + SwinIR-L x4 렌더를 한 번만 만들어 캐시 (백그라운드, 재질당 1분 안팎)
 bash scripts/matup_split.sh prep
 
-# 5-3 최적화: 12 재질 x {matup_shared, matup_split} x seed {0,1,2} = 72회 (백그라운드, 회당 1~2분)
-#     끊기면 다시 실행 -> 끝난 run은 건너뜀
+# 5-3 최적화: 12 재질 x arm x seed {0,1,2} (백그라운드, 회당 1~2분)
+#     arm: matup_shared, matup_split (폭 128, 1.32배), matup_split_x1 (폭 104, 1.00배),
+#          matup_split_x3 (폭 227, 3.00배). 기본은 네 개 전부 = 144회
+#     끊기면 다시 실행 -> 끝난 run은 건너뜀 (이미 끝난 shared / split 72회는 건너뜀)
 bash scripts/matup_split.sh optim
+#     파라미터 맞춘 두 arm만: bash scripts/matup_split.sh optim matup_split_x1,matup_split_x3
 
 # 진행 상황 / 로그 / 중지
 bash scripts/matup_split.sh status
@@ -138,6 +150,7 @@ runs/logs/                                         단계별 로그 (끝에 EXIT
 runs/deeptex/deeptex_split_nb23/checkpoints/       분할 nb=23 체크포인트 (30k/35k/40k)
 runs/deeptex/deeptex_split_nb7/checkpoints/        분할 nb=7 체크포인트
 runs/deeptex/deeptex_split_nb7_b8/checkpoints/     분할 nb=7, 재질 8개/step 체크포인트
+runs/deeptex/deeptex_split_nb*_rmgrey/checkpoints/  분할, RM 손실을 회색 이미지로 계산한 체크포인트
 runs/matup_split/cache/<재질>/                      MatUp LR 렌더, SwinIR 렌더 캐시
 runs/matup_split/<arm>/s<k>/<재질>/                 MatUp 결과 맵 (+ run.json)
 runs/eval/<이름>/                                   report.json, summary.md, maps/, montage/

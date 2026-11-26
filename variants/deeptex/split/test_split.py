@@ -10,6 +10,9 @@
 3. the gradient each generator takes in train.py - one render backward, then
    tape.gradient([own_g, sr_g], theta_g, [1, w_g * dL_ren/d sr_g]) - equals the
    direct gradient of (own_g + w_g * L_ren) with respect to theta_g.
+5. rm_loss grey: rm_grey_stack of the packed RM target is exactly the GGG roughness
+   images followed by the GGG metallic images of the stack (what the shared run's
+   losses see), and of an SR image its channels 1 and 2 tiled.
 4. joint training: theta_n receives render gradient even though only sr_a's
    loss terms are switched on (L_ren couples the groups through the render),
    and w_g = 0 removes exactly the render part.
@@ -59,6 +62,19 @@ def check_groups(rng):
     print("[ok] groups: split/compose round trip, compose_one slots")
 
 
+def check_rm_grey(rng):
+    x5 = rand_stack(rng, S_HR)
+    y = grp.split_stack(x5)
+    g = grp.rm_grey_stack(y["rm"]).numpy()
+    assert g.shape == (2 * B, S_HR, S_HR, 3), g.shape
+    np.testing.assert_allclose(g, np.concatenate([x5.numpy()[:, 2], x5.numpy()[:, 3]], 0), atol=1e-7)
+    sr = tf.constant(rng.uniform(-0.2, 1.2, size=(B, S_HR, S_HR, 3)).astype(np.float32))
+    s = grp.rm_grey_stack(sr).numpy()
+    np.testing.assert_array_equal(s[:B], np.repeat(sr.numpy()[..., 1:2], 3, -1))
+    np.testing.assert_array_equal(s[B:], np.repeat(sr.numpy()[..., 2:3], 3, -1))
+    print("[ok] rm grey: GGG roughness then GGG metallic, channel 0 unused")
+
+
 def check_params():
     for nb in (1, 7, 23):
         m = RRDB_Model(None, 3, {"nf": 64, "nb": nb})
@@ -105,6 +121,7 @@ def main():
     rng = np.random.RandomState(0)
     tf.keras.utils.set_random_seed(0)
     check_groups(rng)
+    check_rm_grey(rng)
     check_params()
     check_gradients(rng)
     print("OK")

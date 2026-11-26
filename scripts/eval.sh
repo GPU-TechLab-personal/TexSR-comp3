@@ -84,10 +84,11 @@ case "$STAGE" in
       done
       [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
     done
-    for d in runs/deeptex/deeptex_split_nb23/checkpoints/esrgan_40k runs/deeptex/deeptex_split_nb7/checkpoints/esrgan_40k \n             runs/deeptex/deeptex_split_nb7_b8/checkpoints/esrgan_40k; do
+    for a in deeptex_split_nb23 deeptex_split_nb7 deeptex_split_nb7_b8 deeptex_split_nb23_rmgrey deeptex_split_nb7_rmgrey; do
+      d=runs/deeptex/$a/checkpoints/esrgan_40k
       [ -d "$d" ] && echo "checkpoints $d: $(ls "$d" | grep -o 'ckpt-[0-9]*' | sort -u | tr '\n' ' ')"
     done
-    for a in matup_shared matup_split; do
+    for a in matup_shared matup_split matup_split_x1 matup_split_x3; do
       [ -d runs/matup_split/$a ] && echo "MatUp $a: $(ls runs/matup_split/$a/s*/*/*/baseColor_opt.png 2>/dev/null | wc -l) run(s) with _opt maps"
     done
     nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu,temperature.gpu --format=csv,noheader ;;

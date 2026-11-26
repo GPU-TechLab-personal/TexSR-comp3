@@ -422,8 +422,13 @@ def main():
     sstats = sm.seed_stats(table_means, keys_by_arm)
     pair_list = [p for p in A.pairs(args.seeds) if p[0] in scored and p[1] in scored]
     pair_results = {"%s_vs_%s" % p: sm.paired(reports, *p) for p in pair_list}
-    seed_pairs = [p for p in pair_list if p[0].startswith("matup_split")]
-    seed_agg = sm.paired_seed_stats(pair_results, seed_pairs) if len(seed_pairs) > 1 else None
+    # per MatUp split arm: split - shared over seeds (one row each in the paired tables)
+    seed_agg = {}
+    for arm in A.MATUP_SPLIT_ARMS:
+        seed_pairs = [p for p in pair_list if p[0] in {A.matup_key(arm, s) for s in args.seeds}]
+        if len(seed_pairs) > 1:
+            seed_agg[arm] = sm.paired_seed_stats(pair_results, seed_pairs)
+    seed_agg = {k: v for k, v in seed_agg.items() if v} or None
 
     sm.write_summary(os.path.join(out, "summary.md"), args.name, reports, common, cols, names,
                      table_means, sstats, pair_list, pair_results, seed_agg, skipped, lights,

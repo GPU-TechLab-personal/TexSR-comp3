@@ -21,7 +21,8 @@ main.py imports them (MatUp's files on disk are never edited):
 2. KEEP THE CACHE. main_optim deletes render_dir and upsamplings_dir when it ends
    (main_optim.py:102-104); its shutil.rmtree is replaced by a no-op.
 3. THE MLP. --mlp split swaps main_optim.FullyConnected for SplitMLP
-   (split_mlp.py); --mlp shared leaves MatUp's own class.
+   (split_mlp.py); --mlp shared leaves MatUp's own class. --split-width W gives
+   the three sub-MLPs width W instead of MatUp's 128 (parameter-matched arms).
 4. THE SEED. main_optim seeds numpy and torch with 1996 (main_optim.py:36-37).
    --seed S makes those two calls seed S instead; S = 1996 is MatUp as released.
 
@@ -56,6 +57,8 @@ def main():
     ap.add_argument("--stage", required=True, choices=["prep", "optim"])
     ap.add_argument("--mlp", default="shared", choices=["shared", "split"])
     ap.add_argument("--seed", type=int, default=MATUP_SEED)
+    ap.add_argument("--split-width", type=int, default=0,
+                    help="split only: sub-MLP hidden width (0 = MatUp's --hid_layer_width, 128)")
     ap.add_argument("--out", default="", help="optim: output folder of this run")
     args = ap.parse_args()
 
@@ -93,9 +96,11 @@ def main():
                 print("[matup_split] keeping %s" % path)
         mo.shutil = _KeepCache
 
+        if args.split_width and args.mlp != "split":
+            sys.exit("[fatal] --split-width needs --mlp split")
         if args.mlp == "split":
-            from variants.matup_split.split_mlp import SplitMLP
-            mo.FullyConnected = SplitMLP
+            from variants.matup_split.split_mlp import SplitMLP, with_width
+            mo.FullyConnected = with_width(args.split_width) if args.split_width else SplitMLP
 
         built = {}
         cls = mo.FullyConnected
@@ -103,8 +108,8 @@ def main():
         def counted(*a, **k):
             m = cls(*a, **k)
             built["params"] = sum(p.numel() for p in m.parameters())
-            print("[matup_split] mlp=%s params=%d seed=%d" % (args.mlp, built["params"], args.seed),
-                  flush=True)
+            print("[matup_split] mlp=%s width=%s params=%d seed=%d" % (
+                args.mlp, args.split_width or "default", built["params"], args.seed), flush=True)
             return m
         mo.FullyConnected = counted
 
@@ -141,7 +146,7 @@ def main():
         sys.exit("[fatal] MatUp wrote no baseColor_opt.png under %s" % args.out)
     with open(os.path.join(args.out, "run.json"), "w") as f:
         json.dump({"material": os.path.basename(os.path.normpath(args.material)),
-                   "mlp": args.mlp, "seed": args.seed,
+                   "mlp": args.mlp, "split_width": args.split_width or None, "seed": args.seed,
                    "params": info["built"].get("params"), "seconds": round(dt, 1),
                    "maps": os.path.relpath(os.path.dirname(outs[-1]), args.out),
                    "cache": args.cache}, f, indent=2)

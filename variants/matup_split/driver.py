@@ -2,7 +2,7 @@
 """Every MatUp run of the split experiment, one subprocess per run (scripts/matup_split.sh).
 
     python /workspace/variants/matup_split/driver.py prep
-    python /workspace/variants/matup_split/driver.py optim [--arms matup_shared,matup_split] [--seeds 0,1,2]
+    python /workspace/variants/matup_split/driver.py optim [--arms matup_shared,matup_split,...] [--seeds 0,1,2]
 
 prep   per material: LR renders + SwinIR-L upscaled renders into
        runs/matup_split/cache/<material>/ (once; every arm and seed reads them)
@@ -24,7 +24,10 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 EVAL_SET = "/data/TexSR-data/matsynth"
 OUT = "/workspace/runs/matup_split"
-ARMS = {"matup_shared": "shared", "matup_split": "split"}
+# arm -> (--mlp, --split-width); 0 = MatUp's width 128. x1 / x3: parameter-matched to
+# 1x / 3x the shared MLP (split_mlp.WIDTHS, SPLIT_THEORY B1-3).
+ARMS = {"matup_shared": ("shared", 0), "matup_split": ("split", 0),
+        "matup_split_x1": ("split", 104), "matup_split_x3": ("split", 227)}
 SEEDS = {0: 1996, 1: 1997, 2: 1998}
 
 
@@ -87,9 +90,12 @@ def main():
                 if os.path.isfile(os.path.join(out, "run.json")):
                     print("[driver] %s s%d %s: done" % (arm, k, name))
                     continue
-                if run([sys.executable, run_py, "--material", mat, "--cache", cache,
-                        "--stage", "optim", "--mlp", ARMS[arm], "--seed", str(SEEDS[k]),
-                        "--out", out]):
+                mlp, width = ARMS[arm]
+                cmd = [sys.executable, run_py, "--material", mat, "--cache", cache,
+                       "--stage", "optim", "--mlp", mlp, "--seed", str(SEEDS[k]), "--out", out]
+                if width:
+                    cmd += ["--split-width", str(width)]
+                if run(cmd):
                     failed.append((arm, k, name))
 
     if failed:

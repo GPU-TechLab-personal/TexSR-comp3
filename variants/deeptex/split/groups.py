@@ -53,6 +53,14 @@ def unpack_rm(y_rm):
     return tf.tile(r, [1, 1, 1, 3]), tf.tile(m, [1, 1, 1, 3])
 
 
+def rm_grey_stack(x_rm):
+    """(B, H, W, 3) [0, R, M] image -> (2B, H, W, 3): the GGG roughness images, then
+    the GGG metallic images - the two grey maps exactly as the shared run feeds them to
+    its pixel / VGG / D losses (rm_loss: grey, SPLIT_THEORY A2-7). Channel 0 drops out."""
+    r, m = unpack_rm(x_rm)
+    return tf.concat([r, m], axis=0)
+
+
 def compose(sr, gt5):
     """{group: SR output} + GT stack -> the (B, 5, H, W, 3) stack the renderer reads.
 

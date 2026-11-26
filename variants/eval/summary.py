@@ -199,9 +199,9 @@ def diff_table(L, cols, pair_list, pair_results, seed_agg, names):
             continue
         L.append("| %s - %s | %d | %s |" % (names[a], names[b], r["n_materials"], " | ".join(
             diff_cell(r[c[0]], c[2]) for c in cols)))
-    if seed_agg:
-        L.append("| **MatUp split - shared, mean ± std over %d seeds** | | %s |" % (
-            seed_agg["seeds"], " | ".join(diff_pm_cell(seed_agg[c[0]], c[2]) for c in cols)))
+    for arm, agg in (seed_agg or {}).items():
+        L.append("| **%s - shared, mean ± std over %d seeds** | | %s |" % (
+            A.DISPLAY.get(arm, arm), agg["seeds"], " | ".join(diff_pm_cell(agg[c[0]], c[2]) for c in cols)))
     L.append("")
 
 

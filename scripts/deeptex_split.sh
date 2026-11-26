@@ -12,6 +12,8 @@
 # ARM: nb23 | nb7   (deeptex_split_nb23 / deeptex_split_nb7)
 #      nb7b8        deeptex_split_nb7_b8: nb7 with 8 materials per step (8 images per network
 #                   per update instead of 2; 4x the data of nb7 in 40k steps)
+#      nb23grey nb7grey  deeptex_split_nb23_rmgrey / _nb7_rmgrey: RM pixel/VGG/D losses on the
+#                   GGG roughness and metallic images, as the shared run (SPLIT_THEORY A2-7)
 #      shared       deeptex_renloss_21 retrained here - only if comp2's checkpoint cannot be
 #                   imported (bash scripts/data.sh import); same config and trainer as comp2
 #
@@ -35,8 +37,10 @@ arm_name() {
     nb23) echo deeptex_split_nb23 ;;
     nb7) echo deeptex_split_nb7 ;;
     nb7b8) echo deeptex_split_nb7_b8 ;;
+    nb23grey) echo deeptex_split_nb23_rmgrey ;;
+    nb7grey) echo deeptex_split_nb7_rmgrey ;;
     shared) echo deeptex_renloss_21 ;;
-    *) echo "ARM must be nb23, nb7, nb7b8 or shared" >&2; exit 1 ;;
+    *) echo "ARM must be nb23, nb7, nb7b8, nb23grey, nb7grey or shared" >&2; exit 1 ;;
   esac
 }
 
@@ -76,7 +80,7 @@ case "${1:-}" in
   test)
     attached deeptex python /workspace/variants/deeptex/split/test_split.py ;;
   params)
-    for a in nb23 nb7; do
+    for a in nb23 nb7 nb23grey; do
       attached deeptex python /workspace/variants/deeptex/split/train.py \
         --cfg_path "/workspace/variants/deeptex/split/$(arm_name $a).yaml" --allow-dead-lr-schedule --count-only
     done ;;
@@ -90,7 +94,7 @@ case "${1:-}" in
   stop)
     docker stop "$(arm_name "${3:-}")_${2:?stage: smoke or train}" ;;
   status)
-    for a in nb23 nb7 nb7b8 shared; do
+    for a in nb23 nb7 nb7b8 nb23grey nb7grey shared; do
       for s in smoke train; do
         n=$(arm_name $a)_$s
         [ -n "$(docker ps -aq -f "name=^${n}$")" ] || continue
@@ -103,5 +107,5 @@ case "${1:-}" in
     done
     nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu,temperature.gpu --format=csv,noheader ;;
   *)
-    sed -n '2,19p' "$0"; exit 1 ;;
+    sed -n '2,21p' "$0"; exit 1 ;;
 esac

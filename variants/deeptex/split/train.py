@@ -17,7 +17,10 @@ The maths is docs/SPLIT_THEORY.md A2. In one step:
      training. The render backward runs once (dL_ren/d sr_g), and each generator's
      gradient is tape.gradient([own_g, sr_g], theta_g, [1, w_g * dL_ren/d sr_g]),
      which equals grad_theta_g (own_g + w_g * L_ren).
-  4. D_g: upstream's RaGAN discriminator loss on group g's B images.
+     rm_loss: grey (default packed) computes rm's pixel / VGG / RaGAN terms on the 2B
+     GGG roughness and metallic images instead of the B packed [0,R,M] images, as the
+     shared run does (groups.rm_grey_stack, SPLIT_THEORY A2-7; w_rm is then 25).
+  4. D_g: upstream's RaGAN discriminator loss on group g's B images (rm grey: 2B).
   5. every gradient (3 G + 3 D) checked finite BEFORE any update; then six Adams.
 
 Everything else is deeptex_renloss_21's: grouped record, seed-keyed crop / flip /
@@ -57,6 +60,7 @@ from variants.deeptex.render_loss.hooks import (check_grouped_dataset,  # noqa: 
 from variants.deeptex.split import groups as grp  # noqa: E402
 
 GROUPS = grp.GROUPS
+RM_LOSS = ("packed", "grey")
 MAX_TO_KEEP = 3          # upstream's; with save_steps 5000 -> 30k / 35k / 40k
 
 
@@ -129,6 +133,9 @@ def load_config(a):
         safety.check_out_root(k, cfg[k])
     safety.check_gt_size(cfg)
     safety.check_lr_schedule(cfg, a.allow_dead_lr_schedule)   # against the config's own niter
+    cfg["rm_loss"] = cfg.get("rm_loss", "packed")
+    if cfg["rm_loss"] not in RM_LOSS:
+        die(8, "rm_loss must be one of %s, got %r" % (RM_LOSS, cfg["rm_loss"]))
     cfg["niter"] = a.max_steps or cfg["niter"]
     cfg["save_steps"] = a.save_steps or cfg["save_steps"]
     return cfg
@@ -191,8 +198,19 @@ def main(argv=None):
     B, n_m = int(cfg["batch_size"]), grouped_dataset.N_MAPS
     s_lr, s_hr = int(cfg["input_size"]), int(cfg["gt_size"])
     niter, save_steps = int(cfg["niter"]), int(cfg["save_steps"])
-    print("[*] split joint: %d materials/step, groups %s, w_render %s, seed=%s, niter=%d"
-          % (B, ",".join(GROUPS), " ".join("%s=%g" % (g, w[g]) for g in GROUPS), seed, niter))
+    rm_grey = cfg["rm_loss"] == "grey"
+    print("[*] split joint: %d materials/step, groups %s, w_render %s, seed=%s, niter=%d, rm_loss=%s"
+          % (B, ",".join(GROUPS), " ".join("%s=%g" % (g, w[g]) for g in GROUPS), seed, niter,
+             cfg["rm_loss"]))
+
+    def loss_images(g, img):
+        """What group g's pixel / VGG / D terms see: its own image, or for rm with
+        rm_loss grey the GGG roughness and metallic images (2B of them)."""
+        return grp.rm_grey_stack(img) if (g == "rm" and rm_grey) else img
+    want_rm = 25.0 if rm_grey else 50.0 / 3.0
+    if abs(w["rm"] - want_rm) > 1e-3 * want_rm:
+        print("[!] w_render_groups.rm = %g, but rm_loss %s gives kappa_rm x 10 = %g (SPLIT_THEORY A2-5/7)"
+              % (w["rm"], cfg["rm_loss"], want_rm), flush=True)
 
     # ---------------------------------------------------------------- networks
     G, D = build_networks(cfg)
@@ -245,11 +263,12 @@ def main(argv=None):
             l_ren = render_loss.loss(sr5, pos, gt_disp, valid)
             terms_G, own, terms_D, loss_D = {}, {}, {}, {}
             for g in GROUPS:
-                hr_out = D[g](y[g], training=True)
-                sr_out = D[g](sr[g], training=True)
+                y_g, sr_g = loss_images(g, y[g]), loss_images(g, sr[g])
+                hr_out = D[g](y_g, training=True)
+                sr_out = D[g](sr_g, training=True)
                 t = {"reg": tf.reduce_sum(G[g].losses),
-                     "pixel": w_pixel * pixel_loss_fn(y[g], sr[g]),
-                     "feature": w_feature * fea_loss_fn(y[g], sr[g]),
+                     "pixel": w_pixel * pixel_loss_fn(y_g, sr_g),
+                     "feature": w_feature * fea_loss_fn(y_g, sr_g),
                      "gan": w_gan * gen_loss_fn(hr_out, sr_out)}
                 own[g] = tf.add_n(list(t.values()))
                 t["render"] = w[g] * l_ren
