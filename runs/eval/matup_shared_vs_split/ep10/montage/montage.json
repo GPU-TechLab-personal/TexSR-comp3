@@ -26,13 +26,7 @@
   "matup_shared_zinit_s2",
   "matup_split_zinit_s0",
   "matup_split_zinit_s1",
-  "matup_split_zinit_s2",
-  "matup_shared_st_s0",
-  "matup_shared_st_s1",
-  "matup_shared_st_s2",
-  "matup_split_st_s0",
-  "matup_split_st_s1",
-  "matup_split_st_s2"
+  "matup_split_zinit_s2"
  ],
  "displays": [
   "GT",
@@ -60,14 +54,67 @@
   "MatUp shared MLP, zero-init last layer s2",
   "MatUp split MLP, zero-init last layer s0",
   "MatUp split MLP, zero-init last layer s1",
-  "MatUp split MLP, zero-init last layer s2",
-  "MatUp shared MLP, straight-through clamp s0",
-  "MatUp shared MLP, straight-through clamp s1",
-  "MatUp shared MLP, straight-through clamp s2",
-  "MatUp split MLP, straight-through clamp s0",
-  "MatUp split MLP, straight-through clamp s1",
-  "MatUp split MLP, straight-through clamp s2"
+  "MatUp split MLP, zero-init last layer s2"
  ],
+ "sheets": {
+  "width": {
+   "prefix": "matup_width",
+   "rows": [
+    "gt",
+    "bilinear",
+    "matup_shared_s0",
+    "matup_shared_s1",
+    "matup_shared_s2",
+    "matup_split_s0",
+    "matup_split_s1",
+    "matup_split_s2",
+    "matup_split_x1_s0",
+    "matup_split_x1_s1",
+    "matup_split_x1_s2",
+    "matup_split_x3_s0",
+    "matup_split_x3_s1",
+    "matup_split_x3_s2"
+   ]
+  },
+  "noreg": {
+   "prefix": "matup_noreg",
+   "rows": [
+    "gt",
+    "bilinear",
+    "matup_shared_s0",
+    "matup_shared_s1",
+    "matup_shared_s2",
+    "matup_split_s0",
+    "matup_split_s1",
+    "matup_split_s2",
+    "matup_shared_noreg_s0",
+    "matup_shared_noreg_s1",
+    "matup_shared_noreg_s2",
+    "matup_split_noreg_s0",
+    "matup_split_noreg_s1",
+    "matup_split_noreg_s2"
+   ]
+  },
+  "zinit": {
+   "prefix": "matup_zinit",
+   "rows": [
+    "gt",
+    "bilinear",
+    "matup_shared_s0",
+    "matup_shared_s1",
+    "matup_shared_s2",
+    "matup_split_s0",
+    "matup_split_s1",
+    "matup_split_s2",
+    "matup_shared_zinit_s0",
+    "matup_shared_zinit_s1",
+    "matup_shared_zinit_s2",
+    "matup_split_zinit_s0",
+    "matup_split_zinit_s1",
+    "matup_split_zinit_s2"
+   ]
+  }
+ },
  "seeds": [
   0,
   1,
@@ -109,13 +156,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/0559_brick_uneven_stones/Nov27_08h14m00s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/0559_brick_uneven_stones/Nov27_08h14m54s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/0559_brick_uneven_stones/Nov27_08h15m56s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/0559_brick_uneven_stones/Nov27_08h16m58s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/0559_brick_uneven_stones/Nov27_10h37m13s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/0559_brick_uneven_stones/Nov27_10h37m49s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/0559_brick_uneven_stones/Nov27_10h38m24s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/0559_brick_uneven_stones/Nov27_10h39m00s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/0559_brick_uneven_stones/Nov27_10h39m38s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/0559_brick_uneven_stones/Nov27_10h40m16s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/0559_brick_uneven_stones/Nov27_08h16m58s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/0559_brick_uneven_stones/SVBRDF",
@@ -142,13 +183,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/0559_brick_uneven_stones/Nov27_08h14m00s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/0559_brick_uneven_stones/Nov27_08h14m54s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/0559_brick_uneven_stones/Nov27_08h15m56s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/0559_brick_uneven_stones/Nov27_08h16m58s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/0559_brick_uneven_stones/Nov27_10h37m13s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/0559_brick_uneven_stones/Nov27_10h37m49s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/0559_brick_uneven_stones/Nov27_10h38m24s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/0559_brick_uneven_stones/Nov27_10h39m00s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/0559_brick_uneven_stones/Nov27_10h39m38s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/0559_brick_uneven_stones/Nov27_10h40m16s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/0559_brick_uneven_stones/Nov27_08h16m58s"
    },
    "eval_psnr": {
     "bilinear": 30.467063865228596,
@@ -175,13 +210,7 @@
     "matup_shared_zinit_s2": 29.890516835411383,
     "matup_split_zinit_s0": 29.8872246568232,
     "matup_split_zinit_s1": 29.924066460507056,
-    "matup_split_zinit_s2": 29.87137004815159,
-    "matup_shared_st_s0": 29.88825787415314,
-    "matup_shared_st_s1": 29.995268534168893,
-    "matup_shared_st_s2": 29.969158996407984,
-    "matup_split_st_s0": 28.546803587173407,
-    "matup_split_st_s1": 28.59294271035091,
-    "matup_split_st_s2": 28.568879022232302
+    "matup_split_zinit_s2": 29.87137004815159
    },
    "missing": [],
    "zoom": {
@@ -190,10 +219,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_0559_brick_uneven_stones.png",
-    "zoom/matup_shared_vs_split_0559_brick_uneven_stones_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_0559_brick_uneven_stones.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_0559_brick_uneven_stones_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_0559_brick_uneven_stones.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_0559_brick_uneven_stones_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_0559_brick_uneven_stones.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_0559_brick_uneven_stones_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "0844_syntetic_foam",
@@ -225,13 +348,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/0844_syntetic_foam/Nov27_08h25m39s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/0844_syntetic_foam/Nov27_08h26m35s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/0844_syntetic_foam/Nov27_08h27m37s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/0844_syntetic_foam/Nov27_08h28m41s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/0844_syntetic_foam/Nov27_10h40m55s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/0844_syntetic_foam/Nov27_10h41m31s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/0844_syntetic_foam/Nov27_10h42m07s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/0844_syntetic_foam/Nov27_10h42m44s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/0844_syntetic_foam/Nov27_10h43m22s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/0844_syntetic_foam/Nov27_10h44m01s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/0844_syntetic_foam/Nov27_08h28m41s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/0844_syntetic_foam/SVBRDF",
@@ -258,13 +375,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/0844_syntetic_foam/Nov27_08h25m39s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/0844_syntetic_foam/Nov27_08h26m35s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/0844_syntetic_foam/Nov27_08h27m37s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/0844_syntetic_foam/Nov27_08h28m41s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/0844_syntetic_foam/Nov27_10h40m55s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/0844_syntetic_foam/Nov27_10h41m31s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/0844_syntetic_foam/Nov27_10h42m07s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/0844_syntetic_foam/Nov27_10h42m44s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/0844_syntetic_foam/Nov27_10h43m22s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/0844_syntetic_foam/Nov27_10h44m01s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/0844_syntetic_foam/Nov27_08h28m41s"
    },
    "eval_psnr": {
     "bilinear": 21.73134128317671,
@@ -291,13 +402,7 @@
     "matup_shared_zinit_s2": 21.91699579067643,
     "matup_split_zinit_s0": 21.8794994779954,
     "matup_split_zinit_s1": 21.927028499534956,
-    "matup_split_zinit_s2": 21.901311043581867,
-    "matup_shared_st_s0": 7.820699931294505,
-    "matup_shared_st_s1": 21.557845482792306,
-    "matup_shared_st_s2": 9.431014899388064,
-    "matup_split_st_s0": 21.891728898976147,
-    "matup_split_st_s1": 21.899511700927565,
-    "matup_split_st_s2": 21.77876434381465
+    "matup_split_zinit_s2": 21.901311043581867
    },
    "missing": [],
    "zoom": {
@@ -306,10 +411,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_0844_syntetic_foam.png",
-    "zoom/matup_shared_vs_split_0844_syntetic_foam_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_0844_syntetic_foam.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_0844_syntetic_foam_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_0844_syntetic_foam.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_0844_syntetic_foam_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_0844_syntetic_foam.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_0844_syntetic_foam_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "1587_cobblestones",
@@ -341,13 +540,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/1587_cobblestones/Nov27_08h37m22s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/1587_cobblestones/Nov27_08h38m17s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/1587_cobblestones/Nov27_08h39m18s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/1587_cobblestones/Nov27_08h40m20s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/1587_cobblestones/Nov27_10h44m40s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/1587_cobblestones/Nov27_10h45m16s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/1587_cobblestones/Nov27_10h45m52s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/1587_cobblestones/Nov27_10h46m28s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/1587_cobblestones/Nov27_10h47m06s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/1587_cobblestones/Nov27_10h47m45s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/1587_cobblestones/Nov27_08h40m20s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/1587_cobblestones/SVBRDF",
@@ -374,13 +567,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/1587_cobblestones/Nov27_08h37m22s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/1587_cobblestones/Nov27_08h38m17s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/1587_cobblestones/Nov27_08h39m18s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/1587_cobblestones/Nov27_08h40m20s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/1587_cobblestones/Nov27_10h44m40s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/1587_cobblestones/Nov27_10h45m16s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/1587_cobblestones/Nov27_10h45m52s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/1587_cobblestones/Nov27_10h46m28s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/1587_cobblestones/Nov27_10h47m06s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/1587_cobblestones/Nov27_10h47m45s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/1587_cobblestones/Nov27_08h40m20s"
    },
    "eval_psnr": {
     "bilinear": 28.110076801215133,
@@ -407,13 +594,7 @@
     "matup_shared_zinit_s2": 28.25994718004182,
     "matup_split_zinit_s0": 28.418735773972344,
     "matup_split_zinit_s1": 28.429960121065502,
-    "matup_split_zinit_s2": 28.291205245908003,
-    "matup_shared_st_s0": 28.02962400222502,
-    "matup_shared_st_s1": 27.99829797978365,
-    "matup_shared_st_s2": 28.31142989809861,
-    "matup_split_st_s0": 27.978857068912436,
-    "matup_split_st_s1": 27.944074806931624,
-    "matup_split_st_s2": 27.94435411601183
+    "matup_split_zinit_s2": 28.291205245908003
    },
    "missing": [],
    "zoom": {
@@ -422,10 +603,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_1587_cobblestones.png",
-    "zoom/matup_shared_vs_split_1587_cobblestones_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_1587_cobblestones.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_1587_cobblestones_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_1587_cobblestones.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_1587_cobblestones_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_1587_cobblestones.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_1587_cobblestones_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "2119_corten_steel",
@@ -457,13 +732,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/2119_corten_steel/Nov27_08h49m00s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/2119_corten_steel/Nov27_08h49m55s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/2119_corten_steel/Nov27_08h50m56s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/2119_corten_steel/Nov27_08h51m58s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/2119_corten_steel/Nov27_10h48m23s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/2119_corten_steel/Nov27_10h49m00s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/2119_corten_steel/Nov27_10h49m37s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/2119_corten_steel/Nov27_10h50m13s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/2119_corten_steel/Nov27_10h50m52s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/2119_corten_steel/Nov27_10h51m31s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/2119_corten_steel/Nov27_08h51m58s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/2119_corten_steel/SVBRDF",
@@ -490,13 +759,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/2119_corten_steel/Nov27_08h49m00s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/2119_corten_steel/Nov27_08h49m55s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/2119_corten_steel/Nov27_08h50m56s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/2119_corten_steel/Nov27_08h51m58s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/2119_corten_steel/Nov27_10h48m23s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/2119_corten_steel/Nov27_10h49m00s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/2119_corten_steel/Nov27_10h49m37s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/2119_corten_steel/Nov27_10h50m13s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/2119_corten_steel/Nov27_10h50m52s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/2119_corten_steel/Nov27_10h51m31s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/2119_corten_steel/Nov27_08h51m58s"
    },
    "eval_psnr": {
     "bilinear": 21.31234576034428,
@@ -523,13 +786,7 @@
     "matup_shared_zinit_s2": 21.299614441666805,
     "matup_split_zinit_s0": 21.426861599094075,
     "matup_split_zinit_s1": 21.376013107285647,
-    "matup_split_zinit_s2": 21.30963692289738,
-    "matup_shared_st_s0": 21.442626607893743,
-    "matup_shared_st_s1": 21.341070817719427,
-    "matup_shared_st_s2": 21.174578358658906,
-    "matup_split_st_s0": 21.4440001536332,
-    "matup_split_st_s1": 21.43401304802035,
-    "matup_split_st_s2": 21.305745776898362
+    "matup_split_zinit_s2": 21.30963692289738
    },
    "missing": [],
    "zoom": {
@@ -538,10 +795,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_2119_corten_steel.png",
-    "zoom/matup_shared_vs_split_2119_corten_steel_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_2119_corten_steel.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_2119_corten_steel_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_2119_corten_steel.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_2119_corten_steel_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_2119_corten_steel.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_2119_corten_steel_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "acg_concrete_026",
@@ -573,13 +924,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_concrete_026/Nov27_09h00m40s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_concrete_026/Nov27_09h01m35s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_concrete_026/Nov27_09h02m36s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_concrete_026/Nov27_09h03m38s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_concrete_026/Nov27_10h52m10s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_concrete_026/Nov27_10h52m46s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_concrete_026/Nov27_10h53m23s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_concrete_026/Nov27_10h53m59s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_concrete_026/Nov27_10h54m37s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_concrete_026/Nov27_10h55m16s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_concrete_026/Nov27_09h03m38s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_concrete_026/SVBRDF",
@@ -606,13 +951,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_concrete_026/Nov27_09h00m40s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_concrete_026/Nov27_09h01m35s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_concrete_026/Nov27_09h02m36s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_concrete_026/Nov27_09h03m38s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_concrete_026/Nov27_10h52m10s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_concrete_026/Nov27_10h52m46s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_concrete_026/Nov27_10h53m23s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_concrete_026/Nov27_10h53m59s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_concrete_026/Nov27_10h54m37s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_concrete_026/Nov27_10h55m16s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_concrete_026/Nov27_09h03m38s"
    },
    "eval_psnr": {
     "bilinear": 21.8644263617553,
@@ -639,13 +978,7 @@
     "matup_shared_zinit_s2": 21.19577877202336,
     "matup_split_zinit_s0": 21.17434246293037,
     "matup_split_zinit_s1": 21.150981187247098,
-    "matup_split_zinit_s2": 21.040635552203764,
-    "matup_shared_st_s0": 21.13037415023245,
-    "matup_shared_st_s1": 21.107048300042315,
-    "matup_shared_st_s2": 21.233658685819094,
-    "matup_split_st_s0": 21.152453531354265,
-    "matup_split_st_s1": 21.155524823968747,
-    "matup_split_st_s2": 21.115087918161034
+    "matup_split_zinit_s2": 21.040635552203764
    },
    "missing": [],
    "zoom": {
@@ -654,10 +987,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_acg_concrete_026.png",
-    "zoom/matup_shared_vs_split_acg_concrete_026_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_acg_concrete_026.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_acg_concrete_026_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_acg_concrete_026.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_acg_concrete_026_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_acg_concrete_026.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_acg_concrete_026_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "acg_metal_026",
@@ -689,13 +1116,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_metal_026/Nov27_09h12m26s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_metal_026/Nov27_09h13m22s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_metal_026/Nov27_09h14m25s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_metal_026/Nov27_09h15m30s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_metal_026/Nov27_10h55m54s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_metal_026/Nov27_10h56m30s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_metal_026/Nov27_10h57m06s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_metal_026/Nov27_10h57m42s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_metal_026/Nov27_10h58m21s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_metal_026/Nov27_10h58m59s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_metal_026/Nov27_09h15m30s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_metal_026/SVBRDF",
@@ -722,13 +1143,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_metal_026/Nov27_09h12m26s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_metal_026/Nov27_09h13m22s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_metal_026/Nov27_09h14m25s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_metal_026/Nov27_09h15m30s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_metal_026/Nov27_10h55m54s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_metal_026/Nov27_10h56m30s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_metal_026/Nov27_10h57m06s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_metal_026/Nov27_10h57m42s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_metal_026/Nov27_10h58m21s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_metal_026/Nov27_10h58m59s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_metal_026/Nov27_09h15m30s"
    },
    "eval_psnr": {
     "bilinear": 29.64123579426591,
@@ -755,13 +1170,7 @@
     "matup_shared_zinit_s2": 29.203918536528363,
     "matup_split_zinit_s0": 29.2643498423323,
     "matup_split_zinit_s1": 29.22089726351541,
-    "matup_split_zinit_s2": 29.214574749878256,
-    "matup_shared_st_s0": 29.300127850647648,
-    "matup_shared_st_s1": 29.358225203740243,
-    "matup_shared_st_s2": 29.149299029225872,
-    "matup_split_st_s0": 29.27727300265467,
-    "matup_split_st_s1": 29.224951689455565,
-    "matup_split_st_s2": 29.25139841035986
+    "matup_split_zinit_s2": 29.214574749878256
    },
    "missing": [],
    "zoom": {
@@ -770,10 +1179,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_acg_metal_026.png",
-    "zoom/matup_shared_vs_split_acg_metal_026_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_acg_metal_026.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_acg_metal_026_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_acg_metal_026.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_acg_metal_026_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_acg_metal_026.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_acg_metal_026_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "acg_plastic_009",
@@ -805,13 +1308,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_plastic_009/Nov27_09h21m53s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_plastic_009/Nov27_09h22m28s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_plastic_009/Nov27_09h23m07s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_plastic_009/Nov27_09h23m46s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_plastic_009/Nov27_10h59m38s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_plastic_009/Nov27_11h00m14s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_plastic_009/Nov27_11h00m50s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_plastic_009/Nov27_11h01m26s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_plastic_009/Nov27_11h02m04s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_plastic_009/Nov27_11h02m42s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_plastic_009/Nov27_09h23m46s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_plastic_009/SVBRDF",
@@ -838,13 +1335,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_plastic_009/Nov27_09h21m53s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_plastic_009/Nov27_09h22m28s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_plastic_009/Nov27_09h23m07s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_plastic_009/Nov27_09h23m46s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_plastic_009/Nov27_10h59m38s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_plastic_009/Nov27_11h00m14s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_plastic_009/Nov27_11h00m50s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_plastic_009/Nov27_11h01m26s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_plastic_009/Nov27_11h02m04s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_plastic_009/Nov27_11h02m42s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_plastic_009/Nov27_09h23m46s"
    },
    "eval_psnr": {
     "bilinear": 39.79330874546398,
@@ -871,13 +1362,7 @@
     "matup_shared_zinit_s2": 38.022186627130104,
     "matup_split_zinit_s0": 37.867983954524654,
     "matup_split_zinit_s1": 37.548854349641715,
-    "matup_split_zinit_s2": 37.67028208524446,
-    "matup_shared_st_s0": 37.76855855579049,
-    "matup_shared_st_s1": 38.33149087552473,
-    "matup_shared_st_s2": 37.381700708349086,
-    "matup_split_st_s0": 38.16872415298996,
-    "matup_split_st_s1": 32.72374169095788,
-    "matup_split_st_s2": 17.333653942517344
+    "matup_split_zinit_s2": 37.67028208524446
    },
    "missing": [],
    "zoom": {
@@ -886,10 +1371,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_acg_plastic_009.png",
-    "zoom/matup_shared_vs_split_acg_plastic_009_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_acg_plastic_009.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_acg_plastic_009_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_acg_plastic_009.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_acg_plastic_009_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_acg_plastic_009.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_acg_plastic_009_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "acg_roofing_tiles_006",
@@ -921,13 +1500,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_roofing_tiles_006/Nov27_09h29m18s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_roofing_tiles_006/Nov27_09h29m54s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_roofing_tiles_006/Nov27_09h30m33s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_roofing_tiles_006/Nov27_09h31m12s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_roofing_tiles_006/Nov27_11h03m20s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_roofing_tiles_006/Nov27_11h03m56s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_roofing_tiles_006/Nov27_11h04m33s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_roofing_tiles_006/Nov27_11h05m09s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_roofing_tiles_006/Nov27_11h05m48s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_roofing_tiles_006/Nov27_11h06m27s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_roofing_tiles_006/Nov27_09h31m12s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_roofing_tiles_006/SVBRDF",
@@ -954,13 +1527,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_roofing_tiles_006/Nov27_09h29m18s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_roofing_tiles_006/Nov27_09h29m54s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_roofing_tiles_006/Nov27_09h30m33s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_roofing_tiles_006/Nov27_09h31m12s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_roofing_tiles_006/Nov27_11h03m20s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_roofing_tiles_006/Nov27_11h03m56s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_roofing_tiles_006/Nov27_11h04m33s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_roofing_tiles_006/Nov27_11h05m09s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_roofing_tiles_006/Nov27_11h05m48s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_roofing_tiles_006/Nov27_11h06m27s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_roofing_tiles_006/Nov27_09h31m12s"
    },
    "eval_psnr": {
     "bilinear": 28.60264055658576,
@@ -987,13 +1554,7 @@
     "matup_shared_zinit_s2": 29.446520825831605,
     "matup_split_zinit_s0": 29.535241431120195,
     "matup_split_zinit_s1": 29.610907911076133,
-    "matup_split_zinit_s2": 29.772337401759273,
-    "matup_shared_st_s0": 29.230658106312504,
-    "matup_shared_st_s1": 29.08875381810556,
-    "matup_shared_st_s2": 29.479032975407495,
-    "matup_split_st_s0": 28.09851873158944,
-    "matup_split_st_s1": 28.19799656584618,
-    "matup_split_st_s2": 28.188995775103955
+    "matup_split_zinit_s2": 29.772337401759273
    },
    "missing": [],
    "zoom": {
@@ -1002,10 +1563,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_acg_roofing_tiles_006.png",
-    "zoom/matup_shared_vs_split_acg_roofing_tiles_006_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_acg_roofing_tiles_006.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_acg_roofing_tiles_006_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_acg_roofing_tiles_006.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_acg_roofing_tiles_006_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_acg_roofing_tiles_006.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_acg_roofing_tiles_006_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "acg_wood_floor_060",
@@ -1037,13 +1692,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_wood_floor_060/Nov27_09h36m46s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_wood_floor_060/Nov27_09h37m21s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_wood_floor_060/Nov27_09h38m00s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_wood_floor_060/Nov27_09h38m38s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_wood_floor_060/Nov27_11h07m05s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_wood_floor_060/Nov27_11h07m41s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_wood_floor_060/Nov27_11h08m17s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_wood_floor_060/Nov27_11h08m53s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_wood_floor_060/Nov27_11h09m32s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_wood_floor_060/Nov27_11h10m10s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_wood_floor_060/Nov27_09h38m38s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_wood_floor_060/SVBRDF",
@@ -1070,13 +1719,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/acg_wood_floor_060/Nov27_09h36m46s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/acg_wood_floor_060/Nov27_09h37m21s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/acg_wood_floor_060/Nov27_09h38m00s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_wood_floor_060/Nov27_09h38m38s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/acg_wood_floor_060/Nov27_11h07m05s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/acg_wood_floor_060/Nov27_11h07m41s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/acg_wood_floor_060/Nov27_11h08m17s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/acg_wood_floor_060/Nov27_11h08m53s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/acg_wood_floor_060/Nov27_11h09m32s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/acg_wood_floor_060/Nov27_11h10m10s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/acg_wood_floor_060/Nov27_09h38m38s"
    },
    "eval_psnr": {
     "bilinear": 33.72186803634651,
@@ -1103,13 +1746,7 @@
     "matup_shared_zinit_s2": 34.19133121039961,
     "matup_split_zinit_s0": 34.1476749482092,
     "matup_split_zinit_s1": 34.06316826370259,
-    "matup_split_zinit_s2": 34.00956696167895,
-    "matup_shared_st_s0": 34.132494523566834,
-    "matup_shared_st_s1": 34.11950051360249,
-    "matup_shared_st_s2": 34.124447875193574,
-    "matup_split_st_s0": 34.11917782557479,
-    "matup_split_st_s1": 34.036226649672365,
-    "matup_split_st_s2": 34.07431276457948
+    "matup_split_zinit_s2": 34.00956696167895
    },
    "missing": [],
    "zoom": {
@@ -1118,10 +1755,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_acg_wood_floor_060.png",
-    "zoom/matup_shared_vs_split_acg_wood_floor_060_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_acg_wood_floor_060.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_acg_wood_floor_060_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_acg_wood_floor_060.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_acg_wood_floor_060_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_acg_wood_floor_060.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_acg_wood_floor_060_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "tc_metal_029",
@@ -1153,13 +1884,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/tc_metal_029/Nov27_09h44m10s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/tc_metal_029/Nov27_09h44m46s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/tc_metal_029/Nov27_09h45m25s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/tc_metal_029/Nov27_09h46m04s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/tc_metal_029/Nov27_11h10m48s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/tc_metal_029/Nov27_11h11m24s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/tc_metal_029/Nov27_11h12m00s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/tc_metal_029/Nov27_11h12m37s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/tc_metal_029/Nov27_11h13m15s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/tc_metal_029/Nov27_11h13m54s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/tc_metal_029/Nov27_09h46m04s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/tc_metal_029/SVBRDF",
@@ -1186,13 +1911,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/tc_metal_029/Nov27_09h44m10s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/tc_metal_029/Nov27_09h44m46s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/tc_metal_029/Nov27_09h45m25s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/tc_metal_029/Nov27_09h46m04s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/tc_metal_029/Nov27_11h10m48s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/tc_metal_029/Nov27_11h11m24s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/tc_metal_029/Nov27_11h12m00s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/tc_metal_029/Nov27_11h12m37s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/tc_metal_029/Nov27_11h13m15s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/tc_metal_029/Nov27_11h13m54s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/tc_metal_029/Nov27_09h46m04s"
    },
    "eval_psnr": {
     "bilinear": 30.080738834451598,
@@ -1219,13 +1938,7 @@
     "matup_shared_zinit_s2": 29.662726134212484,
     "matup_split_zinit_s0": 29.46698874535096,
     "matup_split_zinit_s1": 29.66140461511902,
-    "matup_split_zinit_s2": 29.669501064374586,
-    "matup_shared_st_s0": 29.605814579700798,
-    "matup_shared_st_s1": 29.62346089599821,
-    "matup_shared_st_s2": 29.682329452360232,
-    "matup_split_st_s0": 24.147174316891288,
-    "matup_split_st_s1": 24.340602613036427,
-    "matup_split_st_s2": 22.48896572225324
+    "matup_split_zinit_s2": 29.669501064374586
    },
    "missing": [],
    "zoom": {
@@ -1234,10 +1947,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_tc_metal_029.png",
-    "zoom/matup_shared_vs_split_tc_metal_029_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_tc_metal_029.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_tc_metal_029_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_tc_metal_029.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_tc_metal_029_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_tc_metal_029.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_tc_metal_029_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "th_brick_wall_005",
@@ -1269,13 +2076,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/th_brick_wall_005/Nov27_09h51m37s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/th_brick_wall_005/Nov27_09h52m14s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/th_brick_wall_005/Nov27_09h52m53s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/th_brick_wall_005/Nov27_09h53m31s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/th_brick_wall_005/Nov27_11h14m33s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/th_brick_wall_005/Nov27_11h15m09s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/th_brick_wall_005/Nov27_11h15m46s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/th_brick_wall_005/Nov27_11h16m22s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/th_brick_wall_005/Nov27_11h17m01s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/th_brick_wall_005/Nov27_11h17m39s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/th_brick_wall_005/Nov27_09h53m31s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/th_brick_wall_005/SVBRDF",
@@ -1302,13 +2103,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/th_brick_wall_005/Nov27_09h51m37s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/th_brick_wall_005/Nov27_09h52m14s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/th_brick_wall_005/Nov27_09h52m53s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/th_brick_wall_005/Nov27_09h53m31s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/th_brick_wall_005/Nov27_11h14m33s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/th_brick_wall_005/Nov27_11h15m09s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/th_brick_wall_005/Nov27_11h15m46s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/th_brick_wall_005/Nov27_11h16m22s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/th_brick_wall_005/Nov27_11h17m01s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/th_brick_wall_005/Nov27_11h17m39s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/th_brick_wall_005/Nov27_09h53m31s"
    },
    "eval_psnr": {
     "bilinear": 21.718209809605593,
@@ -1335,13 +2130,7 @@
     "matup_shared_zinit_s2": 22.145005224408273,
     "matup_split_zinit_s0": 22.093938477279455,
     "matup_split_zinit_s1": 22.12693825652542,
-    "matup_split_zinit_s2": 22.127103581033147,
-    "matup_shared_st_s0": 21.8912985345625,
-    "matup_shared_st_s1": 22.050133905193775,
-    "matup_shared_st_s2": 22.04696349910284,
-    "matup_split_st_s0": 22.010761219918287,
-    "matup_split_st_s1": 22.040237121355993,
-    "matup_split_st_s2": 22.04453990096082
+    "matup_split_zinit_s2": 22.127103581033147
    },
    "missing": [],
    "zoom": {
@@ -1350,10 +2139,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_th_brick_wall_005.png",
-    "zoom/matup_shared_vs_split_th_brick_wall_005_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_th_brick_wall_005.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_th_brick_wall_005_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_th_brick_wall_005.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_th_brick_wall_005_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_th_brick_wall_005.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_th_brick_wall_005_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   },
   {
    "material": "th_brown_mud_leaves_001",
@@ -1385,13 +2268,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/th_brown_mud_leaves_001/Nov27_09h59m09s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/th_brown_mud_leaves_001/Nov27_09h59m46s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/th_brown_mud_leaves_001/Nov27_10h00m25s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/th_brown_mud_leaves_001/Nov27_10h01m04s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/th_brown_mud_leaves_001/Nov27_11h18m18s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/th_brown_mud_leaves_001/Nov27_11h18m54s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/th_brown_mud_leaves_001/Nov27_11h19m30s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/th_brown_mud_leaves_001/Nov27_11h20m06s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/th_brown_mud_leaves_001/Nov27_11h20m45s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/th_brown_mud_leaves_001/Nov27_11h21m24s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/th_brown_mud_leaves_001/Nov27_10h01m04s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/th_brown_mud_leaves_001/SVBRDF",
@@ -1418,13 +2295,7 @@
     "matup_shared_zinit_s2": "/workspace/runs/matup_split/matup_shared_zinit/s2/th_brown_mud_leaves_001/Nov27_09h59m09s",
     "matup_split_zinit_s0": "/workspace/runs/matup_split/matup_split_zinit/s0/th_brown_mud_leaves_001/Nov27_09h59m46s",
     "matup_split_zinit_s1": "/workspace/runs/matup_split/matup_split_zinit/s1/th_brown_mud_leaves_001/Nov27_10h00m25s",
-    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/th_brown_mud_leaves_001/Nov27_10h01m04s",
-    "matup_shared_st_s0": "/workspace/runs/matup_split/matup_shared_st/s0/th_brown_mud_leaves_001/Nov27_11h18m18s",
-    "matup_shared_st_s1": "/workspace/runs/matup_split/matup_shared_st/s1/th_brown_mud_leaves_001/Nov27_11h18m54s",
-    "matup_shared_st_s2": "/workspace/runs/matup_split/matup_shared_st/s2/th_brown_mud_leaves_001/Nov27_11h19m30s",
-    "matup_split_st_s0": "/workspace/runs/matup_split/matup_split_st/s0/th_brown_mud_leaves_001/Nov27_11h20m06s",
-    "matup_split_st_s1": "/workspace/runs/matup_split/matup_split_st/s1/th_brown_mud_leaves_001/Nov27_11h20m45s",
-    "matup_split_st_s2": "/workspace/runs/matup_split/matup_split_st/s2/th_brown_mud_leaves_001/Nov27_11h21m24s"
+    "matup_split_zinit_s2": "/workspace/runs/matup_split/matup_split_zinit/s2/th_brown_mud_leaves_001/Nov27_10h01m04s"
    },
    "eval_psnr": {
     "bilinear": 20.78798096238719,
@@ -1451,13 +2322,7 @@
     "matup_shared_zinit_s2": 20.513877112617237,
     "matup_split_zinit_s0": 20.48800058345637,
     "matup_split_zinit_s1": 20.52185221557287,
-    "matup_split_zinit_s2": 20.493937648357246,
-    "matup_shared_st_s0": 20.459926338608373,
-    "matup_shared_st_s1": 20.44437866579915,
-    "matup_shared_st_s2": 20.4436071294344,
-    "matup_split_st_s0": 20.44082166244834,
-    "matup_split_st_s1": 20.51569474541317,
-    "matup_split_st_s2": 20.489471377392007
+    "matup_split_zinit_s2": 20.493937648357246
    },
    "missing": [],
    "zoom": {
@@ -1466,10 +2331,104 @@
     "size": 96,
     "rule": "busiest GT EVAL render window"
    },
-   "files": [
-    "material/matup_shared_vs_split_th_brown_mud_leaves_001.png",
-    "zoom/matup_shared_vs_split_th_brown_mud_leaves_001_zoom.png"
-   ]
+   "files": {
+    "width/material/matup_width_th_brown_mud_leaves_001.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "width/zoom/matup_width_th_brown_mud_leaves_001_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_split_x1_s0",
+     "matup_split_x1_s1",
+     "matup_split_x1_s2",
+     "matup_split_x3_s0",
+     "matup_split_x3_s1",
+     "matup_split_x3_s2"
+    ],
+    "noreg/material/matup_noreg_th_brown_mud_leaves_001.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "noreg/zoom/matup_noreg_th_brown_mud_leaves_001_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_noreg_s0",
+     "matup_shared_noreg_s1",
+     "matup_shared_noreg_s2",
+     "matup_split_noreg_s0",
+     "matup_split_noreg_s1",
+     "matup_split_noreg_s2"
+    ],
+    "zinit/material/matup_zinit_th_brown_mud_leaves_001.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ],
+    "zinit/zoom/matup_zinit_th_brown_mud_leaves_001_zoom.png": [
+     "gt",
+     "bilinear",
+     "matup_shared_s0",
+     "matup_shared_s1",
+     "matup_shared_s2",
+     "matup_split_s0",
+     "matup_split_s1",
+     "matup_split_s2",
+     "matup_shared_zinit_s0",
+     "matup_shared_zinit_s1",
+     "matup_shared_zinit_s2",
+     "matup_split_zinit_s0",
+     "matup_split_zinit_s1",
+     "matup_split_zinit_s2"
+    ]
+   }
   }
  ]
 }
