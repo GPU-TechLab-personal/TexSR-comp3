@@ -315,9 +315,43 @@ E0과 E2는 평가 arm이라 `bash scripts/eval.sh score matup/ep10`, `bash scri
 | H4 | 틀림 | shared 사망 6개 중 5개가 tag 0 (초기 사망) |
 | H5a | 맞음 (예측보다 강함) | zinit은 초기 사망뿐 아니라 drift 사망도 0 |
 | H5b | 틀림 → 제외 | §7 |
-| H6 | 평가 대기 | `matup_shared_vs_split/ep10/summary.md` |
+| H6 | 맞음 | noreg shared render 25.54 dB, 원래 25.56. plastic의 사망 패턴도 같음(noreg shared 28.2~28.4, noreg split $s_0$ 22.6 dB). 정규화를 끄면 metallic 맵만 나빠짐(shared 37.5 → 25.3 dB) |
 
 **결론.** 채널 사망은 공유와 분할 모두에서 일어납니다. 원인은 주로 초기화입니다. 무작위 마지막 층이 모든 texel에 거의 같은 오프셋 $\mu_0\approx\pm0.06$을 더합니다. 어두운 채널은 여유가 그보다 작아(plastic $R$ 0.0034, $B$ 0.0062, $G$ 0.0224) 음의 $\mu_0$가 나오면 바로 경계 밖으로 나갑니다. 분할은 죽은 그룹 MLP가 멈추므로 되살아나지 못합니다. 0 초기화는 이것을 없앱니다. 그러므로 공유 대 분할의 공정한 비교는 `matup_split_zinit − matup_shared_zinit`입니다. 붕괴 자체는 `montage/zinit/`(위: 원래 MatUp, 아래: zinit)에서 볼 수 있습니다.
+
+### 6.1 평가 (`runs/eval/matup_shared_vs_split/ep10/summary.md`)
+
+self-check는 24 column × 12 재질 모두 통과했습니다. 최대 30.2 LSB로, 허용치 32.8 LSB(5e-4)보다 작습니다. 표의 값은 재질 12개 평균이고, ± 는 seed 3개의 표준편차입니다 **[관측]**.
+
+| | render PSNR (train100) | baseColor PSNR | roughness PSNR |
+|---|---|---|---|
+| bilinear | 26.56 | 31.93 | 32.52 |
+| shared | 25.56 ± 0.01 | 27.20 ± 0.08 | 23.77 ± 0.03 |
+| split | 25.70 ± 0.62 | 27.90 ± 1.19 | 25.84 ± 0.99 |
+| shared_zinit | 26.27 ± 0.00 | 28.84 ± 0.02 | 24.80 ± 0.06 |
+| split_zinit | 26.26 ± 0.01 | 29.19 ± 0.06 | 26.85 ± 0.09 |
+
+**짝 비교 split − shared** (같은 재질과 seed끼리 뺀 값, (w/n) = split이 나은 경우)
+
+| | render PSNR | roughness PSNR | baseColor PSNR | metallic PSNR | rm만 바꾼 $\ell_{2,1}$ | full / sum |
+|---|---|---|---|---|---|---|
+| 원래 | +0.13 ± 0.63 (19/36) | +2.07 ± 0.97 (29/36) | +0.70 ± 1.14 | −2.76 ± 3.29 | | |
+| zinit | −0.01 ± 0.01 (22/36) | +2.05 ± 0.14 (29/36) | +0.35 ± 0.08 | +0.71 ± 0.18 | −0.0010 (28/36) | +0.008 |
+
+- **원래 MatUp의 seed 편차는 거의 전부 채널 붕괴에서 옵니다.** split render의 std가 0.62에서 0.01로 줄었습니다. shared도 붕괴(plastic $R,B$)가 사라지며 0.7 dB 올랐습니다.
+- **붕괴를 빼면 렌더는 같고 맵은 분할이 낫습니다.** 특히 roughness는 +2 dB이고 seed와 상관없이 일정합니다.
+- **공유는 맵 사이의 상쇄에 조금 더 기댑니다.** full/sum은 shared 0.705, split 0.713이고, rm만 SR로 바꾼 오차는 split이 더 작습니다. 렌더 손실만으로는 두 구조가 같은 점수에 도달하지만, 공유는 맵끼리 오차를 맞바꿔서 도달합니다(SPLIT_THEORY C-1의 예측 방향).
+- **폭(x1, x3)의 효과는 붕괴 노이즈 안에 묻힙니다.** x1은 −0.20 ± 0.39, x3는 +0.01 ± 0.32입니다. zinit과 함께 돌리지 않아, 붕괴가 없을 때의 폭 효과는 측정하지 않았습니다.
+- **주의: PSNR로는 bilinear가 모든 MatUp arm보다 좋습니다.** FLIP도 bilinear가 0.115, zinit이 0.140으로 bilinear가 낫고, LPIPS만 MatUp이 조금 낫습니다(0.548 대 0.561). 이 결과는 분할 대 공유의 비교이고, MatUp 대 bilinear의 비교가 아닙니다.
+
+**몽타주** (`runs/eval/matup_shared_vs_split/ep10/montage/zinit/`)에서 plastic_009의 EVAL PSNR은 다음과 같습니다. bilinear는 39.8 dB입니다.
+
+| | $s_0$ | $s_1$ | $s_2$ |
+|---|---|---|---|
+| shared | 28.4 | 28.6 | 28.6 |
+| split | 23.7 | 37.6 | 31.1 |
+| shared_zinit | 38.0 | 38.0 | 38.0 |
+| split_zinit | 37.9 | 37.6 | 37.7 |
 
 ## 7. straight-through clamp(`*_st`)를 뺀 이유
 
