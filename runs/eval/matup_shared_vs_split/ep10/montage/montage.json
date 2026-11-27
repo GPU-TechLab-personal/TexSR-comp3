@@ -4,27 +4,40 @@
   "gt",
   "bilinear",
   "matup_shared_s0",
-  "matup_split_s0"
+  "matup_shared_s1",
+  "matup_shared_s2",
+  "matup_split_s0",
+  "matup_split_s1",
+  "matup_split_s2",
+  "matup_split_x1_s0",
+  "matup_split_x1_s1",
+  "matup_split_x1_s2",
+  "matup_split_x3_s0",
+  "matup_split_x3_s1",
+  "matup_split_x3_s2"
  ],
  "displays": [
   "GT",
   "bilinear",
   "MatUp shared MLP s0",
-  "MatUp split MLP s0"
+  "MatUp shared MLP s1",
+  "MatUp shared MLP s2",
+  "MatUp split MLP s0",
+  "MatUp split MLP s1",
+  "MatUp split MLP s2",
+  "MatUp split MLP 1x s0",
+  "MatUp split MLP 1x s1",
+  "MatUp split MLP 1x s2",
+  "MatUp split MLP 3x s0",
+  "MatUp split MLP 3x s1",
+  "MatUp split MLP 3x s2"
  ],
  "seeds": [
-  0
+  0,
+  1,
+  2
  ],
- "skipped": [
-  [
-   "matup_split_x1_s0",
-   "no MatUp output in /workspace/runs/matup_split/matup_split_x1/s0"
-  ],
-  [
-   "matup_split_x3_s0",
-   "no MatUp output in /workspace/runs/matup_split/matup_split_x3/s0"
-  ]
- ],
+ "skipped": [],
  "heat_gain": 4.0,
  "cell": 256,
  "zoom": 96,
@@ -38,17 +51,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/0559_brick_uneven_stones/Nov23_09h06m52s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/0559_brick_uneven_stones/Nov23_09h09m11s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/0559_brick_uneven_stones/Nov23_09h07m38s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/0559_brick_uneven_stones/Nov23_09h08m24s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/0559_brick_uneven_stones/Nov23_09h09m11s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/0559_brick_uneven_stones/Nov23_09h10m02s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/0559_brick_uneven_stones/Nov23_09h10m52s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/0559_brick_uneven_stones/Nov27_02h25m36s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/0559_brick_uneven_stones/Nov27_02h26m14s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/0559_brick_uneven_stones/Nov27_02h26m50s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/0559_brick_uneven_stones/Nov27_02h27m25s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/0559_brick_uneven_stones/Nov27_02h28m04s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/0559_brick_uneven_stones/Nov27_02h28m44s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/0559_brick_uneven_stones/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/0559_brick_uneven_stones/Nov23_09h06m52s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/0559_brick_uneven_stones/Nov23_09h09m11s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/0559_brick_uneven_stones/Nov23_09h07m38s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/0559_brick_uneven_stones/Nov23_09h08m24s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/0559_brick_uneven_stones/Nov23_09h09m11s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/0559_brick_uneven_stones/Nov23_09h10m02s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/0559_brick_uneven_stones/Nov23_09h10m52s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/0559_brick_uneven_stones/Nov27_02h25m36s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/0559_brick_uneven_stones/Nov27_02h26m14s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/0559_brick_uneven_stones/Nov27_02h26m50s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/0559_brick_uneven_stones/Nov27_02h27m25s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/0559_brick_uneven_stones/Nov27_02h28m04s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/0559_brick_uneven_stones/Nov27_02h28m44s"
    },
    "eval_psnr": {
     "bilinear": 30.467063865228596,
     "matup_shared_s0": 29.89276137530588,
-    "matup_split_s0": 29.874134746197406
+    "matup_shared_s1": 29.928857470306617,
+    "matup_shared_s2": 29.88759864786596,
+    "matup_split_s0": 29.874134746197406,
+    "matup_split_s1": 29.93471681439633,
+    "matup_split_s2": 29.84598629098584,
+    "matup_split_x1_s0": 29.92279560188081,
+    "matup_split_x1_s1": 29.819366512066612,
+    "matup_split_x1_s2": 29.832755397685414,
+    "matup_split_x3_s0": 29.8387782967683,
+    "matup_split_x3_s1": 29.877935681645724,
+    "matup_split_x3_s2": 29.78947687097042
    },
    "missing": [],
    "zoom": {
@@ -70,17 +113,47 @@
    "valid_frac": 0.9996422996878251,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/0844_syntetic_foam/Nov23_09h11m43s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/0844_syntetic_foam/Nov23_09h14m06s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/0844_syntetic_foam/Nov23_09h12m31s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/0844_syntetic_foam/Nov23_09h13m19s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/0844_syntetic_foam/Nov23_09h14m06s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/0844_syntetic_foam/Nov23_09h14m57s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/0844_syntetic_foam/Nov23_09h15m49s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/0844_syntetic_foam/Nov27_02h29m24s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/0844_syntetic_foam/Nov27_02h30m00s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/0844_syntetic_foam/Nov27_02h30m36s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/0844_syntetic_foam/Nov27_02h31m11s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/0844_syntetic_foam/Nov27_02h31m51s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/0844_syntetic_foam/Nov27_02h32m31s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/0844_syntetic_foam/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/0844_syntetic_foam/Nov23_09h11m43s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/0844_syntetic_foam/Nov23_09h14m06s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/0844_syntetic_foam/Nov23_09h12m31s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/0844_syntetic_foam/Nov23_09h13m19s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/0844_syntetic_foam/Nov23_09h14m06s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/0844_syntetic_foam/Nov23_09h14m57s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/0844_syntetic_foam/Nov23_09h15m49s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/0844_syntetic_foam/Nov27_02h29m24s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/0844_syntetic_foam/Nov27_02h30m00s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/0844_syntetic_foam/Nov27_02h30m36s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/0844_syntetic_foam/Nov27_02h31m11s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/0844_syntetic_foam/Nov27_02h31m51s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/0844_syntetic_foam/Nov27_02h32m31s"
    },
    "eval_psnr": {
     "bilinear": 21.73134128317671,
     "matup_shared_s0": 21.920448497789337,
-    "matup_split_s0": 21.862879566104105
+    "matup_shared_s1": 21.898313939920534,
+    "matup_shared_s2": 21.91430566706741,
+    "matup_split_s0": 21.862879566104105,
+    "matup_split_s1": 21.93444297258441,
+    "matup_split_s2": 21.869872241231356,
+    "matup_split_x1_s0": 21.89205384602974,
+    "matup_split_x1_s1": 21.91892631109161,
+    "matup_split_x1_s2": 21.906484768381567,
+    "matup_split_x3_s0": 21.955819716151996,
+    "matup_split_x3_s1": 21.943044895338772,
+    "matup_split_x3_s2": 21.982943459242893
    },
    "missing": [],
    "zoom": {
@@ -102,17 +175,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/1587_cobblestones/Nov23_09h16m40s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/1587_cobblestones/Nov23_09h19m02s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/1587_cobblestones/Nov23_09h17m27s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/1587_cobblestones/Nov23_09h18m15s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/1587_cobblestones/Nov23_09h19m02s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/1587_cobblestones/Nov23_09h19m53s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/1587_cobblestones/Nov23_09h20m45s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/1587_cobblestones/Nov27_02h33m11s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/1587_cobblestones/Nov27_02h33m48s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/1587_cobblestones/Nov27_02h34m23s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/1587_cobblestones/Nov27_02h34m59s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/1587_cobblestones/Nov27_02h35m39s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/1587_cobblestones/Nov27_02h36m19s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/1587_cobblestones/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/1587_cobblestones/Nov23_09h16m40s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/1587_cobblestones/Nov23_09h19m02s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/1587_cobblestones/Nov23_09h17m27s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/1587_cobblestones/Nov23_09h18m15s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/1587_cobblestones/Nov23_09h19m02s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/1587_cobblestones/Nov23_09h19m53s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/1587_cobblestones/Nov23_09h20m45s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/1587_cobblestones/Nov27_02h33m11s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/1587_cobblestones/Nov27_02h33m48s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/1587_cobblestones/Nov27_02h34m23s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/1587_cobblestones/Nov27_02h34m59s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/1587_cobblestones/Nov27_02h35m39s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/1587_cobblestones/Nov27_02h36m19s"
    },
    "eval_psnr": {
     "bilinear": 28.110076801215133,
     "matup_shared_s0": 28.301954644364486,
-    "matup_split_s0": 28.411515908965832
+    "matup_shared_s1": 28.143844306882944,
+    "matup_shared_s2": 28.254358485628494,
+    "matup_split_s0": 28.411515908965832,
+    "matup_split_s1": 28.391468075893126,
+    "matup_split_s2": 28.35127610938489,
+    "matup_split_x1_s0": 28.27094254919968,
+    "matup_split_x1_s1": 28.269576417821618,
+    "matup_split_x1_s2": 28.26691116426752,
+    "matup_split_x3_s0": 28.344234069183027,
+    "matup_split_x3_s1": 28.29089248255993,
+    "matup_split_x3_s2": 28.269113483477824
    },
    "missing": [],
    "zoom": {
@@ -134,17 +237,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/2119_corten_steel/Nov23_09h21m35s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/2119_corten_steel/Nov23_09h24m00s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/2119_corten_steel/Nov23_09h22m23s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/2119_corten_steel/Nov23_09h23m12s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/2119_corten_steel/Nov23_09h24m00s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/2119_corten_steel/Nov23_09h24m50s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/2119_corten_steel/Nov23_09h25m42s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/2119_corten_steel/Nov27_02h36m59s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/2119_corten_steel/Nov27_02h37m36s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/2119_corten_steel/Nov27_02h38m12s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/2119_corten_steel/Nov27_02h38m48s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/2119_corten_steel/Nov27_02h39m28s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/2119_corten_steel/Nov27_02h40m08s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/2119_corten_steel/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/2119_corten_steel/Nov23_09h21m35s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/2119_corten_steel/Nov23_09h24m00s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/2119_corten_steel/Nov23_09h22m23s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/2119_corten_steel/Nov23_09h23m12s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/2119_corten_steel/Nov23_09h24m00s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/2119_corten_steel/Nov23_09h24m50s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/2119_corten_steel/Nov23_09h25m42s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/2119_corten_steel/Nov27_02h36m59s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/2119_corten_steel/Nov27_02h37m36s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/2119_corten_steel/Nov27_02h38m12s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/2119_corten_steel/Nov27_02h38m48s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/2119_corten_steel/Nov27_02h39m28s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/2119_corten_steel/Nov27_02h40m08s"
    },
    "eval_psnr": {
     "bilinear": 21.31234576034428,
     "matup_shared_s0": 21.50511370733517,
-    "matup_split_s0": 21.42024090503636
+    "matup_shared_s1": 21.326343949996627,
+    "matup_shared_s2": 21.266079905993287,
+    "matup_split_s0": 21.42024090503636,
+    "matup_split_s1": 21.473662075684405,
+    "matup_split_s2": 21.224925866804902,
+    "matup_split_x1_s0": 21.36580326383022,
+    "matup_split_x1_s1": 21.21380419253747,
+    "matup_split_x1_s2": 21.387619351500323,
+    "matup_split_x3_s0": 21.448168742786947,
+    "matup_split_x3_s1": 21.364931590409437,
+    "matup_split_x3_s2": 21.262229139806056
    },
    "missing": [],
    "zoom": {
@@ -166,17 +299,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_concrete_026/Nov23_09h26m33s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_concrete_026/Nov23_09h28m55s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_concrete_026/Nov23_09h27m19s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_concrete_026/Nov23_09h28m07s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_concrete_026/Nov23_09h28m55s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_concrete_026/Nov23_09h29m46s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_concrete_026/Nov23_09h30m38s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_concrete_026/Nov27_02h40m48s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_concrete_026/Nov27_02h41m25s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_concrete_026/Nov27_02h42m01s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_concrete_026/Nov27_02h42m37s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_concrete_026/Nov27_02h43m17s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_concrete_026/Nov27_02h43m57s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_concrete_026/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_concrete_026/Nov23_09h26m33s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_concrete_026/Nov23_09h28m55s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_concrete_026/Nov23_09h27m19s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_concrete_026/Nov23_09h28m07s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_concrete_026/Nov23_09h28m55s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_concrete_026/Nov23_09h29m46s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_concrete_026/Nov23_09h30m38s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_concrete_026/Nov27_02h40m48s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_concrete_026/Nov27_02h41m25s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_concrete_026/Nov27_02h42m01s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_concrete_026/Nov27_02h42m37s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_concrete_026/Nov27_02h43m17s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_concrete_026/Nov27_02h43m57s"
    },
    "eval_psnr": {
     "bilinear": 21.8644263617553,
     "matup_shared_s0": 21.131863743025647,
-    "matup_split_s0": 21.14686994039318
+    "matup_shared_s1": 21.09042418826163,
+    "matup_shared_s2": 21.215149507362028,
+    "matup_split_s0": 21.14686994039318,
+    "matup_split_s1": 21.17157100757307,
+    "matup_split_s2": 21.120369588602532,
+    "matup_split_x1_s0": 21.174754848722813,
+    "matup_split_x1_s1": 21.131028125156377,
+    "matup_split_x1_s2": 21.16244552200469,
+    "matup_split_x3_s0": 20.99674077647819,
+    "matup_split_x3_s1": 21.095468191987248,
+    "matup_split_x3_s2": 21.18464630138896
    },
    "missing": [],
    "zoom": {
@@ -198,17 +361,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_metal_026/Nov23_09h31m30s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_metal_026/Nov23_09h33m50s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_metal_026/Nov23_09h32m16s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_metal_026/Nov23_09h33m03s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_metal_026/Nov23_09h33m50s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_metal_026/Nov23_09h34m41s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_metal_026/Nov23_09h35m31s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_metal_026/Nov27_02h44m37s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_metal_026/Nov27_02h45m13s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_metal_026/Nov27_02h45m49s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_metal_026/Nov27_02h46m24s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_metal_026/Nov27_02h47m04s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_metal_026/Nov27_02h47m44s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_metal_026/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_metal_026/Nov23_09h31m30s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_metal_026/Nov23_09h33m50s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_metal_026/Nov23_09h32m16s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_metal_026/Nov23_09h33m03s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_metal_026/Nov23_09h33m50s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_metal_026/Nov23_09h34m41s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_metal_026/Nov23_09h35m31s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_metal_026/Nov27_02h44m37s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_metal_026/Nov27_02h45m13s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_metal_026/Nov27_02h45m49s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_metal_026/Nov27_02h46m24s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_metal_026/Nov27_02h47m04s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_metal_026/Nov27_02h47m44s"
    },
    "eval_psnr": {
     "bilinear": 29.64123579426591,
     "matup_shared_s0": 29.33938898319202,
-    "matup_split_s0": 29.2930294243282
+    "matup_shared_s1": 29.329324829823417,
+    "matup_shared_s2": 29.196998188416327,
+    "matup_split_s0": 29.2930294243282,
+    "matup_split_s1": 29.261071544440263,
+    "matup_split_s2": 29.255578903144045,
+    "matup_split_x1_s0": 29.184924609430922,
+    "matup_split_x1_s1": 29.22274253802569,
+    "matup_split_x1_s2": 29.17845638970612,
+    "matup_split_x3_s0": 29.17113258041043,
+    "matup_split_x3_s1": 29.195560378019117,
+    "matup_split_x3_s2": 29.24584979413533
    },
    "missing": [],
    "zoom": {
@@ -230,17 +423,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_plastic_009/Nov23_09h36m21s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_plastic_009/Nov23_09h38m43s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_plastic_009/Nov23_09h37m09s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_plastic_009/Nov23_09h37m56s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_plastic_009/Nov23_09h38m43s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_plastic_009/Nov23_09h39m33s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_plastic_009/Nov23_09h40m25s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_plastic_009/Nov27_02h48m24s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_plastic_009/Nov27_02h49m00s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_plastic_009/Nov27_02h49m36s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_plastic_009/Nov27_02h50m11s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_plastic_009/Nov27_02h50m51s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_plastic_009/Nov27_02h51m31s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_plastic_009/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_plastic_009/Nov23_09h36m21s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_plastic_009/Nov23_09h38m43s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_plastic_009/Nov23_09h37m09s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_plastic_009/Nov23_09h37m56s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_plastic_009/Nov23_09h38m43s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_plastic_009/Nov23_09h39m33s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_plastic_009/Nov23_09h40m25s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_plastic_009/Nov27_02h48m24s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_plastic_009/Nov27_02h49m00s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_plastic_009/Nov27_02h49m36s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_plastic_009/Nov27_02h50m11s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_plastic_009/Nov27_02h50m51s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_plastic_009/Nov27_02h51m31s"
    },
    "eval_psnr": {
     "bilinear": 39.79330874546398,
     "matup_shared_s0": 28.43834063844809,
-    "matup_split_s0": 23.686592118456787
+    "matup_shared_s1": 28.576732868181512,
+    "matup_shared_s2": 28.55270210927378,
+    "matup_split_s0": 23.686592118456787,
+    "matup_split_s1": 37.60407423913163,
+    "matup_split_s2": 31.07422270776747,
+    "matup_split_x1_s0": 23.65179443033096,
+    "matup_split_x1_s1": 31.03649466741559,
+    "matup_split_x1_s2": 28.476450486184657,
+    "matup_split_x3_s0": 31.178283113644163,
+    "matup_split_x3_s1": 28.662583040184412,
+    "matup_split_x3_s2": 30.985285977769976
    },
    "missing": [],
    "zoom": {
@@ -262,17 +485,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_roofing_tiles_006/Nov23_09h41m15s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_roofing_tiles_006/Nov23_09h43m35s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_roofing_tiles_006/Nov23_09h42m01s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_roofing_tiles_006/Nov23_09h42m48s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_roofing_tiles_006/Nov23_09h43m35s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_roofing_tiles_006/Nov23_09h44m26s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_roofing_tiles_006/Nov23_09h45m17s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_roofing_tiles_006/Nov27_02h52m11s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_roofing_tiles_006/Nov27_02h52m48s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_roofing_tiles_006/Nov27_02h53m23s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_roofing_tiles_006/Nov27_02h53m59s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_roofing_tiles_006/Nov27_02h54m39s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_roofing_tiles_006/Nov27_02h55m19s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_roofing_tiles_006/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_roofing_tiles_006/Nov23_09h41m15s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_roofing_tiles_006/Nov23_09h43m35s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_roofing_tiles_006/Nov23_09h42m01s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_roofing_tiles_006/Nov23_09h42m48s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_roofing_tiles_006/Nov23_09h43m35s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_roofing_tiles_006/Nov23_09h44m26s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_roofing_tiles_006/Nov23_09h45m17s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_roofing_tiles_006/Nov27_02h52m11s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_roofing_tiles_006/Nov27_02h52m48s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_roofing_tiles_006/Nov27_02h53m23s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_roofing_tiles_006/Nov27_02h53m59s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_roofing_tiles_006/Nov27_02h54m39s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_roofing_tiles_006/Nov27_02h55m19s"
    },
    "eval_psnr": {
     "bilinear": 28.60264055658576,
     "matup_shared_s0": 29.506217947682757,
-    "matup_split_s0": 29.617720942183734
+    "matup_shared_s1": 29.478408915330824,
+    "matup_shared_s2": 29.508847247090845,
+    "matup_split_s0": 29.617720942183734,
+    "matup_split_s1": 29.568789191275663,
+    "matup_split_s2": 29.74079105716127,
+    "matup_split_x1_s0": 29.675811929831752,
+    "matup_split_x1_s1": 29.640017067044838,
+    "matup_split_x1_s2": 23.93724222411987,
+    "matup_split_x3_s0": 29.65306279910923,
+    "matup_split_x3_s1": 23.88769858144236,
+    "matup_split_x3_s2": 29.587576869442252
    },
    "missing": [],
    "zoom": {
@@ -294,17 +547,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_wood_floor_060/Nov23_09h46m07s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_wood_floor_060/Nov23_09h48m29s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_wood_floor_060/Nov23_09h46m55s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_wood_floor_060/Nov23_09h47m42s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_wood_floor_060/Nov23_09h48m29s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_wood_floor_060/Nov23_09h49m19s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_wood_floor_060/Nov23_09h50m09s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_wood_floor_060/Nov27_02h55m59s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_wood_floor_060/Nov27_02h56m36s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_wood_floor_060/Nov27_02h57m12s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_wood_floor_060/Nov27_02h57m48s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_wood_floor_060/Nov27_02h58m28s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_wood_floor_060/Nov27_02h59m08s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/acg_wood_floor_060/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/acg_wood_floor_060/Nov23_09h46m07s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_wood_floor_060/Nov23_09h48m29s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/acg_wood_floor_060/Nov23_09h46m55s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/acg_wood_floor_060/Nov23_09h47m42s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/acg_wood_floor_060/Nov23_09h48m29s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/acg_wood_floor_060/Nov23_09h49m19s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/acg_wood_floor_060/Nov23_09h50m09s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/acg_wood_floor_060/Nov27_02h55m59s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/acg_wood_floor_060/Nov27_02h56m36s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/acg_wood_floor_060/Nov27_02h57m12s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/acg_wood_floor_060/Nov27_02h57m48s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/acg_wood_floor_060/Nov27_02h58m28s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/acg_wood_floor_060/Nov27_02h59m08s"
    },
    "eval_psnr": {
     "bilinear": 33.72186803634651,
     "matup_shared_s0": 34.19187823448417,
-    "matup_split_s0": 34.147024607314876
+    "matup_shared_s1": 34.193665439077215,
+    "matup_shared_s2": 34.26130147150797,
+    "matup_split_s0": 34.147024607314876,
+    "matup_split_s1": 34.1147731484025,
+    "matup_split_s2": 34.07365230329089,
+    "matup_split_x1_s0": 34.1426038830067,
+    "matup_split_x1_s1": 34.13499262508687,
+    "matup_split_x1_s2": 34.14572548579669,
+    "matup_split_x3_s0": 34.01344090158404,
+    "matup_split_x3_s1": 33.83589585459164,
+    "matup_split_x3_s2": 34.05142905280797
    },
    "missing": [],
    "zoom": {
@@ -326,17 +609,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/tc_metal_029/Nov23_09h50m59s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/tc_metal_029/Nov23_09h53m20s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/tc_metal_029/Nov23_09h51m45s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/tc_metal_029/Nov23_09h52m33s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/tc_metal_029/Nov23_09h53m20s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/tc_metal_029/Nov23_09h54m10s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/tc_metal_029/Nov23_09h55m01s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/tc_metal_029/Nov27_02h59m48s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/tc_metal_029/Nov27_03h00m25s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/tc_metal_029/Nov27_03h01m00s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/tc_metal_029/Nov27_03h01m36s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/tc_metal_029/Nov27_03h02m16s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/tc_metal_029/Nov27_03h02m56s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/tc_metal_029/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/tc_metal_029/Nov23_09h50m59s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/tc_metal_029/Nov23_09h53m20s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/tc_metal_029/Nov23_09h51m45s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/tc_metal_029/Nov23_09h52m33s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/tc_metal_029/Nov23_09h53m20s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/tc_metal_029/Nov23_09h54m10s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/tc_metal_029/Nov23_09h55m01s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/tc_metal_029/Nov27_02h59m48s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/tc_metal_029/Nov27_03h00m25s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/tc_metal_029/Nov27_03h01m00s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/tc_metal_029/Nov27_03h01m36s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/tc_metal_029/Nov27_03h02m16s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/tc_metal_029/Nov27_03h02m56s"
    },
    "eval_psnr": {
     "bilinear": 30.080738834451598,
     "matup_shared_s0": 29.536715047823403,
-    "matup_split_s0": 29.52462658766724
+    "matup_shared_s1": 29.615313417564,
+    "matup_shared_s2": 29.5977355550785,
+    "matup_split_s0": 29.52462658766724,
+    "matup_split_s1": 29.580716539623214,
+    "matup_split_s2": 29.68175930201899,
+    "matup_split_x1_s0": 29.6896352512265,
+    "matup_split_x1_s1": 29.695034344969283,
+    "matup_split_x1_s2": 29.67263009683628,
+    "matup_split_x3_s0": 29.5889885208171,
+    "matup_split_x3_s1": 29.581597320614073,
+    "matup_split_x3_s2": 29.671542641681782
    },
    "missing": [],
    "zoom": {
@@ -358,17 +671,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/th_brick_wall_005/Nov23_09h55m52s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/th_brick_wall_005/Nov23_09h58m13s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/th_brick_wall_005/Nov23_09h56m38s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/th_brick_wall_005/Nov23_09h57m26s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/th_brick_wall_005/Nov23_09h58m13s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/th_brick_wall_005/Nov23_09h59m04s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/th_brick_wall_005/Nov23_09h59m54s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/th_brick_wall_005/Nov27_03h03m36s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/th_brick_wall_005/Nov27_03h04m13s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/th_brick_wall_005/Nov27_03h04m49s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/th_brick_wall_005/Nov27_03h05m25s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/th_brick_wall_005/Nov27_03h06m05s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/th_brick_wall_005/Nov27_03h06m45s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/th_brick_wall_005/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/th_brick_wall_005/Nov23_09h55m52s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/th_brick_wall_005/Nov23_09h58m13s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/th_brick_wall_005/Nov23_09h56m38s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/th_brick_wall_005/Nov23_09h57m26s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/th_brick_wall_005/Nov23_09h58m13s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/th_brick_wall_005/Nov23_09h59m04s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/th_brick_wall_005/Nov23_09h59m54s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/th_brick_wall_005/Nov27_03h03m36s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/th_brick_wall_005/Nov27_03h04m13s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/th_brick_wall_005/Nov27_03h04m49s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/th_brick_wall_005/Nov27_03h05m25s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/th_brick_wall_005/Nov27_03h06m05s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/th_brick_wall_005/Nov27_03h06m45s"
    },
    "eval_psnr": {
     "bilinear": 21.718209809605593,
     "matup_shared_s0": 22.186848754715598,
-    "matup_split_s0": 22.092616098055945
+    "matup_shared_s1": 22.055188484902555,
+    "matup_shared_s2": 22.145153810405837,
+    "matup_split_s0": 22.092616098055945,
+    "matup_split_s1": 22.127370596109863,
+    "matup_split_s2": 22.04021443257836,
+    "matup_split_x1_s0": 22.072502517206516,
+    "matup_split_x1_s1": 22.08921810956634,
+    "matup_split_x1_s2": 22.07666306353696,
+    "matup_split_x3_s0": 22.120422765193915,
+    "matup_split_x3_s1": 22.125489339915752,
+    "matup_split_x3_s2": 22.06999104553479
    },
    "missing": [],
    "zoom": {
@@ -390,17 +733,47 @@
    "valid_frac": 1.0,
    "matup_runs": {
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/th_brown_mud_leaves_001/Nov23_10h00m46s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/th_brown_mud_leaves_001/Nov23_10h03m10s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/th_brown_mud_leaves_001/Nov23_10h01m34s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/th_brown_mud_leaves_001/Nov23_10h02m23s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/th_brown_mud_leaves_001/Nov23_10h03m10s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/th_brown_mud_leaves_001/Nov23_10h04m02s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/th_brown_mud_leaves_001/Nov23_10h04m52s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/th_brown_mud_leaves_001/Nov27_03h07m25s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/th_brown_mud_leaves_001/Nov27_03h08m02s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/th_brown_mud_leaves_001/Nov27_03h08m38s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/th_brown_mud_leaves_001/Nov27_03h09m14s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/th_brown_mud_leaves_001/Nov27_03h09m54s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/th_brown_mud_leaves_001/Nov27_03h10m34s"
    },
    "sources": {
     "bilinear": "/data/TexSR-data/matsynth/th_brown_mud_leaves_001/SVBRDF",
     "matup_shared_s0": "/workspace/runs/matup_split/matup_shared/s0/th_brown_mud_leaves_001/Nov23_10h00m46s",
-    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/th_brown_mud_leaves_001/Nov23_10h03m10s"
+    "matup_shared_s1": "/workspace/runs/matup_split/matup_shared/s1/th_brown_mud_leaves_001/Nov23_10h01m34s",
+    "matup_shared_s2": "/workspace/runs/matup_split/matup_shared/s2/th_brown_mud_leaves_001/Nov23_10h02m23s",
+    "matup_split_s0": "/workspace/runs/matup_split/matup_split/s0/th_brown_mud_leaves_001/Nov23_10h03m10s",
+    "matup_split_s1": "/workspace/runs/matup_split/matup_split/s1/th_brown_mud_leaves_001/Nov23_10h04m02s",
+    "matup_split_s2": "/workspace/runs/matup_split/matup_split/s2/th_brown_mud_leaves_001/Nov23_10h04m52s",
+    "matup_split_x1_s0": "/workspace/runs/matup_split/matup_split_x1/s0/th_brown_mud_leaves_001/Nov27_03h07m25s",
+    "matup_split_x1_s1": "/workspace/runs/matup_split/matup_split_x1/s1/th_brown_mud_leaves_001/Nov27_03h08m02s",
+    "matup_split_x1_s2": "/workspace/runs/matup_split/matup_split_x1/s2/th_brown_mud_leaves_001/Nov27_03h08m38s",
+    "matup_split_x3_s0": "/workspace/runs/matup_split/matup_split_x3/s0/th_brown_mud_leaves_001/Nov27_03h09m14s",
+    "matup_split_x3_s1": "/workspace/runs/matup_split/matup_split_x3/s1/th_brown_mud_leaves_001/Nov27_03h09m54s",
+    "matup_split_x3_s2": "/workspace/runs/matup_split/matup_split_x3/s2/th_brown_mud_leaves_001/Nov27_03h10m34s"
    },
    "eval_psnr": {
     "bilinear": 20.78798096238719,
     "matup_shared_s0": 20.493370661641784,
-    "matup_split_s0": 20.453404191679567
+    "matup_shared_s1": 20.451817576464105,
+    "matup_shared_s2": 20.45047096696677,
+    "matup_split_s0": 20.453404191679567,
+    "matup_split_s1": 20.51720524963911,
+    "matup_split_s2": 20.506669647460633,
+    "matup_split_x1_s0": 20.447012138084656,
+    "matup_split_x1_s1": 20.463715933492864,
+    "matup_split_x1_s2": 20.535150318322344,
+    "matup_split_x3_s0": 20.532621962667257,
+    "matup_split_x3_s1": 20.534582156658367,
+    "matup_split_x3_s2": 20.511518755106707
    },
    "missing": [],
    "zoom": {
@@ -414,6 +787,5 @@
     "zoom/matup_shared_vs_split_th_brown_mud_leaves_001_zoom.png"
    ]
   }
- ],
- "note": "moved from runs/eval/main; only bilinear + matup arms kept (as score --only matup)"
+ ]
 }
