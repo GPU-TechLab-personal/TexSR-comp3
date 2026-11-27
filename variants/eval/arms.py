@@ -22,13 +22,18 @@ Report column order (summary.md, report.json):
   matup_shared_noreg_s<k>, matup_split_noreg_s<k>
                         shared / split (width 128) with MatUp's metallic regulariser off
                         (--alpha_reg 0, SPLIT_THEORY B1-4)
+  matup_shared_zinit_s<k>, matup_split_zinit_s<k>
+                        last MLP layer starts at 0 (CLAMP_DEATH.md, I1)
+  matup_shared_st_s<k>, matup_split_st_s<k>
+                        straight-through clamp in training (CLAMP_DEATH.md, I2)
 
 Pairs (split vs its shared counterpart, paired per material):
   deeptex_split_nb23 - deeptex_renloss_21, deeptex_split_nb7 - deeptex_renloss_21,
   deeptex_split_nb7_b8 - deeptex_renloss_21 (not data-matched: 4x the crops),
   deeptex_split_nb*_rmgrey - deeptex_renloss_21,
   matup_split*_s<k> - matup_shared_s<k> for every split arm and seed k
-  (matup_split_noreg_s<k> - matup_shared_noreg_s<k>: the same regulariser on both sides).
+  (matup_split_<v>_s<k> - matup_shared_<v>_s<k> for v = noreg, zinit, st: the same
+  training change on both sides).
 """
 
 import os
@@ -41,13 +46,20 @@ MATUP_RUNS = "/workspace/runs/matup_split"
 
 SEEDS = (0, 1, 2)
 MATUP_ARMS = ("matup_shared", "matup_split", "matup_split_x1", "matup_split_x3",
-              "matup_shared_noreg", "matup_split_noreg")
+              "matup_shared_noreg", "matup_split_noreg",
+              "matup_shared_zinit", "matup_split_zinit",
+              "matup_shared_st", "matup_split_st")
 MATUP_SPLIT_ARMS = tuple(a for a in MATUP_ARMS if a.startswith("matup_split"))
+# training variants applied to both sides of a pair (split_<v> - shared_<v>)
+MATUP_VARIANTS = ("_noreg", "_zinit", "_st")
 
 
 def matup_counterpart(arm):
-    """The shared arm a split arm is paired with: same metallic regulariser."""
-    return "matup_shared_noreg" if arm.endswith("_noreg") else "matup_shared"
+    """The shared arm a split arm is paired with: the same training variant."""
+    for v in MATUP_VARIANTS:
+        if arm.endswith(v):
+            return "matup_shared" + v
+    return "matup_shared"
 
 # DeepTextures arms: config, default checkpoint dir, and how the generator(s) sit
 # in the tf.train.Checkpoint.
@@ -106,6 +118,10 @@ DISPLAY = {
     "matup_split_x3": "MatUp split MLP 3x",
     "matup_shared_noreg": "MatUp shared MLP, no metallic reg",
     "matup_split_noreg": "MatUp split MLP, no metallic reg",
+    "matup_shared_zinit": "MatUp shared MLP, zero-init last layer",
+    "matup_split_zinit": "MatUp split MLP, zero-init last layer",
+    "matup_shared_st": "MatUp shared MLP, straight-through clamp",
+    "matup_split_st": "MatUp split MLP, straight-through clamp",
 }
 
 

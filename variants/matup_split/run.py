@@ -28,6 +28,15 @@ main.py imports them (MatUp's files on disk are never edited):
 5. THE METALLIC REGULARISER. --alpha-reg X is passed to main.py as --alpha_reg X
    (weight of the metallic term, train.loss_fn; MatUp's default 0.1). Only the
    *_noreg arms set it (0, docs/SPLIT_THEORY.md B1-4); omitted, MatUp's default holds.
+6. CLAMP-DEATH TESTS (docs/CLAMP_DEATH.md). All three leave the default run unchanged.
+   --probe       clamp_probe.py: per-channel clamp statistics at initialisation and
+                 after every epoch -> <out>/probe.json (adds --save_interval 1 for
+                 MatUp's per-epoch eval; the per-epoch PNGs are not written)
+   --zero-init   the last layer of every MatUp MLP (shared, or each split sub-MLP)
+                 starts at 0, so f(x) = 0 and every texel starts at the bilinear init
+                 (zeroed after construction: the seed's random stream is unchanged)
+   --st-clamp    training clamps straight-through: forward as MatUp, backward
+                 d clamp(z)/dz = 1 everywhere (albedo, metallic, alpha)
 
 Outputs: MatUp writes <out>/<timestamp>/{baseColor,metallic,normal,roughness,render}_opt.png
 (512^2 with an 8 px border, DirectX normals). This file adds <out>/run.json
@@ -65,6 +74,9 @@ def main():
                     help="split only: sub-MLP hidden width (0 = MatUp's --hid_layer_width, 128)")
     ap.add_argument("--alpha-reg", type=float, default=None,
                     help="optim: metallic regulariser weight (main.py --alpha_reg; default MatUp's 0.1)")
+    ap.add_argument("--probe", action="store_true", help="optim: write <out>/probe.json (clamp_probe.py)")
+    ap.add_argument("--zero-init", action="store_true", help="optim: last MLP layer starts at 0")
+    ap.add_argument("--st-clamp", action="store_true", help="optim: straight-through clamp in training")
     ap.add_argument("--out", default="", help="optim: output folder of this run")
     args = ap.parse_args()
 
@@ -113,6 +125,12 @@ def main():
 
         def counted(*a, **k):
             m = cls(*a, **k)
+            if args.zero_init:                 # after construction: same random stream
+                from matup.model import FullyConnected
+                for mod in m.modules():
+                    if isinstance(mod, FullyConnected):
+                        torch.nn.init.zeros_(mod.mlp[-1].weight)
+                        torch.nn.init.zeros_(mod.mlp[-1].bias)
             built["params"] = sum(p.numel() for p in m.parameters())
             print("[matup_split] mlp=%s width=%s params=%d seed=%d" % (
                 args.mlp, args.split_width or "default", built["params"], args.seed), flush=True)
@@ -128,6 +146,24 @@ def main():
             return np_seed(args.seed if s == MATUP_SEED else s)
         mo.torch.manual_seed = seed_torch
         mo.np.random.seed = seed_np
+
+        if args.st_clamp:
+            import matup.data_utils as du
+            clamped = du.get_renorm_clamped_maps
+
+            def st_clamped(in_maps):          # forward as MatUp, gradient 1 through the clamps
+                raw = {i: in_maps[i] for i in (0, 1, 3)}      # albedo, metallic, alpha
+                out = clamped(in_maps)
+                for i, r in raw.items():
+                    out[i] = r + (out[i] - r).detach()
+                return out
+            du.get_renorm_clamped_maps = st_clamped
+        if args.probe:
+            from matup.renderer import Renderer
+            from variants.matup_split import clamp_probe
+            probe = clamp_probe.Probe(os.path.join(args.out, "probe.json"),
+                                      Renderer.min_alpha, 17)          # main.py --tile_width
+            clamp_probe.install(probe, 10)                             # main.py --nb_epochs
         os.makedirs(args.out, exist_ok=True)
         info.update({"mlp": args.mlp, "seed": args.seed, "built": built})
 
@@ -137,6 +173,8 @@ def main():
             "--output_folder", (args.out or os.path.join(args.cache, "_unused")) + "/"]
     if args.stage == "optim" and args.alpha_reg is not None:
         argv += ["--alpha_reg", repr(args.alpha_reg)]
+    if args.stage == "optim" and args.probe:
+        argv += ["--save_interval", "1"]
     print("[matup_split] %s" % " ".join(argv), flush=True)
     sys.argv = argv
     t0 = time.time()
@@ -156,6 +194,7 @@ def main():
         json.dump({"material": os.path.basename(os.path.normpath(args.material)),
                    "mlp": args.mlp, "split_width": args.split_width or None, "seed": args.seed,
                    "alpha_reg": MATUP_ALPHA_REG if args.alpha_reg is None else args.alpha_reg,
+                   "zero_init": args.zero_init, "st_clamp": args.st_clamp, "probe": args.probe,
                    "params": info["built"].get("params"), "seconds": round(dt, 1),
                    "maps": os.path.relpath(os.path.dirname(outs[-1]), args.out),
                    "cache": args.cache}, f, indent=2)

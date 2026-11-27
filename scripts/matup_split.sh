@@ -10,7 +10,15 @@
 #                                         run; rerun skips finished runs). Arms: matup_shared,
 #                                         matup_split (width 128, 1.32x), matup_split_x1 (width 104,
 #                                         1.00x), matup_split_x3 (width 227, 3.00x), matup_shared_noreg /
-#                                         matup_split_noreg (metallic regulariser off); default all six
+#                                         matup_split_noreg (metallic regulariser off), matup_shared_zinit /
+#                                         matup_split_zinit (last layer starts at 0), matup_shared_st /
+#                                         matup_split_st (straight-through clamp); default all ten
+#   bash scripts/matup_split.sh probe [ARMS] [SEEDS]
+#                                         the same runs again with clamp statistics per epoch
+#                                         (docs/CLAMP_DEATH.md) -> runs/matup_split/probe/ (detached;
+#                                         default matup_shared,matup_split); not an evaluation arm
+#   bash scripts/matup_split.sh report    every probe.json -> runs/eval/matup_clamp_probe/ep10/
+#                                         {report.json,summary.md} (seconds, no GPU)
 #   bash scripts/matup_split.sh status    containers, log tail, runs done
 #   bash scripts/matup_split.sh stop STAGE
 #
@@ -55,23 +63,27 @@ case "${1:-}" in
   optim)
     need "$EVAL" "bash scripts/data.sh import ../TexSR-comp2 (or evalset)"
     detached optim "python $DRIVER optim ${2:+--arms $2} ${3:+--seeds $3}" ;;
+  probe)
+    need "$EVAL" "bash scripts/data.sh import ../TexSR-comp2 (or evalset)"
+    detached probe "python $DRIVER probe ${2:+--arms $2} ${3:+--seeds $3}" ;;
+  report)
+    ( cd docker && $DC run --rm -T matup python /workspace/variants/matup_split/probe_report.py ) ;;
   stop)
-    docker stop "matup_split_${2:?stage: prep or optim}" ;;
+    docker stop "matup_split_${2:?stage: prep, optim or probe}" ;;
   status)
-    for s in prep optim; do
+    for s in prep optim probe; do
       n=matup_split_$s
       [ -n "$(docker ps -aq -f "name=^${n}$")" ] || continue
       docker inspect -f "== $n: {{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} started={{.State.StartedAt}}" "$n"
       [ -f "$LOGS/$n.log" ] && tr '\r' '\n' < "$LOGS/$n.log" | grep -v '^\s*$' | tail -"${LINES:-6}" | cut -c1-200
     done
     [ -d runs/matup_split/cache ] && echo "cache: $(ls runs/matup_split/cache | wc -l) materials"
-    for arm in matup_shared matup_split matup_split_x1 matup_split_x3 matup_shared_noreg matup_split_noreg; do
-      for k in 0 1 2; do
-        d=runs/matup_split/$arm/s$k
-        [ -d "$d" ] && echo "$arm s$k: $(ls "$d"/*/run.json 2>/dev/null | wc -l) done"
-      done
+    for d in runs/matup_split/*/s[0-9]/ runs/matup_split/probe/*/s[0-9]/; do
+      [ -d "$d" ] || continue
+      p=${d#runs/matup_split/}; p=${p%/}
+      echo "${p%/s*} ${p##*/}: $(ls "$d"*/run.json 2>/dev/null | wc -l) done, $(ls "$d"*/probe.json 2>/dev/null | wc -l) probed"
     done
     nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu --format=csv,noheader ;;
   *)
-    sed -n '2,18p' "$0"; exit 1 ;;
+    sed -n '2,26p' "$0"; exit 1 ;;
 esac

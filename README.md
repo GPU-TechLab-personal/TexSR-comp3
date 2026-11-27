@@ -7,7 +7,7 @@ Two methods, each run **shared** (as in TexSR-comp2) and **split**:
 - **DeepTextures + MatUp render loss** (`deeptex_renloss_21` of comp2): three RRDB generators, nb=23 each (3x parameters) and nb=7 each (~0.93x), trained **jointly**. Their outputs form one material, rendered under MatUp's 100 lights, and the l2,1 render loss backpropagates into all three.
 - **MatUp** (EGSR 2024): its per-material MLP split into three group MLPs, each seeing only its own channels. Seeds 0-2.
 
-The formulas, what differs from the original papers and why, are in **[docs/SPLIT_THEORY.md](docs/SPLIT_THEORY.md)**. Every command, in order, is in **[COMMANDS.txt](COMMANDS.txt)**. What differs from comp2 is in [docs/DEVIATIONS.md](docs/DEVIATIONS.md).
+The formulas, what differs from the original papers and why, are in **[docs/SPLIT_THEORY.md](docs/SPLIT_THEORY.md)**; why MatUp's split arms sometimes end with a channel stuck at its clamp bound, and the experiments that test it, in [docs/CLAMP_DEATH.md](docs/CLAMP_DEATH.md). Every command, in order, is in **[COMMANDS.txt](COMMANDS.txt)**. What differs from comp2 is in [docs/DEVIATIONS.md](docs/DEVIATIONS.md).
 
 | path | what |
 |---|---|
