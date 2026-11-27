@@ -72,8 +72,8 @@ BAND_NAMES = ("grazing", "mid", "high")
 SELF_TOL_MATUP = 5e-4
 # Above SELF_TOL_MATUP but below this the run is scored with a warning, not stopped. A
 # wrong map preparation (normal convention, grid, crop) moves the render by >> 1e-2; a
-# few 1e-3 is the 16-bit round trip at the sharpest highlights, e.g. matup_split_st
-# brick where alpha sits at Renderer.min_alpha everywhere (1.2e-3, CLAMP_DEATH.md).
+# few 1e-3 is the 16-bit round trip at the sharpest highlights, e.g. alpha at
+# Renderer.min_alpha everywhere (1.2e-3 on the removed straight-through arm, CLAMP_DEATH.md).
 SELF_FATAL_MATUP = 1e-2
 RENDER_OPT = "render_opt.png"
 

@@ -106,8 +106,8 @@ bash scripts/matup_split.sh prep
 
 # 5-3 최적화: 12 재질 x arm x seed {0,1,2} (백그라운드, 회당 1~2분)
 #     arm: matup_shared, matup_split (폭 128, 1.32배), matup_split_x1 (폭 104, 1.00배),
-#          matup_split_x3 (폭 227, 3.00배), noreg (5-4), zinit / st (5-6).
-#          기본은 열 개 전부 = 360회
+#          matup_split_x3 (폭 227, 3.00배), noreg (5-4), zinit (5-6).
+#          기본은 여덟 개 전부 = 288회
 #     끊기면 다시 실행 -> 끝난 run은 건너뜀 (이미 끝난 shared / split 72회는 건너뜀)
 bash scripts/matup_split.sh optim
 #     파라미터 맞춘 두 arm만: bash scripts/matup_split.sh optim matup_split_x1,matup_split_x3
@@ -124,9 +124,10 @@ bash scripts/matup_split.sh optim matup_shared_noreg,matup_split_noreg
 bash scripts/matup_split.sh probe
 tail -f runs/logs/matup_split_probe.log      # [probe] <tag>: dead ... 줄로 epoch별 죽은 채널 확인
 
-# 5-6 수정안 (CLAMP_DEATH.md E2): 마지막 층 0 초기화(zinit), straight-through clamp(st), 공유·분할 모두
-#     probe 포함. 144회, 1.5시간 안팎. 끝나면 [6] 평가 (score / montage matup/ep10)
-bash scripts/matup_split.sh optim matup_shared_zinit,matup_split_zinit,matup_shared_st,matup_split_st
+# 5-6 수정안 (CLAMP_DEATH.md E2): 마지막 층 0 초기화(zinit), 공유·분할 모두
+#     probe 포함. 72회, 45분 안팎. 끝나면 [6] 평가 (score / montage matup/ep10)
+#     (straight-through clamp(st)는 시도 후 제외: CLAMP_DEATH.md "ST 제외")
+bash scripts/matup_split.sh optim matup_shared_zinit,matup_split_zinit
 
 # 5-7 probe 표: probe.json 전부 -> runs/eval/matup_clamp_probe/ep10/{summary.md,report.json} (몇 초, git에 올라감)
 bash scripts/matup_split.sh report
@@ -160,8 +161,13 @@ bash scripts/eval.sh infer deeptex/30k
 #     zoom/<실험>_<재질>_zoom.png        노란 박스 영역(디테일이 가장 많은 96x96 texel)을 확대한 것
 bash scripts/eval.sh montage deeptex/40k
 bash scripts/eval.sh montage matup/ep10
+#     MatUp은 학습 설정별로 폴더가 나뉨 (한 장에 arm 전부면 26줄):
+#       montage/width/  공유, 분할(1.32배), 분할 1배, 분할 3배
+#       montage/noreg/  공유, 분할 | metallic reg 끈 공유, 분할   (위 두 줄 = 원래 MatUp 기준)
+#       montage/zinit/  공유, 분할 | 마지막 층 0 초기화 공유, 분할  <- 채널 사망 있음 / 없음 비교
+#       각 폴더 안에 material/ zoom/ overview/. 결과가 아직 없는 설정은 폴더가 안 생김
 #     MatUp seed 전부: bash scripts/eval.sh montage matup/ep10 --seeds 0,1,2
-#       -> montage/by_seed/s0,s1,s2/ 에 seed별 sheet도 같이 생김 (GT, bilinear + 그 seed의 arm만)
+#       -> montage/<설정>/by_seed/s0,s1,s2/ 에 seed별 sheet도 같이 생김 (GT, bilinear + 그 seed의 arm만)
 #     git으로 받은 sheet를 seed별로 자르기만: bash scripts/eval.sh split matup/ep10  (몇 초)
 #     줌 위치 직접 지정 (crop 좌표 y,x): bash scripts/eval.sh montage deeptex/40k --zoom 64 --zoom-at 200,120 --material <재질>
 

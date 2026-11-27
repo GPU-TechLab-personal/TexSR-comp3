@@ -30,18 +30,24 @@ map) on comp3's evaluation code, with the comp3 conventions:
            inferno, GT-invalid texels grey. The PSNR in its corner is that render's
            over the GT-valid texels of the cell (the whole crop, or the zoom window).
 
-EXPERIMENTS  one set of sheets each, the experiment in every file name (<exp>):
-  deeptex_shared_vs_split   GT | bilinear | DeepTex shared (renloss_21), split nb23,
-                            split nb7, split nb7 B=8 (each when its maps exist)
-  matup_shared_vs_split     GT | bilinear | MatUp shared MLP s<k>, split MLP s<k> for
-                            each --seeds k (default 0 = MatUp as released)
-  An arm with no output at all is left out (warning); one missing a material is left
-  out of that material's sheets (--keep-missing draws an n/a row instead). An
-  experiment with no arm at all writes nothing.
+EXPERIMENTS  one set of sheets each, in its own folder <dir> under montage/ and with
+  <exp> starting every file name. DeepTex is one experiment; MatUp is one per training
+  setting (one sheet with every MatUp arm and seed was 32 rows), with seed k's rows for
+  each --seeds k (default 0 = MatUp as released):
+  <exp>  (<dir>)                      rows after GT | bilinear
+  deeptex_shared_vs_split (montage/)  DeepTex shared (renloss_21), split nb23, nb7, nb7 B=8,
+                                      nb23 / nb7 RM grey (each when its maps exist)
+  matup_width (width/)                MatUp shared MLP, split MLP (1.32x), split 1x, split 3x
+  matup_noreg (noreg/)                shared, split | shared, split without the metallic reg
+  matup_zinit (zinit/)                shared, split | shared, split with zero-init last layer
+  The variant sheets repeat the released pair (shared, split) as the reference, above a
+  separator. An arm with no output at all is left out (warning); one missing a material
+  is left out of that material's sheets (--keep-missing draws an n/a row instead). An
+  experiment with none of its own arms (the reference does not count) writes nothing.
 
-OUTPUTS  <eval-root>/<name>/montage/{material,zoom,overview}/, one folder per kind of
-         sheet; every file name starts with <exp>. scripts/eval.sh gives each experiment
-         its own <name> = <exp>/<checkpoint> and --only, so one experiment per folder
+OUTPUTS  <eval-root>/<name>/montage/<dir>/{material,zoom,overview}/, one folder per kind
+         of sheet (montage/{material,...}/ for DeepTex). scripts/eval.sh gives each
+         family its own <name> = <family>/<checkpoint> and --only, one family per folder
   material/<exp>_<material>.png        the whole crop; the zoom window outlined in yellow
   zoom/<exp>_<material>_zoom.png       the same rows and columns on the zoom window, texels
                               enlarged (nearest). Window: --zoom texels square, at
@@ -51,14 +57,16 @@ OUTPUTS  <eval-root>/<name>/montage/{material,zoom,overview}/, one folder per ki
                               experiments.
   overview/<exp>_overview_<key>.png    materials down, rows across, for key in baseColor,
                               normal, roughness, metallic, render (EVAL_LIGHT), error
-  montage.json (in montage/)  per material: border, crop, zoom window, sources, EVAL
-                              PSNR (whole crop) per row, missing rows, files (relative
-                              to montage/)
-  by_seed/s<k>/<kind>/        with two or more --seeds: every sheet again with GT,
-                              bilinear and seed k's rows only (split_sheets.py)
-  Earlier layouts' sheets are removed on every run: montage/<exp>/<kind>/ and the flat
-  montage/<exp>_*.png, and the first version's <material>.png, <material>_zoom.png,
-  overview_<key>.png.
+  montage.json (in montage/)  sheets: per <dir>, its <exp> and row keys; per material:
+                              border, crop, zoom window, sources, EVAL PSNR (whole crop)
+                              per row, missing rows, files ({path relative to montage/:
+                              its row keys})
+  <dir>/by_seed/s<k>/<kind>/  with two or more --seeds: every sheet of <dir> again with
+                              GT, bilinear and seed k's rows only (split_sheets.py)
+  Earlier layouts' sheets are removed on every run: the single MatUp set
+  montage/<kind>/matup_shared_vs_split_* with montage/by_seed/ (before the settings),
+  montage/<exp>/<kind>/ and the flat montage/<exp>_*.png, and the first version's
+  <material>.png, <material>_zoom.png, overview_<key>.png.
 """
 import argparse
 import glob
@@ -90,17 +98,36 @@ OV_KEYS = list(MAP4) + ["render", "error"]
 HEADS = list(MAP4) + ["render EVAL_LIGHT (67 deg)", "render held-out grazing",
                       "|render - GT| x%g (EVAL)" % S.HEAT_GAIN]
 GROUP = {"gt": "gt", "bilinear": "bilinear", "deeptex": "deeptex", "matup": "matup"}
-# One set of sheets per experiment: (file-name prefix, row group, title). GT and
-# bilinear (SHARED_GROUPS) head every experiment's sheets.
+SHARED_GROUPS = ("gt", "bilinear")                 # head every experiment's sheets
+MATUP_REF = ("matup_shared", "matup_split")        # MatUp as released: the variants' reference
+# One set of sheets per experiment. dir: its folder under montage/ ("" = montage/ itself);
+# prefix: starts every file name; kind: the arms' kind; arms: its own arms (None = every
+# arm of the kind); ref: arms repeated above a separator as the reference.
 EXPERIMENTS = (
-    ("deeptex_shared_vs_split", "deeptex", "DeepTextures: shared vs split"),
-    ("matup_shared_vs_split", "matup", "MatUp: shared vs split MLP"),
+    {"dir": "", "prefix": "deeptex_shared_vs_split", "kind": "deeptex", "arms": None, "ref": (),
+     "title": "DeepTextures: shared vs split"},
+    {"dir": "width", "prefix": "matup_width", "kind": "matup", "ref": (),
+     "arms": ("matup_shared", "matup_split", "matup_split_x1", "matup_split_x3"),
+     "title": "MatUp: shared vs split MLP (1.32x, 1x, 3x the parameters)"},
+    {"dir": "noreg", "prefix": "matup_noreg", "kind": "matup", "ref": MATUP_REF,
+     "arms": ("matup_shared_noreg", "matup_split_noreg"),
+     "title": "MatUp: released | no metallic regulariser"},
+    {"dir": "zinit", "prefix": "matup_zinit", "kind": "matup", "ref": MATUP_REF,
+     "arms": ("matup_shared_zinit", "matup_split_zinit"),
+     "title": "MatUp: released | zero-init last layer"},
 )
-SHARED_GROUPS = ("gt", "bilinear")
+LEGACY_PREFIXES = ("deeptex_shared_vs_split", "matup_shared_vs_split")   # earlier layouts
+_unsheeted = set(A.MATUP_ARMS) - {a for e in EXPERIMENTS if e["kind"] == "matup"
+                                  for a in e["arms"]}
+assert not _unsheeted, "MatUp arms on no montage sheet: %s" % sorted(_unsheeted)
 
 
 def label(col):
     return col["display"] if col["kind"] != "gt" else "GT"
+
+
+def arm_of(col):
+    return col.get("arm", col["key"])
 
 
 def masked_psnr(img, gt, mask_hw):
@@ -184,7 +211,7 @@ def process(mat_dir, cols, args, device, lights):
     gt_stored = {m: E.read_stored(os.path.join(mat_dir, "GT", m + ".png"), m) for m in MAP4}
     gt_eval, gt_graz = render_two(gt4, gt_pos, border, lights, device, "%s gt" % name)
 
-    rows = [{"key": "gt", "label": "GT", "group": "gt", "kind": "gt",
+    rows = [{"key": "gt", "arm": "gt", "label": "GT", "group": "gt", "kind": "gt",
              "maps": display_maps(gt_stored, "gt", border), "eval": gt_eval, "graz": gt_graz}]
     info = {"material": name, "border": border, "full": full, "side": side,
             "valid_frac": float(mask_hw.mean()), "matup_runs": runs, "sources": {},
@@ -195,8 +222,8 @@ def process(mat_dir, cols, args, device, lights):
         if got is None:
             info["missing"].append(key)
             rows.append(None if not args.keep_missing else
-                        {"key": key, "label": label(col), "group": GROUP[col["kind"]],
-                         "kind": "missing"})
+                        {"key": key, "arm": arm_of(col), "label": label(col),
+                         "group": GROUP[col["kind"]], "kind": "missing"})
             continue
         maps4, stored, src = got
         if any(t.shape[0] != full for t in maps4) or \
@@ -206,8 +233,8 @@ def process(mat_dir, cols, args, device, lights):
         ev, gr = render_two(maps4, gt_pos, border, lights, device, "%s %s" % (name, key))
         info["sources"][key] = src.get("dir")
         info["eval_psnr"][key] = masked_psnr(ev, gt_eval, mask_hw)
-        rows.append({"key": key, "label": label(col), "group": GROUP[col["kind"]],
-                     "kind": col["kind"], "maps": display_maps(stored, col["kind"], border),
+        rows.append({"key": key, "arm": arm_of(col), "label": label(col),
+                     "group": GROUP[col["kind"]], "kind": col["kind"], "maps": display_maps(stored, col["kind"], border),
                      "eval": ev, "graz": gr})
 
     if args.zoom_at:
@@ -227,8 +254,22 @@ def process(mat_dir, cols, args, device, lights):
 
 # ------------------------------------------------------------------- pictures
 
-def in_experiment(group, exp_group):
-    return group in SHARED_GROUPS or group == exp_group
+def in_experiment(group, arm, exp):
+    """A row (its group and arm) belongs on the experiment's sheets."""
+    if group in SHARED_GROUPS:
+        return True
+    return group == GROUP[exp["kind"]] and (
+        exp["arms"] is None or arm in exp["arms"] or arm in exp["ref"])
+
+
+def own_arm(group, arm, exp):
+    """One of the experiment's own arms (not GT / bilinear / the reference)."""
+    return group == GROUP[exp["kind"]] and (exp["arms"] is None or arm in exp["arms"])
+
+
+def sep_group(group, arm, exp):
+    """Separator group: the reference rows apart from the experiment's own."""
+    return "ref" if group not in SHARED_GROUPS and arm in exp["ref"] else group
 
 
 def remove_if(path):
@@ -236,11 +277,16 @@ def remove_if(path):
         os.remove(path)
 
 
-def sheet_path(out, kind, fname):
-    """montage/<kind>/<fname> (the file name starts with the experiment)."""
-    d = os.path.join(out, kind)
+def sheet_path(out, exp, kind, fname):
+    """montage/<dir>/<kind>/<fname> (the file name starts with the experiment)."""
+    d = os.path.join(out, exp["dir"], kind)
     os.makedirs(d, exist_ok=True)
     return os.path.join(d, fname)
+
+
+def rel(exp, kind, fname):
+    """The sheet's path relative to montage/ (montage.json)."""
+    return "/".join(p for p in (exp["dir"], kind, fname) if p)
 
 
 def write_material(out, info, rows, mask_hw, args):
@@ -254,14 +300,14 @@ def write_material(out, info, rows, mask_hw, args):
     for old in (name + ".png", name + "_zoom.png"):   # the first version's file names
         remove_if(os.path.join(out, old))
 
-    def sheet_rows(sel, size, cut):
+    def sheet_rows(sel, size, cut, exp):
         out_rows = []
         for r in sel:
             if r["kind"] == "missing":
                 cells = [S.placeholder(size, ["no output"])] * len(HEADS)
             else:
                 cells = cells_for(r, gt_eval, mask_hw, side, size, cut)
-            out_rows.append((r["label"], r["group"], cells))
+            out_rows.append((r["label"], sep_group(r["group"], r["arm"], exp), cells))
         return out_rows
 
     notes = ["%d^2 crop (MatUp's %d px rim removed from every row). Every arm rendered with "
@@ -274,22 +320,25 @@ def write_material(out, info, rows, mask_hw, args):
                   zm["y0"], zm["y0"] + zm["size"], zm["x0"], zm["x0"] + zm["size"], side,
                   zm["rule"], args.zoom_cell / float(zm["size"])),
               notes[1].split(" Yellow box")[0]]
-    info["files"] = []
-    for prefix, exp_group, title in EXPERIMENTS:
-        sel = [r for r in present if in_experiment(r["group"], exp_group)]
-        if not any(r["group"] == exp_group for r in sel):
+    info["files"] = {}
+    for exp in EXPERIMENTS:
+        sel = [r for r in present if in_experiment(r["group"], r["arm"], exp)]
+        if not any(own_arm(r["group"], r["arm"], exp) for r in sel):
             continue
-        full_rows = sheet_rows(sel, args.cell, None)
+        prefix, title = exp["prefix"], exp["title"]
+        full_rows = sheet_rows(sel, args.cell, None, exp)
         for c in full_rows[0][2][:6]:                 # the GT row: where the zoom is
             S.draw_box(c, box, side)
         f_full, f_zoom = "%s_%s.png" % (prefix, name), "%s_%s_zoom.png" % (prefix, name)
-        S.write_png(sheet_path(out, "material", f_full),
+        S.write_png(sheet_path(out, exp, "material", f_full),
                     S.sheet("%s  -  %s  -  %s" % (title, name, args.name), notes, HEADS,
                             full_rows, args.cell))
-        S.write_png(sheet_path(out, "zoom", f_zoom),
+        S.write_png(sheet_path(out, exp, "zoom", f_zoom),
                     S.sheet("%s  -  %s  -  zoom  -  %s" % (title, name, args.name), znotes,
-                            HEADS, sheet_rows(sel, args.zoom_cell, box), args.zoom_cell))
-        info["files"] += ["material/" + f_full, "zoom/" + f_zoom]
+                            HEADS, sheet_rows(sel, args.zoom_cell, box, exp), args.zoom_cell))
+        keys = [r["key"] for r in sel]                # split_sheets.py cuts by these
+        info["files"][rel(exp, "material", f_full)] = keys
+        info["files"][rel(exp, "zoom", f_zoom)] = keys
     return {r["key"]: r for r in present}
 
 
@@ -356,12 +405,16 @@ def main():
         die(2, "no material with SVBRDF/ and GT/ under %s" % args.root)
 
     cols, skipped = E.available_columns(args)
-    # earlier layouts: montage/<exp>/<kind>/ (third version) and montage/<exp>_*.png (second)
-    for prefix, _, _ in EXPERIMENTS:
+    # earlier layouts: montage/<exp>/<kind>/ (third version), montage/<exp>_*.png (second)
+    # and the single MatUp set montage/<kind>/matup_shared_vs_split_* (before the settings;
+    # its montage/by_seed/ goes in split_sheets.split_run)
+    for prefix in LEGACY_PREFIXES:
         if os.path.isdir(os.path.join(out, prefix)):
             shutil.rmtree(os.path.join(out, prefix))
         for old in glob.glob(os.path.join(out, prefix + "_*.png")):
             os.remove(old)
+    for old in glob.glob(os.path.join(out, "*", "matup_shared_vs_split_*.png")):
+        os.remove(old)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     Renderer.init_renderer(argparse.Namespace(light_falloff=False), device)
     lights = rc.build_lights(device)
@@ -373,6 +426,12 @@ def main():
     keys = ["gt"] + [c["key"] for c in cols]
     heads = ["GT"] + [c["display"] for c in cols]
     groups = ["gt"] + [GROUP[c["kind"]] for c in cols]
+    arms = ["gt"] + [arm_of(c) for c in cols]
+    exp_rows = {}                                 # experiment with an own arm -> row indices
+    for exp in EXPERIMENTS:
+        idx = [i for i in range(len(keys)) if in_experiment(groups[i], arms[i], exp)]
+        if any(own_arm(groups[i], arms[i], exp) for i in idx):
+            exp_rows[exp["prefix"]] = idx
     infos, ov = [], {k: [] for k in OV_KEYS}
     with torch.no_grad():
         for d in mats:
@@ -387,23 +446,27 @@ def main():
     if not args.no_overview and not args.material:
         for old in glob.glob(os.path.join(out, "overview_*.png")):   # first version's names
             os.remove(old)
-        for prefix, exp_group, title in EXPERIMENTS:
-            idx = [i for i, g in enumerate(groups) if in_experiment(g, exp_group)]
-            if not any(groups[i] == exp_group for i in idx):
+        for exp in EXPERIMENTS:
+            idx = exp_rows.get(exp["prefix"])
+            if idx is None:
                 continue
             for k in OV_KEYS:
                 what = {"render": "render EVAL_LIGHT (GT height)",
                         "error": "|render - GT| x%g EVAL_LIGHT, EVAL PSNR" % S.HEAT_GAIN
                         }.get(k, k)
                 rows_k = [(mat, [cells[i] for i in idx]) for mat, cells in ov[k]]
-                S.write_png(sheet_path(out, "overview", "%s_overview_%s.png" % (prefix, k)),
+                S.write_png(sheet_path(out, exp, "overview",
+                                       "%s_overview_%s.png" % (exp["prefix"], k)),
                             S.overview("%s  -  %s  -  %s  -  %d materials" % (
-                                title, what, args.name, len(rows_k)),
-                                rows_k, [heads[i] for i in idx], [groups[i] for i in idx],
+                                exp["title"], what, args.name, len(rows_k)),
+                                rows_k, [heads[i] for i in idx],
+                                [sep_group(groups[i], arms[i], exp) for i in idx],
                                 args.ov_cell))
 
+    sheets = {e["dir"]: {"prefix": e["prefix"], "rows": [keys[i] for i in exp_rows[e["prefix"]]]}
+              for e in EXPERIMENTS if e["prefix"] in exp_rows}
     with open(os.path.join(out, "montage.json"), "w") as fh:
-        json.dump(rc.clean({"name": args.name, "rows": keys, "displays": heads,
+        json.dump(rc.clean({"name": args.name, "rows": keys, "displays": heads, "sheets": sheets,
                             "seeds": list(args.seeds), "skipped": skipped,
                             "heat_gain": S.HEAT_GAIN, "cell": args.cell, "zoom": args.zoom,
                             "zoom_cell": args.zoom_cell, "materials": infos}), fh, indent=1)

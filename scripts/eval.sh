@@ -3,7 +3,9 @@
 # One folder per experiment, one sub-folder per checkpoint:
 #   runs/eval/deeptex_shared_vs_split/<N>k/   DeepTex arms, split arms at step N*1000 (30k / 35k / 40k)
 #   runs/eval/matup_shared_vs_split/ep10/     MatUp shared / split MLP (per-material optimisation, 10 epochs)
-# each with report.json, summary.md, montage/{overview,material,zoom}/ (in git) and maps/ (local).
+# each with report.json, summary.md, montage/ (in git) and maps/ (local). DeepTex sheets are in
+# montage/{overview,material,zoom}/, MatUp's one folder per training setting:
+# montage/{width,noreg,zinit}/{overview,material,zoom}/ (montage.py EXPERIMENTS).
 # Run from the repo root in Git Bash (or any Linux shell). RUN = <experiment>/<checkpoint>;
 # deeptex/... and matup/... are accepted for the two experiment folders.
 #
@@ -14,7 +16,7 @@
 #                                                     detached; DeepTex needs infer first); ARGS -> montage.py, e.g. --seeds 0,1,2
 #   bash scripts/eval.sh score   RUN [ARGS]           bilinear + the RUN's arms, every metric -> <RUN>/{report.json,summary.md}
 #                                                     (matup container, detached); ARGS -> evaluate.py, e.g. --no-perceptual
-#   bash scripts/eval.sh split   RUN                  cut the RUN's montage sheets per seed -> <RUN>/montage/by_seed/s<k>/
+#   bash scripts/eval.sh split   RUN                  cut the RUN's montage sheets per seed -> <RUN>/montage/[<setting>/]by_seed/s<k>/
 #                                                     (montage does this itself; for sheets made before, or pulled from git)
 #   bash scripts/eval.sh status                       what is running, log tails, what each RUN has written
 #   bash scripts/eval.sh stop STAGE                   stop a detached stage (infer / montage / score)
@@ -36,7 +38,7 @@ EXPERIMENTS="deeptex_shared_vs_split matup_shared_vs_split"   # montage.py EXPER
 mkdir -p "$LOGS" runs/cache/nv runs/cache/torch
 if docker compose version >/dev/null 2>&1; then DC="docker compose"; else DC="docker-compose"; fi
 
-usage() { sed -n '2,28p' "$0"; exit 1; }
+usage() { sed -n '2,30p' "$0"; exit 1; }
 
 STAGE=${1:-}
 [ $# -gt 0 ] && shift
@@ -141,13 +143,14 @@ case "$STAGE" in
         for a in "$d"maps/*/; do
           [ -d "$a" ] && echo "   maps $(basename "$a"): $(ls -d "$a"*/ 2>/dev/null | wc -l) material(s)"
         done
-        if [ -d "$d"montage ]; then
-          c() { ls "$d"montage/$1/*.png 2>/dev/null | wc -l || true; }
-          echo "   montage: $(c material) material, $(c zoom) zoom, $(c overview) overview"
-          for k in "$d"montage/by_seed/s*/; do
-            [ -d "$k" ] && echo "   montage/by_seed/$(basename "$k"): $(ls "$k"*/*.png 2>/dev/null | wc -l || true) sheet(s)"
+        for m in "$d"montage/ "$d"montage/*/; do              # montage/ itself, or a setting folder
+          [ -d "${m}material" ] || [ -d "${m}overview" ] || continue
+          c() { ls "$m$1"/*.png 2>/dev/null | wc -l || true; }
+          echo "   ${m#"$d"}: $(c material) material, $(c zoom) zoom, $(c overview) overview"
+          for k in "$m"by_seed/s*/; do
+            [ -d "$k" ] && echo "   ${k#"$d"}: $(ls "$k"*/*.png 2>/dev/null | wc -l || true) sheet(s)"
           done
-        fi
+        done
         [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
       done
     done

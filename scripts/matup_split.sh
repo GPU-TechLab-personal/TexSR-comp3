@@ -11,8 +11,7 @@
 #                                         matup_split (width 128, 1.32x), matup_split_x1 (width 104,
 #                                         1.00x), matup_split_x3 (width 227, 3.00x), matup_shared_noreg /
 #                                         matup_split_noreg (metallic regulariser off), matup_shared_zinit /
-#                                         matup_split_zinit (last layer starts at 0), matup_shared_st /
-#                                         matup_split_st (straight-through clamp); default all ten
+#                                         matup_split_zinit (last layer starts at 0); default all eight
 #   bash scripts/matup_split.sh probe [ARMS] [SEEDS]
 #                                         the same runs again with clamp statistics per epoch
 #                                         (docs/CLAMP_DEATH.md) -> runs/matup_split/probe/ (detached;

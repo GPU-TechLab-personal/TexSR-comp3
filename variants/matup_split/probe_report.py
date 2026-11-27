@@ -3,7 +3,7 @@
 
 Tests the clamp-death hypotheses of docs/CLAMP_DEATH.md section 4 on the MatUp runs that
 were probed: the probe stage's re-runs of shared / split (runs/matup_split/probe/<arm>/...)
-and the intervention arms that probe in optim (*_zinit, *_st). Pure Python + json; runs
+and the intervention arms that probe in optim (*_zinit). Pure Python + json; runs
 anywhere (scripts/matup_split.sh report runs it in the matup container).
 
 A channel is DEAD at a probe when no texel is inside its clamp range (active = 0), so it

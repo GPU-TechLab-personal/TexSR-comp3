@@ -3,15 +3,21 @@
 
 With MatUp's seeds 0-2 and four arms, a sheet has 14 rows (GT, bilinear, 4 arms x 3 seeds),
 too many to compare by eye. This keeps, for each seed k, the rows without a seed (GT,
-bilinear) and every seeded row of seed k (<arm>_s<k>), in the order of the full sheet:
+bilinear) and every seeded row of seed k (<arm>_s<k>), in the order of the full sheet,
+for every sheet folder <dir> of montage.json "sheets" (montage/<dir>/, e.g. MatUp's
+width/ noreg/ zinit/; montage/ itself for a montage.json without "sheets"):
 
-  montage/by_seed/s<k>/material/<sheet>_s<k>.png    rows cut out of montage/material/
-  montage/by_seed/s<k>/zoom/<sheet>_s<k>.png        rows cut out of montage/zoom/
-  montage/by_seed/s<k>/overview/<sheet>_s<k>.png    columns cut out of montage/overview/
+  <dir>/by_seed/s<k>/material/<sheet>_s<k>.png    rows cut out of <dir>/material/
+  <dir>/by_seed/s<k>/zoom/<sheet>_s<k>.png        rows cut out of <dir>/zoom/
+  <dir>/by_seed/s<k>/overview/<sheet>_s<k>.png    columns cut out of <dir>/overview/
 
-Pixels are copied, nothing is re-rendered, so it takes seconds and runs anywhere with numpy
-and Pillow (montage.py calls it at the end; scripts/eval.sh split re-cuts existing sheets).
-by_seed/ is rebuilt from scratch every time; it travels with git like the rest of montage/. A run with fewer than two seeds or no seeded row is left alone.
+A sheet's rows are its own (montage.json materials[].files), else its folder's, else the
+run's. Pixels are copied, nothing is re-rendered, so it takes seconds and runs anywhere
+with numpy and Pillow (montage.py calls it at the end; scripts/eval.sh split re-cuts
+existing sheets). by_seed/ is rebuilt from scratch every time (montage/by_seed/ of the
+single-folder layout is removed when montage/ itself is no sheet folder any more); it
+travels with git like the rest of montage/. A folder with fewer than two seeds or no
+seeded row gets no by_seed/.
 
     python variants/eval/split_sheets.py runs/eval/matup_shared_vs_split/ep10
 """
@@ -93,21 +99,20 @@ def save(path, a, title=None):
     im.save(path, optimize=True)
 
 
-def split_run(run_dir, log=print):
-    mont = os.path.join(run_dir, "montage")
-    meta = json.load(open(os.path.join(mont, "montage.json")))
-    rows, seeds = meta["rows"], meta.get("seeds") or []
-    out_root = os.path.join(mont, "by_seed")
+def split_dir(mont, sub, dir_rows, file_rows, meta, log):
+    """by_seed/ of one sheet folder montage/<sub>/; returns the number of sheets cut."""
+    root = os.path.join(mont, sub)
+    seeds = meta.get("seeds") or []
+    out_root = os.path.join(root, "by_seed")
     if os.path.isdir(out_root):
         shutil.rmtree(out_root)
-    if len(seeds) < 2 or not any(SEEDED.match(k) for k in rows):
+    if len(seeds) < 2 or not any(SEEDED.match(k) for k in dir_rows):
         return 0
     cells = {"material": meta["cell"], "zoom": meta["zoom_cell"]}
     n = 0
     for k in seeds:
-        keep, groups = plan(rows, k)
         for kind in ("material", "zoom", "overview"):
-            src_dir = os.path.join(mont, kind)
+            src_dir = os.path.join(root, kind)
             if not os.path.isdir(src_dir):
                 continue
             dst_dir = os.path.join(out_root, "s%d" % k, kind)
@@ -115,6 +120,9 @@ def split_run(run_dir, log=print):
             for f in sorted(os.listdir(src_dir)):
                 if not f.endswith(".png"):
                     continue
+                rows = dir_rows if kind == "overview" else \
+                    file_rows.get("/".join(p for p in (sub, kind, f) if p), dir_rows)
+                keep, groups = plan(rows, k)
                 a = np.asarray(Image.open(os.path.join(src_dir, f)).convert("RGB"))
                 dst = os.path.join(dst_dir, f[:-4] + "_s%d.png" % k)
                 if kind == "overview":
@@ -126,6 +134,20 @@ def split_run(run_dir, log=print):
                 n += 1
     log("[split] %d sheet(s), seeds %s -> %s" % (n, ",".join(map(str, seeds)), out_root))
     return n
+
+
+def split_run(run_dir, log=print):
+    mont = os.path.join(run_dir, "montage")
+    meta = json.load(open(os.path.join(mont, "montage.json")))
+    sheets = meta.get("sheets") or {"": {"rows": meta["rows"]}}   # before the sheet folders
+    file_rows = {}
+    for info in meta.get("materials", []):
+        if isinstance(info.get("files"), dict):                    # list before per-file rows
+            file_rows.update(info["files"])
+    if "" not in sheets and os.path.isdir(os.path.join(mont, "by_seed")):
+        shutil.rmtree(os.path.join(mont, "by_seed"))               # the single-folder layout's
+    return sum(split_dir(mont, sub, s["rows"], file_rows, meta, log)
+               for sub, s in sorted(sheets.items()))
 
 
 def main():

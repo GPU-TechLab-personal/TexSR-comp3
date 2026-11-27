@@ -210,12 +210,12 @@ $$
    - ep10 결과에서 분할 arm의 일부 seed는 채널 하나 이상이 clamp 경계에 붙은 채로 끝났습니다(plastic albedo 전체 0, roofing B 0, brick_wall roughness 1). 이 arm은 그 원인이 정규화항인지 가립니다.
    - 분할에서 albedo MLP는 $z_m$에 닿지 않으므로 $\nabla_{\varphi_a}$(정규화항)$\equiv0$입니다. 그래서 정규화항이 원인이라면 RM 쪽 사망(roughness 고정)만 바뀌고 albedo 사망은 그대로여야 합니다.
    - 짝 비교는 `matup_split_noreg` − `matup_shared_noreg`입니다(정규화 조건이 같은 쌍). 정규화 효과는 같은 seed의 `*_noreg` − 기존 arm으로 봅니다.
-5. **(진단 arm) clamp 사망 수정안:** `*_zinit`(마지막 층 0 초기화), `*_st`(학습 중 straight-through clamp)를 공유와 분할에 똑같이 적용합니다. 원인 가설, 수식, 예측, 계측(probe)은 [CLAMP_DEATH.md](CLAMP_DEATH.md)에 있습니다.
+5. **(진단 arm) clamp 사망 수정안:** `*_zinit`(마지막 층 0 초기화)을 공유와 분할에 똑같이 적용합니다. 학습 중 straight-through clamp(`*_st`)도 시도했지만 경계 밖으로 폭주해 뺐습니다(CLAMP_DEATH.md §7). 원인 가설, 수식, 예측, 계측(probe)은 [CLAMP_DEATH.md](CLAMP_DEATH.md)에 있습니다.
 
 **바뀌지 않는 것**
 - 손실 $\mathcal L$이 그대로입니다. render 손실은 하나뿐이고 그룹별 항이 없으므로, DeepTex와 달리 $w_g$를 조정할 필요가 없습니다.
 - 세 MLP의 파라미터 전체를 Adam 하나로 함께 최적화합니다. MatUp은 원래 공동 학습입니다. Adam은 파라미터마다 따로 적응하므로, Adam을 셋으로 나눈 것과 같습니다.
-- 그대로인 것: SwinIR-L(릴리스 가중치), 목표 렌더 $\tilde I_l$(모든 arm과 seed가 같은 캐시를 씀), 빛, epoch 10, 배치 128, 학습률, $\alpha_{\text{reg}}$(B1-4의 `*_noreg`만 0), 초기화와 clamp(B1-5의 `*_zinit`, `*_st`만 다름), height 처리(위치에만 사용).
+- 그대로인 것: SwinIR-L(릴리스 가중치), 목표 렌더 $\tilde I_l$(모든 arm과 seed가 같은 캐시를 씀), 빛, epoch 10, 배치 128, 학습률, $\alpha_{\text{reg}}$(B1-4의 `*_noreg`만 0), 초기화와 clamp(B1-5의 `*_zinit`만 다름), height 처리(위치에만 사용).
 - 실험상 차이: seed를 3개 돌려 노이즈 수준을 함께 보고합니다.
 
 **SwinIR-L은 왜 나누지 않는가:** MatUp의 SwinIR-L은 맵이 아니라 렌더 이미지를 업스케일합니다. 렌더에는 모든 맵이 섞여 있으므로, 맵 그룹으로 나눌 대상이 아닙니다.

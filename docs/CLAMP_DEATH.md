@@ -2,7 +2,7 @@
 
 `matup_shared_vs_split/ep10`의 분할 arm에서 일부 seed가 엉뚱한 결과로 끝났습니다(plastic 25.5 dB, roofing −3.7 dB 등). 이 문서는 그 원인 가설을 정리하고, 가설을 가리는 실험을 정의합니다.
 
-실험은 `scripts/matup_split.sh`의 `probe`, `report` 단계와 `*_zinit`, `*_st`, `*_noreg` arm으로 돌립니다. 명령은 [COMMANDS.txt](../COMMANDS.txt) [5-4]~[5-6]에 있습니다. 공유·분할 MLP의 정의는 [SPLIT_THEORY.md](SPLIT_THEORY.md) B1을 봅니다.
+실험은 `scripts/matup_split.sh`의 `probe`, `report` 단계와 `*_zinit`, `*_noreg` arm으로 돌립니다. 결과는 §6, 시도 후 뺀 straight-through clamp(`*_st`)는 §7에 있습니다. 명령은 [COMMANDS.txt](../COMMANDS.txt) [5-4]~[5-6]에 있습니다. 공유·분할 MLP의 정의는 [SPLIT_THEORY.md](SPLIT_THEORY.md) B1을 봅니다.
 
 표시: **[관측]** 몽타주 맵이나 코드에서 직접 확인한 것, **[추정]** 분포를 가정해 계산하거나 추론한 것.
 
@@ -226,7 +226,7 @@ $$
 
 초기 사망은 없애지만 drift에 의한 사망은 남습니다. 은닉층 gradient는 첫 스텝에서 0이지만($\partial f/\partial h=w=0$), 마지막 층이 바로 학습되면서 풀립니다. 생성 후에 0으로 바꾸므로 seed의 난수 흐름은 같습니다.
 
-**I2. 학습 중 straight-through clamp (`--st-clamp`)**
+**I2. 학습 중 straight-through clamp (`--st-clamp`) — 시도 후 제외 (§7)**
 
 $$
 \text{forward: } y=\Pi(z),\qquad
@@ -270,7 +270,7 @@ gradient가 0이 되지 않으므로 흡수 상태가 없습니다. 렌더가 �
 |---|---|---|---|---|
 | E0 | 정규화 끄기: `matup_shared_noreg`, `matup_split_noreg` | `optim matup_shared_noreg,matup_split_noreg` | 평가 arm | 72 run, ~45분 |
 | E1 | probe: shared, split을 계측과 함께 다시 실행 | `probe` | `runs/matup_split/probe/`, 평가 arm 아님 | 72 run, ~50분 |
-| E2 | 수정안: `*_zinit`, `*_st` (probe 포함) | `optim matup_shared_zinit,matup_split_zinit,matup_shared_st,matup_split_st` | 평가 arm | 144 run, ~1.5시간 |
+| E2 | 수정안: `*_zinit` (probe 포함; `*_st`는 §7에서 제외) | `optim matup_shared_zinit,matup_split_zinit` | 평가 arm | 72 run, ~45분 |
 | 보고 | probe 표 | `report` | `runs/eval/matup_clamp_probe/ep10/` | 몇 초 |
 
 **probe가 기록하는 것** (`variants/matup_split/clamp_probe.py`): 초기화 직후(tag 0)와 매 epoch 끝(tag 1~10)에 전체 재질의 $z=s+f(x)$를 계산하고, clamp가 걸리는 채널($R,G,B,m,\alpha$)마다 다음을 저장합니다.
@@ -289,7 +289,61 @@ MatUp의 epoch별 `eval_model`(`--save_interval 1`)을 그대로 쓰고, epoch�
 | H1, H4 | 모든 사망 목록 (처음 죽은 tag, 끝 상태) |
 | H2 | 초기 $\sigma$ 표 (재질 × shared/split) |
 | H3 | 동결 그룹 표, arm별 부활 수 |
-| H5 | arm별 요약 (`*_zinit`, `*_st`) |
+| H5 | arm별 요약 (`*_zinit`) |
 | H6 | E0의 summary.md와 몽타주 (채널 사망은 맵 픽셀로 확인) |
 
 E0과 E2는 평가 arm이라 `bash scripts/eval.sh score matup/ep10`, `bash scripts/eval.sh montage matup/ep10 --seeds 0,1,2`로 render 지표와 짝 비교가 함께 나옵니다.
+
+---
+
+## 6. 결과 (probe, ep10)
+
+표는 `runs/eval/matup_clamp_probe/ep10/summary.md`에 있습니다. 재질 12개 × seed 3개 = arm당 36 run입니다. GPU 연산이 비결정적이라 probe 재실행은 ep10과 run 단위로 같지 않습니다. 그래서 개별 seed끼리 비교하지 않고 개수와 비율로 봅니다 **[관측]**.
+
+| arm | 끝에 죽은 채널 | 그중 초기(tag 0) 사망 | drift 사망 | 전체가 죽은 그룹 |
+|---|---|---|---|---|
+| shared (probe 재실행) | 6 | 5 | 1 | 0 |
+| split (probe 재실행) | 4 | 2 | 2 | 1 |
+| shared_zinit | 0 | 0 | 0 | 0 |
+| split_zinit | 0 | 0 | 0 | 0 |
+
+| 가설 | 판정 | 근거 |
+|---|---|---|
+| H1 | 맞음 | plastic의 경계에 붙은 $R,B$는 끝 probe에서 `active = 0` |
+| H2 | 약함 | 초기 $\sigma_0\le0.002$이고 albedo의 $\lvert\mu_0\rvert\approx0.058$은 재질과 arm에 상관없이 같습니다. 초기 사망은 $\sigma$가 아니라 $\mu_0$ 대 여유 $\bar s$로 갈립니다 |
+| H3 | 맞음 | split plastic $s_0$의 a 그룹은 9 epoch 동안 전부 죽어 있었고 `param_step` = 0.00 (살아 있을 때 중앙값 1.55). 재실행 shared의 부활도 0 |
+| H4 | 틀림 | shared 사망 6개 중 5개가 tag 0 (초기 사망) |
+| H5a | 맞음 (예측보다 강함) | zinit은 초기 사망뿐 아니라 drift 사망도 0 |
+| H5b | 틀림 → 제외 | §7 |
+| H6 | 평가 대기 | `matup_shared_vs_split/ep10/summary.md` |
+
+**결론.** 채널 사망은 공유와 분할 모두에서 일어납니다. 원인은 주로 초기화입니다. 무작위 마지막 층이 모든 texel에 거의 같은 오프셋 $\mu_0\approx\pm0.06$을 더합니다. 어두운 채널은 여유가 그보다 작아(plastic $R$ 0.0034, $B$ 0.0062, $G$ 0.0224) 음의 $\mu_0$가 나오면 바로 경계 밖으로 나갑니다. 분할은 죽은 그룹 MLP가 멈추므로 되살아나지 못합니다. 0 초기화는 이것을 없앱니다. 그러므로 공유 대 분할의 공정한 비교는 `matup_split_zinit − matup_shared_zinit`입니다. 붕괴 자체는 `montage/zinit/`(위: 원래 MatUp, 아래: zinit)에서 볼 수 있습니다.
+
+## 7. straight-through clamp(`*_st`)를 뺀 이유
+
+**(1) 첫 구현의 float32 소거 (0ec17d0에서 수정).** `r + (clamp(r) - r).detach()`는 $\lvert r\rvert>2^{24}$이면 clamp가 사라집니다. 예를 들어 $10^8+(1-10^8)=0$입니다. 평가 self-check가 1(전체 범위) 차이로 멈춘 원인이었습니다. 고친 forward `clamp(r).detach() + (r - r.detach())`는 정확히 $\Pi(r)$입니다.
+
+**(2) 고친 뒤에도 경계 밖으로 폭주합니다 [관측 + 추정].**
+
+| arm | 끝에 죽은 채널 | drift 사망 | 전체가 죽은 그룹 |
+|---|---|---|---|
+| shared_st | 6 | 6 | 3 |
+| split_st | 18 | 17 | 14 |
+
+split_st의 사망은 대부분 $\alpha$입니다. brick_uneven, cobblestones, roofing, brick_wall에서 모든 seed가 epoch 1~3에 죽었습니다. 이 재질들은 원래 MatUp에서는 $\alpha$가 죽지 않습니다. rm 그룹은 "전부 죽은" 상태인데도 `param_step`이 $3\times10^1$~$1.4\times10^2$로, 살아 있을 때(~7)보다 훨씬 큽니다. 멈춘 것이 아니라 달려 나가는 중입니다.
+
+메커니즘은 이렇습니다. 경계에 닿은 texel에서 렌더가 경계 너머를 원하면 $g=\partial\mathcal L/\partial y$는 바깥을 가리킵니다.
+- **hard clamp:** 이 gradient를 0으로 끊습니다. 그 texel은 경계에 머물고, 나머지 texel은 계속 맞춰집니다.
+- **ST:** 이 gradient를 그대로 통과시킵니다. 공유 가중치를 통해 모든 texel을 바깥으로 끕니다.
+
+출력은 clamp되어 손실이 변하지 않습니다. 그래서 gradient도 같은 값으로 계속 나오고, Adam은 매 스텝 거의 lr만큼 같은 방향으로 움직입니다. 이 과정을 멈출 것이 없습니다. split의 rm MLP는 $m,\alpha$의 gradient만 받으므로 이 끌림이 희석되지 않습니다. shared는 trunk가 albedo와 normal의 gradient도 받아 덜합니다.
+
+결과적으로 brick split_st의 train100 $\ell_{2,1}$은 0.044입니다. bilinear(0.038)와 다른 arm(~0.042)보다 나쁩니다. plastic의 사망은 shared_st에서 되살아났지만(alive 1.00), 그 대가로 다른 재질이 망가졌습니다.
+
+**(3) 평가 self-check가 넘칩니다.** ST run만 MatUp의 `render_opt.png`와 16-bit `_opt` PNG에서 다시 그린 렌더의 차이가 허용치 5e-4를 넘었습니다.
+- brick split_st: 1.2e-3, 픽셀 값의 0.04%
+- foam shared_st $s_0$: 1.2e-2
+
+다른 arm은 같은 코드에서 모두 ≤ 12 LSB(≈ 1.8e-4)라 맵 준비 버그는 아닙니다. 극단값 맵에서 16-bit 왕복 오차가 커진 것으로 보입니다 **[추정]**. 다만 foam의 정확한 메커니즘은 찾지 못했습니다($\alpha=1$ 고정은 민감한 값이 아닙니다). ST를 빼면서 더 조사하지 않았습니다.
+
+**(4) 부수 문제.** 실패한 score 실행이 이전에 성공한 `matup_shared_vs_split/ep10/{report.json,summary.md}`를 지운 채로 커밋됐습니다(1368159). ST를 뺀 뒤 score를 다시 돌려 복구합니다.

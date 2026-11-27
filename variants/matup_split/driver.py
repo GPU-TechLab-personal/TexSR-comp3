@@ -11,7 +11,7 @@ optim  per arm x seed x material: MatUp's optimisation with the shared or split
        MLP into runs/matup_split/<arm>/s<k>/<material>/ (run.json marks it done)
 probe  the same runs again with run.py --probe (clamp statistics per epoch,
        docs/CLAMP_DEATH.md) into runs/matup_split/probe/<arm>/s<k>/<material>/;
-       not an evaluation arm. The *_zinit / *_st arms probe in optim already.
+       not an evaluation arm. The *_zinit arms probe in optim already.
 
 Seeds: s0 = 1996 (MatUp's own seed, main_optim.py:36-37), s1 = 1997, s2 = 1998.
 A run that already has run.json is skipped, so rerunning continues where it stopped.
@@ -32,15 +32,12 @@ OUT = "/workspace/runs/matup_split"
 #   x1 / x3   parameter-matched to 1x / 3x the shared MLP (split_mlp.WIDTHS, SPLIT_THEORY B1-3)
 #   *_noreg   the metallic regulariser off (SPLIT_THEORY B1-4)
 #   *_zinit   last MLP layer starts at 0 (CLAMP_DEATH.md, intervention I1), probed
-#   *_st      straight-through clamp in training (CLAMP_DEATH.md, intervention I2), probed
 ARMS = {"matup_shared": ("shared", 0, []), "matup_split": ("split", 0, []),
         "matup_split_x1": ("split", 104, []), "matup_split_x3": ("split", 227, []),
         "matup_shared_noreg": ("shared", 0, ["--alpha-reg", "0.0"]),
         "matup_split_noreg": ("split", 0, ["--alpha-reg", "0.0"]),
         "matup_shared_zinit": ("shared", 0, ["--zero-init", "--probe"]),
-        "matup_split_zinit": ("split", 0, ["--zero-init", "--probe"]),
-        "matup_shared_st": ("shared", 0, ["--st-clamp", "--probe"]),
-        "matup_split_st": ("split", 0, ["--st-clamp", "--probe"])}
+        "matup_split_zinit": ("split", 0, ["--zero-init", "--probe"])}
 PROBE_ARMS = "matup_shared,matup_split"
 SEEDS = {0: 1996, 1: 1997, 2: 1998}
 

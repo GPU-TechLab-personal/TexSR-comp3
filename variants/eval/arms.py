@@ -24,15 +24,13 @@ Report column order (summary.md, report.json):
                         (--alpha_reg 0, SPLIT_THEORY B1-4)
   matup_shared_zinit_s<k>, matup_split_zinit_s<k>
                         last MLP layer starts at 0 (CLAMP_DEATH.md, I1)
-  matup_shared_st_s<k>, matup_split_st_s<k>
-                        straight-through clamp in training (CLAMP_DEATH.md, I2)
 
 Pairs (split vs its shared counterpart, paired per material):
   deeptex_split_nb23 - deeptex_renloss_21, deeptex_split_nb7 - deeptex_renloss_21,
   deeptex_split_nb7_b8 - deeptex_renloss_21 (not data-matched: 4x the crops),
   deeptex_split_nb*_rmgrey - deeptex_renloss_21,
   matup_split*_s<k> - matup_shared_s<k> for every split arm and seed k
-  (matup_split_<v>_s<k> - matup_shared_<v>_s<k> for v = noreg, zinit, st: the same
+  (matup_split_<v>_s<k> - matup_shared_<v>_s<k> for v = noreg, zinit: the same
   training change on both sides).
 """
 
@@ -47,11 +45,10 @@ MATUP_RUNS = "/workspace/runs/matup_split"
 SEEDS = (0, 1, 2)
 MATUP_ARMS = ("matup_shared", "matup_split", "matup_split_x1", "matup_split_x3",
               "matup_shared_noreg", "matup_split_noreg",
-              "matup_shared_zinit", "matup_split_zinit",
-              "matup_shared_st", "matup_split_st")
+              "matup_shared_zinit", "matup_split_zinit")
 MATUP_SPLIT_ARMS = tuple(a for a in MATUP_ARMS if a.startswith("matup_split"))
 # training variants applied to both sides of a pair (split_<v> - shared_<v>)
-MATUP_VARIANTS = ("_noreg", "_zinit", "_st")
+MATUP_VARIANTS = ("_noreg", "_zinit")
 
 
 def matup_counterpart(arm):
@@ -120,8 +117,6 @@ DISPLAY = {
     "matup_split_noreg": "MatUp split MLP, no metallic reg",
     "matup_shared_zinit": "MatUp shared MLP, zero-init last layer",
     "matup_split_zinit": "MatUp split MLP, zero-init last layer",
-    "matup_shared_st": "MatUp shared MLP, straight-through clamp",
-    "matup_split_st": "MatUp split MLP, straight-through clamp",
 }
 
 
