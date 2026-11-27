@@ -456,7 +456,8 @@ def main():
                    "flip": sets["flip"] if sets else None},
         "constants": {"nz_min": rc.NZ_MIN, "mask_min_norm": rc.MASK_MIN_NORM,
                       "normal_norm_floor": rc.NORMAL_NORM_FLOOR, "l21_eps": rc.L21_EPS,
-                      "self_check_tol_matup": rc.SELF_TOL_MATUP, "map_bits": 8,
+                      "self_check_tol_matup": rc.SELF_TOL_MATUP,
+                      "self_check_fatal_matup": rc.SELF_FATAL_MATUP, "map_bits": 8,
                       "chunk": args.chunk, "device": str(device)},
         "perceptual": None if metric is None else {
             "versions": metric.versions, "flip_parameters": metric.flip_params},
