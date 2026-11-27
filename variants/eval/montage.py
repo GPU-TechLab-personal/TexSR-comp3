@@ -4,7 +4,7 @@
 Runs in the matup container (torch, MatUp's renderer, cv2); scripts/eval.sh montage
 runs
 
-    python /workspace/variants/eval/montage.py --name main [--seeds 0] [--material M]
+    python /workspace/variants/eval/montage.py --name deeptex_shared_vs_split/40k --only deeptex [--seeds 0] [--material M]
 
 after `bash scripts/eval.sh infer` has written the DeepTextures arm folders. It does
 NOT need `score`: bilinear and MatUp are read from their sources, exactly as
@@ -39,8 +39,9 @@ EXPERIMENTS  one set of sheets each, the experiment in every file name (<exp>):
   out of that material's sheets (--keep-missing draws an n/a row instead). An
   experiment with no arm at all writes nothing.
 
-OUTPUTS  <eval-root>/<name>/montage/<exp>/{material,zoom,overview}/, one folder per
-         experiment and per kind of sheet; every file name still starts with <exp>
+OUTPUTS  <eval-root>/<name>/montage/{material,zoom,overview}/, one folder per kind of
+         sheet; every file name starts with <exp>. scripts/eval.sh gives each experiment
+         its own <name> = <exp>/<checkpoint> and --only, so one experiment per folder
   material/<exp>_<material>.png        the whole crop; the zoom window outlined in yellow
   zoom/<exp>_<material>_zoom.png       the same rows and columns on the zoom window, texels
                               enlarged (nearest). Window: --zoom texels square, at
@@ -53,15 +54,15 @@ OUTPUTS  <eval-root>/<name>/montage/<exp>/{material,zoom,overview}/, one folder 
   montage.json (in montage/)  per material: border, crop, zoom window, sources, EVAL
                               PSNR (whole crop) per row, missing rows, files (relative
                               to montage/)
-  Earlier layouts' files are removed when their replacements are written: the flat
-  montage/<exp>_*.png of the second version and the first version's <material>.png,
-  <material>_zoom.png, overview_<key>.png. scripts/eval.sh tidy moves flat sheets
-  into the folders without redrawing them.
+  Earlier layouts' sheets are removed on every run: montage/<exp>/<kind>/ and the flat
+  montage/<exp>_*.png, and the first version's <material>.png, <material>_zoom.png,
+  overview_<key>.png.
 """
 import argparse
 import glob
 import json
 import os
+import shutil
 import sys
 import time
 
@@ -232,11 +233,10 @@ def remove_if(path):
         os.remove(path)
 
 
-def sheet_path(out, prefix, kind, fname):
-    """montage/<exp>/<kind>/<fname>; removes the flat montage/<fname> it replaces."""
-    d = os.path.join(out, prefix, kind)
+def sheet_path(out, kind, fname):
+    """montage/<kind>/<fname> (the file name starts with the experiment)."""
+    d = os.path.join(out, kind)
     os.makedirs(d, exist_ok=True)
-    remove_if(os.path.join(out, fname))
     return os.path.join(d, fname)
 
 
@@ -280,13 +280,13 @@ def write_material(out, info, rows, mask_hw, args):
         for c in full_rows[0][2][:6]:                 # the GT row: where the zoom is
             S.draw_box(c, box, side)
         f_full, f_zoom = "%s_%s.png" % (prefix, name), "%s_%s_zoom.png" % (prefix, name)
-        S.write_png(sheet_path(out, prefix, "material", f_full),
+        S.write_png(sheet_path(out, "material", f_full),
                     S.sheet("%s  -  %s  -  %s" % (title, name, args.name), notes, HEADS,
                             full_rows, args.cell))
-        S.write_png(sheet_path(out, prefix, "zoom", f_zoom),
+        S.write_png(sheet_path(out, "zoom", f_zoom),
                     S.sheet("%s  -  %s  -  zoom  -  %s" % (title, name, args.name), znotes,
                             HEADS, sheet_rows(sel, args.zoom_cell, box), args.zoom_cell))
-        info["files"] += ["%s/material/%s" % (prefix, f_full), "%s/zoom/%s" % (prefix, f_zoom)]
+        info["files"] += ["material/" + f_full, "zoom/" + f_zoom]
     return {r["key"]: r for r in present}
 
 
@@ -315,7 +315,7 @@ def overview_cells(by_key, keys, gt_eval, mask_hw, size):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--name", default="main", help="evaluation name: <eval-root>/<name>")
+    ap.add_argument("--name", required=True, help="evaluation folder under the eval root: <experiment>/<checkpoint>, e.g. deeptex_shared_vs_split/40k (scripts/eval.sh)")
     ap.add_argument("--eval-root", default=A.EVAL_ROOT)
     ap.add_argument("--root", default=A.MATSYNTH_ROOT, help="evaluation materials (<mat>/{SVBRDF,GT})")
     ap.add_argument("--matup-root", default=A.MATUP_RUNS)
@@ -329,6 +329,9 @@ def main():
     ap.add_argument("--zoom-at", default="", help="y,x top-left of the zoom window (crop coords)")
     ap.add_argument("--ov-cell", type=int, default=160, help="cell size of the overviews")
     ap.add_argument("--no-overview", action="store_true")
+    ap.add_argument("--only", default="", choices=["", "deeptex", "matup"],
+                    help="bilinear + this experiment's arms only (scripts/eval.sh sets it from "
+                         "the folder: deeptex_shared_vs_split/<ckpt>, matup_shared_vs_split/<ckpt>)")
     ap.add_argument("--keep-missing", action="store_true",
                     help="draw an n/a row for an arm with no output for a material")
     args = ap.parse_args()
@@ -350,6 +353,12 @@ def main():
         die(2, "no material with SVBRDF/ and GT/ under %s" % args.root)
 
     cols, skipped = E.available_columns(args)
+    # earlier layouts: montage/<exp>/<kind>/ (third version) and montage/<exp>_*.png (second)
+    for prefix, _, _ in EXPERIMENTS:
+        if os.path.isdir(os.path.join(out, prefix)):
+            shutil.rmtree(os.path.join(out, prefix))
+        for old in glob.glob(os.path.join(out, prefix + "_*.png")):
+            os.remove(old)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     Renderer.init_renderer(argparse.Namespace(light_falloff=False), device)
     lights = rc.build_lights(device)
@@ -384,7 +393,7 @@ def main():
                         "error": "|render - GT| x%g EVAL_LIGHT, EVAL PSNR" % S.HEAT_GAIN
                         }.get(k, k)
                 rows_k = [(mat, [cells[i] for i in idx]) for mat, cells in ov[k]]
-                S.write_png(sheet_path(out, prefix, "overview", "%s_overview_%s.png" % (prefix, k)),
+                S.write_png(sheet_path(out, "overview", "%s_overview_%s.png" % (prefix, k)),
                             S.overview("%s  -  %s  -  %s  -  %d materials" % (
                                 title, what, args.name, len(rows_k)),
                                 rows_k, [heads[i] for i in idx], [groups[i] for i in idx],

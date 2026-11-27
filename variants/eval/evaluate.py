@@ -4,7 +4,7 @@
 Runs in the matup container (torch 2.7.1, Python 3.10, lpips, flip-evaluator);
 scripts/eval.sh score runs
 
-    python /workspace/variants/eval/evaluate.py --name main
+    python /workspace/variants/eval/evaluate.py --name matup_shared_vs_split/ep10 --only matup   (or deeptex_shared_vs_split/40k --only deeptex)
 
 after stage (a) (variants/eval/infer_deeptex.py, deeptex container) has written
 the DeepTextures arm folders. docs/SPLIT_THEORY.md is the question; this is the
@@ -133,6 +133,9 @@ def available_columns(args):
     """Every arms.py column whose outputs exist at all, plus (key, reason) skips."""
     cols, skipped = [], []
     for c in A.columns(args.seeds):
+        only = getattr(args, "only", "")
+        if only and c["kind"] not in ("bilinear", only):
+            continue          # --only: one experiment per evaluation folder (bilinear in both)
         if c["kind"] == "deeptex":
             d = os.path.join(args.maps_root, c["key"])
             if not os.path.isdir(d) or not glob.glob(os.path.join(d, "*", "baseColor.png")):
@@ -349,7 +352,7 @@ def check_out(path):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--name", default="main", help="evaluation name: <eval-root>/<name>")
+    ap.add_argument("--name", required=True, help="evaluation folder under the eval root: <experiment>/<checkpoint>, e.g. deeptex_shared_vs_split/40k (scripts/eval.sh)")
     ap.add_argument("--eval-root", default=A.EVAL_ROOT)
     ap.add_argument("--root", default=A.MATSYNTH_ROOT, help="evaluation materials (<mat>/{SVBRDF,GT})")
     ap.add_argument("--matup-root", default=A.MATUP_RUNS,
@@ -360,6 +363,9 @@ def main():
     ap.add_argument("--lpips-lights", default="heldout", choices=["heldout", "sheet"])
     ap.add_argument("--flip-lights", default="sheet", choices=["heldout", "sheet"])
     ap.add_argument("--no-perceptual", action="store_true", help="skip LPIPS / FLIP")
+    ap.add_argument("--only", default="", choices=["", "deeptex", "matup"],
+                    help="bilinear + this experiment's arms only (scripts/eval.sh sets it from "
+                         "the folder: deeptex_shared_vs_split/<ckpt>, matup_shared_vs_split/<ckpt>)")
     ap.add_argument("--threads", type=int, default=0, help="cap torch / OpenCV CPU threads")
     args = ap.parse_args()
 

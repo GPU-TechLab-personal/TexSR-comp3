@@ -3,7 +3,7 @@
 
 Runs in the deeptex container (TF 2.10.1, Python 3.8); scripts/eval.sh infer runs
 
-    python /workspace/variants/eval/infer_deeptex.py --name main
+    python /workspace/variants/eval/infer_deeptex.py --name deeptex_shared_vs_split/40k --step 40000
 
 and writes, for every DeepTextures arm whose checkpoint exists (variants/eval/arms.py),
 
@@ -47,7 +47,8 @@ checkpoint index and shards resolve, every generator variable is matched
 30k / 35k / 40k) instead of the latest, matched by the `step` variable stored in
 the checkpoint, not by the ckpt-<k> number; an arm without that step is skipped.
 The shared arm keeps its own latest checkpoint, so the paired comparison is
-split@N against the shared model as evaluated in main. Give it its own --name.
+split@N against the same shared model in every runs/eval/deeptex_shared_vs_split/<N>k.
+scripts/eval.sh infer deeptex/<N>k passes --step N*1000 from the folder name.
 
 A checkpoint dir that is missing or holds no checkpoint skips that arm with a
 warning. An arm whose checkpoint exists but cannot be restored is reported as
@@ -304,7 +305,7 @@ def parse_ckpt_overrides(specs):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--name", default="main", help="evaluation name: runs/eval/<name>")
+    ap.add_argument("--name", required=True, help="evaluation folder under the eval root: <experiment>/<checkpoint>, e.g. deeptex_shared_vs_split/40k (scripts/eval.sh)")
     ap.add_argument("--eval-root", default=A.EVAL_ROOT)
     ap.add_argument("--root", default=A.MATSYNTH_ROOT, help="evaluation materials (<mat>/SVBRDF)")
     ap.add_argument("--arms", default="all",
@@ -314,7 +315,7 @@ def main():
     ap.add_argument("--step", type=int, default=None,
                     help="split arms: the checkpoint saved at this step (30000 / 35000 / 40000) "
                          "instead of the latest; the shared arm always uses its own latest. "
-                         "Use a separate --name, e.g. step30k")
+                         "scripts/eval.sh sets it from the folder: deeptex/30k -> 30000")
     ap.add_argument("--material", default="")
     ap.add_argument("--tile-size", type=int, default=0)
     ap.add_argument("--overlap", type=int, default=16)

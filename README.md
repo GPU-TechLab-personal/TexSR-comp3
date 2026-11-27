@@ -22,6 +22,6 @@ The formulas, what differs from the original papers and why, are in **[docs/SPLI
 | `variants/matup_split/` | SplitMLP, the MatUp wrapper, the run driver |
 | `variants/eval/` | inference, montages (`montage.py`, `sheets.py`) and metrics for every arm |
 | `D:/TexSR-data/` | data (outside the repository): evaluation set, pairs, grouped TFRecord, baseline checkpoints |
-| `runs/` | everything a run produces (gitignored except `runs/eval/*/{report.json,summary.md}`) |
+| `runs/` | everything a run produces (gitignored except `runs/eval/<experiment>/<checkpoint>/{report.json,summary.md,montage/}`: `deeptex_shared_vs_split/{30k,35k,40k}`, `matup_shared_vs_split/ep10`) |
 
 The upstream licenses apply to each submodule.

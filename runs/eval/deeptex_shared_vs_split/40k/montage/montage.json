@@ -1,0 +1,455 @@
+{
+ "name": "deeptex_shared_vs_split/40k",
+ "rows": [
+  "gt",
+  "bilinear",
+  "deeptex_renloss_21",
+  "deeptex_split_nb23",
+  "deeptex_split_nb7",
+  "deeptex_split_nb23_rmgrey",
+  "deeptex_split_nb7_rmgrey"
+ ],
+ "displays": [
+  "GT",
+  "bilinear",
+  "DeepTex shared (renloss_21, nb23)",
+  "DeepTex split nb23 x3",
+  "DeepTex split nb7 x3",
+  "DeepTex split nb23 x3 RM grey",
+  "DeepTex split nb7 x3 RM grey"
+ ],
+ "seeds": [],
+ "skipped": [
+  [
+   "deeptex_split_nb7_b8",
+   "no maps in /workspace/runs/eval/main/maps/deeptex_split_nb7_b8"
+  ]
+ ],
+ "heat_gain": 4.0,
+ "cell": 256,
+ "zoom": 96,
+ "zoom_cell": 288,
+ "materials": [
+  {
+   "material": "0559_brick_uneven_stones",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/0559_brick_uneven_stones/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/0559_brick_uneven_stones",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/0559_brick_uneven_stones",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/0559_brick_uneven_stones",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/0559_brick_uneven_stones",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/0559_brick_uneven_stones"
+   },
+   "eval_psnr": {
+    "bilinear": 30.467063865228596,
+    "deeptex_renloss_21": 30.172960407218135,
+    "deeptex_split_nb23": 30.150994179724915,
+    "deeptex_split_nb7": 30.53277861676583,
+    "deeptex_split_nb23_rmgrey": 30.537371863265417,
+    "deeptex_split_nb7_rmgrey": 30.58961162137991
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 311,
+    "x0": 0,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_0559_brick_uneven_stones.png",
+    "zoom/deeptex_shared_vs_split_0559_brick_uneven_stones_zoom.png"
+   ]
+  },
+  {
+   "material": "0844_syntetic_foam",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 0.9996422996878251,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/0844_syntetic_foam/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/0844_syntetic_foam",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/0844_syntetic_foam",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/0844_syntetic_foam",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/0844_syntetic_foam",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/0844_syntetic_foam"
+   },
+   "eval_psnr": {
+    "bilinear": 21.73134128317671,
+    "deeptex_renloss_21": 23.15486649179723,
+    "deeptex_split_nb23": 22.931248577237177,
+    "deeptex_split_nb7": 22.855907365058684,
+    "deeptex_split_nb23_rmgrey": 22.8422922316356,
+    "deeptex_split_nb7_rmgrey": 22.739421825355024
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 0,
+    "x0": 3,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_0844_syntetic_foam.png",
+    "zoom/deeptex_shared_vs_split_0844_syntetic_foam_zoom.png"
+   ]
+  },
+  {
+   "material": "1587_cobblestones",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/1587_cobblestones/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/1587_cobblestones",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/1587_cobblestones",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/1587_cobblestones",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/1587_cobblestones",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/1587_cobblestones"
+   },
+   "eval_psnr": {
+    "bilinear": 28.110076801215133,
+    "deeptex_renloss_21": 28.530392963482058,
+    "deeptex_split_nb23": 28.68930583249223,
+    "deeptex_split_nb7": 28.664013694429148,
+    "deeptex_split_nb23_rmgrey": 28.602986473968876,
+    "deeptex_split_nb7_rmgrey": 28.6472817409659
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 29,
+    "x0": 50,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_1587_cobblestones.png",
+    "zoom/deeptex_shared_vs_split_1587_cobblestones_zoom.png"
+   ]
+  },
+  {
+   "material": "2119_corten_steel",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/2119_corten_steel/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/2119_corten_steel",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/2119_corten_steel",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/2119_corten_steel",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/2119_corten_steel",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/2119_corten_steel"
+   },
+   "eval_psnr": {
+    "bilinear": 21.31234576034428,
+    "deeptex_renloss_21": 21.62237088879607,
+    "deeptex_split_nb23": 21.788932130287705,
+    "deeptex_split_nb7": 21.843119309902306,
+    "deeptex_split_nb23_rmgrey": 21.765934785060708,
+    "deeptex_split_nb7_rmgrey": 21.784744040436983
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 373,
+    "x0": 298,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_2119_corten_steel.png",
+    "zoom/deeptex_shared_vs_split_2119_corten_steel_zoom.png"
+   ]
+  },
+  {
+   "material": "acg_concrete_026",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/acg_concrete_026/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/acg_concrete_026",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/acg_concrete_026",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/acg_concrete_026",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/acg_concrete_026",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/acg_concrete_026"
+   },
+   "eval_psnr": {
+    "bilinear": 21.8644263617553,
+    "deeptex_renloss_21": 21.900082987858337,
+    "deeptex_split_nb23": 22.064895959106497,
+    "deeptex_split_nb7": 22.020463541226547,
+    "deeptex_split_nb23_rmgrey": 22.07159909534656,
+    "deeptex_split_nb7_rmgrey": 22.141005403945705
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 8,
+    "x0": 12,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_acg_concrete_026.png",
+    "zoom/deeptex_shared_vs_split_acg_concrete_026_zoom.png"
+   ]
+  },
+  {
+   "material": "acg_metal_026",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/acg_metal_026/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/acg_metal_026",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/acg_metal_026",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/acg_metal_026",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/acg_metal_026",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/acg_metal_026"
+   },
+   "eval_psnr": {
+    "bilinear": 29.64123579426591,
+    "deeptex_renloss_21": 29.044229094944093,
+    "deeptex_split_nb23": 19.909415405443845,
+    "deeptex_split_nb7": 27.344001088412504,
+    "deeptex_split_nb23_rmgrey": 26.015057903786392,
+    "deeptex_split_nb7_rmgrey": 28.68749676362519
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 262,
+    "x0": 297,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_acg_metal_026.png",
+    "zoom/deeptex_shared_vs_split_acg_metal_026_zoom.png"
+   ]
+  },
+  {
+   "material": "acg_plastic_009",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/acg_plastic_009/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/acg_plastic_009",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/acg_plastic_009",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/acg_plastic_009",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/acg_plastic_009",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/acg_plastic_009"
+   },
+   "eval_psnr": {
+    "bilinear": 39.79330874546398,
+    "deeptex_renloss_21": 35.573610184493276,
+    "deeptex_split_nb23": 34.8541843313713,
+    "deeptex_split_nb7": 33.78267056580482,
+    "deeptex_split_nb23_rmgrey": 33.91625333289447,
+    "deeptex_split_nb7_rmgrey": 34.57473670263895
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 316,
+    "x0": 294,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_acg_plastic_009.png",
+    "zoom/deeptex_shared_vs_split_acg_plastic_009_zoom.png"
+   ]
+  },
+  {
+   "material": "acg_roofing_tiles_006",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/acg_roofing_tiles_006/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/acg_roofing_tiles_006",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/acg_roofing_tiles_006",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/acg_roofing_tiles_006",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/acg_roofing_tiles_006",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/acg_roofing_tiles_006"
+   },
+   "eval_psnr": {
+    "bilinear": 28.60264055658576,
+    "deeptex_renloss_21": 28.422167279922895,
+    "deeptex_split_nb23": 27.723574108981893,
+    "deeptex_split_nb7": 28.636533906743388,
+    "deeptex_split_nb23_rmgrey": 28.553699534356088,
+    "deeptex_split_nb7_rmgrey": 29.511694225786975
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 345,
+    "x0": 348,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_acg_roofing_tiles_006.png",
+    "zoom/deeptex_shared_vs_split_acg_roofing_tiles_006_zoom.png"
+   ]
+  },
+  {
+   "material": "acg_wood_floor_060",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/acg_wood_floor_060/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/acg_wood_floor_060",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/acg_wood_floor_060",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/acg_wood_floor_060",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/acg_wood_floor_060",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/acg_wood_floor_060"
+   },
+   "eval_psnr": {
+    "bilinear": 33.72186803634651,
+    "deeptex_renloss_21": 34.16688149111742,
+    "deeptex_split_nb23": 33.62358276475293,
+    "deeptex_split_nb7": 34.21407938391294,
+    "deeptex_split_nb23_rmgrey": 33.93622138281326,
+    "deeptex_split_nb7_rmgrey": 34.38395272647042
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 33,
+    "x0": 308,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_acg_wood_floor_060.png",
+    "zoom/deeptex_shared_vs_split_acg_wood_floor_060_zoom.png"
+   ]
+  },
+  {
+   "material": "tc_metal_029",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/tc_metal_029/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/tc_metal_029",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/tc_metal_029",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/tc_metal_029",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/tc_metal_029",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/tc_metal_029"
+   },
+   "eval_psnr": {
+    "bilinear": 30.080738834451598,
+    "deeptex_renloss_21": 29.55497890749008,
+    "deeptex_split_nb23": 11.343946792759535,
+    "deeptex_split_nb7": 20.495713454587175,
+    "deeptex_split_nb23_rmgrey": 16.781624246119897,
+    "deeptex_split_nb7_rmgrey": 26.39815877651712
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 256,
+    "x0": 352,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_tc_metal_029.png",
+    "zoom/deeptex_shared_vs_split_tc_metal_029_zoom.png"
+   ]
+  },
+  {
+   "material": "th_brick_wall_005",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/th_brick_wall_005/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/th_brick_wall_005",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/th_brick_wall_005",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/th_brick_wall_005",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/th_brick_wall_005",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/th_brick_wall_005"
+   },
+   "eval_psnr": {
+    "bilinear": 21.718209809605593,
+    "deeptex_renloss_21": 23.091109911737103,
+    "deeptex_split_nb23": 23.261807771905225,
+    "deeptex_split_nb7": 23.30231882397748,
+    "deeptex_split_nb23_rmgrey": 23.283079513461114,
+    "deeptex_split_nb7_rmgrey": 23.30885328134741
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 0,
+    "x0": 21,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_th_brick_wall_005.png",
+    "zoom/deeptex_shared_vs_split_th_brick_wall_005_zoom.png"
+   ]
+  },
+  {
+   "material": "th_brown_mud_leaves_001",
+   "border": 8,
+   "full": 512,
+   "side": 496,
+   "valid_frac": 1.0,
+   "matup_runs": {},
+   "sources": {
+    "bilinear": "/data/TexSR-data/matsynth/th_brown_mud_leaves_001/SVBRDF",
+    "deeptex_renloss_21": "/workspace/runs/eval/main/maps/deeptex_renloss_21/th_brown_mud_leaves_001",
+    "deeptex_split_nb23": "/workspace/runs/eval/main/maps/deeptex_split_nb23/th_brown_mud_leaves_001",
+    "deeptex_split_nb7": "/workspace/runs/eval/main/maps/deeptex_split_nb7/th_brown_mud_leaves_001",
+    "deeptex_split_nb23_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb23_rmgrey/th_brown_mud_leaves_001",
+    "deeptex_split_nb7_rmgrey": "/workspace/runs/eval/main/maps/deeptex_split_nb7_rmgrey/th_brown_mud_leaves_001"
+   },
+   "eval_psnr": {
+    "bilinear": 20.78798096238719,
+    "deeptex_renloss_21": 21.096124862941018,
+    "deeptex_split_nb23": 21.1770093115189,
+    "deeptex_split_nb7": 21.02640000581654,
+    "deeptex_split_nb23_rmgrey": 21.20060133593194,
+    "deeptex_split_nb7_rmgrey": 21.23284625847476
+   },
+   "missing": [],
+   "zoom": {
+    "y0": 119,
+    "x0": 0,
+    "size": 96,
+    "rule": "busiest GT EVAL render window"
+   },
+   "files": [
+    "material/deeptex_shared_vs_split_th_brown_mud_leaves_001.png",
+    "zoom/deeptex_shared_vs_split_th_brown_mud_leaves_001_zoom.png"
+   ]
+  }
+ ],
+ "note": "moved from runs/eval/main; only bilinear + deeptex arms kept (as score --only deeptex)"
+}

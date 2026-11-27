@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 # Shared vs split evaluation (docs/SPLIT_THEORY.md D) on the 12 MatSynth evaluation materials.
-# Two stages in two containers; results in runs/eval/<NAME>/ (NAME defaults to main).
-# Run from the repo root in Git Bash (or any Linux shell):
+# One folder per experiment, one sub-folder per checkpoint:
+#   runs/eval/deeptex_shared_vs_split/<N>k/   DeepTex arms, split arms at step N*1000 (30k / 35k / 40k)
+#   runs/eval/matup_shared_vs_split/ep10/     MatUp shared / split MLP (per-material optimisation, 10 epochs)
+# each with report.json, summary.md, montage/{overview,material,zoom}/ (in git) and maps/ (local).
+# Run from the repo root in Git Bash (or any Linux shell). RUN = <experiment>/<checkpoint>;
+# deeptex/... and matup/... are accepted for the two experiment folders.
 #
-#   bash scripts/eval.sh infer [NAME] [ARGS]   DeepTex arms -> runs/eval/<NAME>/maps/<arm>/   (deeptex container, detached)
-#                                              every arm of variants/eval/arms.py whose checkpoint exists;
-#                                              a missing checkpoint is skipped with a warning.
-#                                              ARGS go to infer_deeptex.py, e.g. --step 30000 (split arms
-#                                              at that checkpoint, shared at its latest; use NAME step30k)
-#   bash scripts/eval.sh montage [NAME] [ARGS] every arm vs GT as pictures -> runs/eval/<NAME>/montage/<exp>/
-#                                              {material,zoom,overview}/ (matup container, detached; needs
-#                                              infer, not score); ARGS go to montage.py, e.g. --seeds 0,1,2
-#   bash scripts/eval.sh tidy                  move flat montage/<exp>_*.png sheets (older montage.py) into
-#                                              montage/<exp>/{material,zoom,overview}/ in every runs/eval/*/ (no redraw)
-#   bash scripts/eval.sh score [NAME] [ARGS]   bilinear + MatUp + every metric -> runs/eval/<NAME>/{report.json,summary.md}
-#                                              (matup container, detached); ARGS go to evaluate.py, e.g. --no-perceptual
-#   bash scripts/eval.sh status                what is running, log tails, what each stage has written
-#   bash scripts/eval.sh stop STAGE            stop a detached stage (infer / montage / score)
+#   bash scripts/eval.sh infer   deeptex/30k [ARGS]   DeepTex arms -> <RUN>/maps/<arm>/ (deeptex container, detached):
+#                                                     split arms at the checkpoint of step 30000, the shared
+#                                                     renloss_21 at its own (only) checkpoint; ARGS -> infer_deeptex.py
+#   bash scripts/eval.sh montage RUN [ARGS]           the RUN's arms vs GT as pictures -> <RUN>/montage/ (matup container,
+#                                                     detached; DeepTex needs infer first); ARGS -> montage.py, e.g. --seeds 0,1,2
+#   bash scripts/eval.sh score   RUN [ARGS]           bilinear + the RUN's arms, every metric -> <RUN>/{report.json,summary.md}
+#                                                     (matup container, detached); ARGS -> evaluate.py, e.g. --no-perceptual
+#   bash scripts/eval.sh status                       what is running, log tails, what each RUN has written
+#   bash scripts/eval.sh stop STAGE                   stop a detached stage (infer / montage / score)
+#   bash scripts/eval.sh migrate                      move local maps/ of the old runs/eval/{main,step30k,step35k}
+#                                                     into the folders above (git already moved the results)
 #
 # Detached stages run in a container named eval_<stage>; closing the terminal does not stop them.
 # Logs: runs/logs/eval_<stage>.log (EXIT code on the last line when it ends).
@@ -33,13 +34,10 @@ EXPERIMENTS="deeptex_shared_vs_split matup_shared_vs_split"   # montage.py EXPER
 mkdir -p "$LOGS" runs/cache/nv runs/cache/torch
 if docker compose version >/dev/null 2>&1; then DC="docker compose"; else DC="docker-compose"; fi
 
+usage() { sed -n '2,26p' "$0"; exit 1; }
+
 STAGE=${1:-}
 [ $# -gt 0 ] && shift
-NAME=main                                   # optional NAME, then evaluate.py ARGS (score)
-if [ $# -gt 0 ] && [ "${1#-}" = "$1" ]; then NAME=$1; shift; fi
-case "$NAME" in
-  */*|*' '*|"") echo "NAME must be a plain folder name, got '$NAME'" >&2; exit 1 ;;
-esac
 
 detached() {  # stage, service, shell command
   local stage=$1 svc=$2 cmd=$3 name=eval_$1
@@ -54,44 +52,74 @@ detached() {  # stage, service, shell command
   echo "started $name   log: $LOGS/$name.log   status: bash scripts/eval.sh status"
 }
 
+parse_run() {  # RUN -> RUN (full experiment name), ONLY (deeptex / matup), CKPT
+  local exp=${1%%/*}
+  CKPT=${1#*/}
+  case "$exp" in
+    deeptex|deeptex_shared_vs_split) exp=deeptex_shared_vs_split; ONLY=deeptex ;;
+    matup|matup_shared_vs_split) exp=matup_shared_vs_split; ONLY=matup ;;
+    *) echo "RUN must be <experiment>/<checkpoint> with experiment deeptex or matup, got '$1'" >&2; exit 1 ;;
+  esac
+  case "$CKPT" in
+    */*|*' '*|""|"$1") echo "RUN must be <experiment>/<checkpoint>, e.g. deeptex/40k or matup/ep10, got '$1'" >&2; exit 1 ;;
+  esac
+  RUN=$exp/$CKPT
+}
+
+quote_args() { EXTRA=""; for a in "$@"; do EXTRA="$EXTRA '${a//\'/}'"; done; }
+
 case "$STAGE" in
-  infer)
-    EXTRA=""
-    for a in "$@"; do EXTRA="$EXTRA '${a//\'/}'"; done
-    detached infer deeptex "python /workspace/variants/eval/infer_deeptex.py --name $NAME$EXTRA" ;;
-  montage)
-    EXTRA=""
-    for a in "$@"; do EXTRA="$EXTRA '${a//\'/}'"; done
-    detached montage matup "python /workspace/variants/eval/montage.py --name $NAME$EXTRA" ;;
-  score)
-    EXTRA=""
-    for a in "$@"; do EXTRA="$EXTRA '${a//\'/}'"; done
-    # LPIPS's AlexNet weights are downloaded once into runs/cache/torch (TORCH_HOME).
-    detached score matup "export TORCH_HOME=/workspace/runs/cache/torch; \
-            python /workspace/variants/eval/evaluate.py --name $NAME$EXTRA" ;;
-  tidy)
-    for d in runs/eval/*/montage; do
-      [ -d "$d" ] || continue
-      moved=0
-      for f in "$d"/*.png; do
-        [ -f "$f" ] || continue
-        b=$(basename "$f")
-        for e in $EXPERIMENTS; do
-          case "$b" in
-            "${e}"_overview_*.png) k=overview ;;
-            "${e}"_*_zoom.png) k=zoom ;;
-            "${e}"_*.png) k=material ;;
-            *) continue ;;
-          esac
-          mkdir -p "$d/$e/$k" && mv -f "$f" "$d/$e/$k/$b" && moved=$((moved + 1))
-          break
-        done
+  infer|montage|score)
+    [ $# -gt 0 ] && [ "${1#-}" = "$1" ] || usage
+    parse_run "$1"; shift
+    quote_args "$@"
+    case "$STAGE" in
+      infer)
+        [ "$ONLY" = deeptex ] || { echo "infer is for DeepTex only (MatUp's maps come from matup_split.sh optim)" >&2; exit 1; }
+        STEP=""
+        case " $* " in
+          *" --step "*) ;;                                     # given explicitly
+          *) [[ "$CKPT" =~ ^([0-9]+)k$ ]] || { echo "DeepTex checkpoint folder must be <N>k (step N*1000), got '$CKPT'" >&2; exit 1; }
+             STEP=" --step $(( ${BASH_REMATCH[1]} * 1000 ))" ;;
+        esac
+        detached infer deeptex "python /workspace/variants/eval/infer_deeptex.py --name $RUN$STEP$EXTRA" ;;
+      montage)
+        detached montage matup "python /workspace/variants/eval/montage.py --name $RUN --only $ONLY$EXTRA" ;;
+      score)
+        # LPIPS's AlexNet weights are downloaded once into runs/cache/torch (TORCH_HOME).
+        detached score matup "export TORCH_HOME=/workspace/runs/cache/torch; \
+            python /workspace/variants/eval/evaluate.py --name $RUN --only $ONLY$EXTRA" ;;
+    esac ;;
+  migrate)
+    # old flat names -> experiment/checkpoint; only the local maps/ (git moved the rest)
+    mv_maps() {  # old dir, new run dir, glob of arm folders
+      local src=runs/eval/$1/maps dst=runs/eval/$2/maps a
+      for a in $src/$3; do
+        [ -d "$a" ] || continue
+        mkdir -p "$dst"
+        if [ -e "$dst/$(basename "$a")" ]; then
+          echo "  keep $dst/$(basename "$a") (exists), old copy stays in $a"
+        else
+          mv "$a" "$dst/" && echo "  $a -> $dst/"
+        fi
       done
-      echo "$d: $moved sheet(s) moved into <exp>/{material,zoom,overview}/"
+    }
+    mv_maps main deeptex_shared_vs_split/40k 'deeptex_*'
+    mv_maps main matup_shared_vs_split/ep10 'matup_*'
+    mv_maps main matup_shared_vs_split/ep10 'bilinear'
+    mv_maps step30k deeptex_shared_vs_split/30k 'deeptex_*'
+    mv_maps step35k deeptex_shared_vs_split/35k 'deeptex_*'
+    for o in step30k step35k; do                  # copies of main's MatUp / bilinear maps
+      rm -rf runs/eval/$o/maps/matup_* runs/eval/$o/maps/bilinear
+    done
+    for o in main step30k step35k; do
+      [ -d runs/eval/$o ] || continue
+      find runs/eval/$o -depth -type d -empty -delete
+      if [ -d runs/eval/$o ]; then echo "left in runs/eval/$o (check, then delete):"; find runs/eval/$o | head -20
+      else echo "runs/eval/$o: removed (empty)"; fi
     done ;;
   stop)
-    # `stop infer` parses "infer" as NAME above
-    docker stop "eval_${NAME:?}" ;;
+    docker stop "eval_${1:?stop STAGE: infer / montage / score}" ;;
   status)
     for s in infer montage score; do
       n=eval_$s
@@ -99,20 +127,22 @@ case "$STAGE" in
       docker inspect -f "== $n: {{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} started={{.State.StartedAt}}" "$n"
       [ -f "$LOGS/$n.log" ] && tr '\r' '\n' < "$LOGS/$n.log" | grep -v '^\s*$' | tail -"${LINES:-8}" | cut -c1-200
     done
-    for d in runs/eval/*/; do
-      [ -d "$d" ] || continue
-      echo "-- $d"
-      for a in "$d"maps/*/; do
-        [ -d "$a" ] && echo "   maps $(basename "$a"): $(ls -d "$a"*/ 2>/dev/null | wc -l) material(s)"
+    for e in $EXPERIMENTS; do
+      for d in runs/eval/$e/*/; do
+        [ -d "$d" ] || continue
+        echo "-- $d"
+        for a in "$d"maps/*/; do
+          [ -d "$a" ] && echo "   maps $(basename "$a"): $(ls -d "$a"*/ 2>/dev/null | wc -l) material(s)"
+        done
+        if [ -d "$d"montage ]; then
+          c() { ls "$d"montage/$1/*.png 2>/dev/null | wc -l || true; }
+          echo "   montage: $(c material) material, $(c zoom) zoom, $(c overview) overview"
+        fi
+        [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
       done
-      for e in $EXPERIMENTS; do
-        m="$d"montage/$e
-        [ -d "$m" ] && n=$(ls "$m"/material/*.png 2>/dev/null | wc -l) && [ "$n" -gt 0 ] && \
-          echo "   montage $e: $n material(s), $(ls "$m"/zoom/*.png 2>/dev/null | wc -l) zoom, $(ls "$m"/overview/*.png 2>/dev/null | wc -l) overview(s)"
-      done
-      n=$(ls "$d"montage/*_shared_vs_split_*.png 2>/dev/null | wc -l)
-      [ "$n" -gt 0 ] && echo "   montage: $n flat sheet(s) of an older montage.py - bash scripts/eval.sh tidy"
-      [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
+    done
+    for o in main step30k step35k; do
+      [ -d runs/eval/$o ] && echo "!! runs/eval/$o: old layout - bash scripts/eval.sh migrate"
     done
     for a in deeptex_split_nb23 deeptex_split_nb7 deeptex_split_nb7_b8 deeptex_split_nb23_rmgrey deeptex_split_nb7_rmgrey; do
       d=runs/deeptex/$a/checkpoints/esrgan_40k
@@ -123,5 +153,5 @@ case "$STAGE" in
     done
     nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu,temperature.gpu --format=csv,noheader ;;
   *)
-    sed -n '2,25p' "$0"; exit 1 ;;
+    usage ;;
 esac

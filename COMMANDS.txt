@@ -79,83 +79,45 @@ bash scripts/deeptex_split.sh smoke nb7b8
 bash scripts/deeptex_split.sh train nb7b8
 tail -f runs/logs/deeptex_split_nb7_b8_train.log
 bash scripts/deeptex_split.sh stop train nb7b8
-#     끝나면 [6] 평가를 다시: infer -> montage -> score (새 arm "DeepTex split nb7 x3 B=8"이 추가됨)
-
-# 4-6 RM 손실 수정: RM 네트워크의 pixel/VGG/D 손실을 [0,R,M] 묶음 이미지가 아니라
-#     회색 roughness, 회색 metallic 이미지로 계산 (공유 모델과 같은 방식, w_rm 25)
-#     배치 2, seed 1, 40k로 기존 nb23 / nb7과 짝이 맞음. 먼저 4-1 test (rm grey 검사 포함)
-bash scripts/deeptex_split.sh test
-bash scripts/deeptex_split.sh smoke nb7grey
-bash scripts/deeptex_split.sh train nb7grey
-bash scripts/deeptex_split.sh train nb23grey
-tail -f runs/logs/deeptex_split_nb7_rmgrey_train.log
-
-# (comp2 체크포인트를 못 가져왔을 때만) 공유 기준 모델 재학습 - comp2와 같은 설정
-#   bash scripts/deeptex_split.sh train shared
-#   이때 체크포인트는 runs/deeptex/deeptex_renloss_21/checkpoints/esrgan_40k (평가 때 경로 지정)
-
-
-[5] MatUp 공유 / 분할 MLP (평가 재질 12개 x seed 3개)
+#     끝나면 [6] 평가 (평가 재질 12개)
 ---------------------------------------------------------------------
-# DeepTex 학습과 같이 돌려도 되지만 느려짐. VRAM이 부족하면 하나씩
-# 5-1 SplitMLP 검사 (파라미터 수 309,511 / 408,839, 1배 309,719 / 3배 927,302, 채널 분리). 끝에 OK
-bash scripts/matup_split.sh test
+# 결과 폴더: 실험별 폴더 아래 체크포인트 폴더 (명령의 RUN = <실험>/<체크포인트>)
+#   runs/eval/deeptex_shared_vs_split/30k|35k|40k/   DeepTex: bilinear, 공유 renloss_21, 분할 arm (그 step의 체크포인트)
+#   runs/eval/matup_shared_vs_split/ep10/            MatUp: bilinear, 공유 / 분할 MLP s0-s2 (재질별 10 epoch 최적화)
+#   각 폴더: report.json, summary.md, montage/{overview,material,zoom}/  (git에 올라감) + maps/ (안 올라감)
+#   명령에서는 deeptex/40k, matup/ep10 처럼 줄여 써도 됨. 한 단계씩 EXIT 0 확인 후 다음
+#   공유 renloss_21은 체크포인트가 하나뿐이라 30k/35k/40k 폴더 모두 같은 모델 (짝 비교 기준)
 
-# 5-2 재질마다 LR 렌더 + SwinIR-L x4 렌더를 한 번만 만들어 캐시 (백그라운드, 재질당 1분 안팎)
-bash scripts/matup_split.sh prep
+# 6-1 DeepTex 추론: 폴더 이름의 step으로 분할 arm 체크포인트를 고름 (40k -> step 40000)
+#     끝 줄 written: 에 분할 arm들이 있어야 함
+bash scripts/eval.sh infer deeptex/40k
+bash scripts/eval.sh infer deeptex/35k
+bash scripts/eval.sh infer deeptex/30k
 
-# 5-3 최적화: 12 재질 x arm x seed {0,1,2} (백그라운드, 회당 1~2분)
-#     arm: matup_shared, matup_split (폭 128, 1.32배), matup_split_x1 (폭 104, 1.00배),
-#          matup_split_x3 (폭 227, 3.00배). 기본은 네 개 전부 = 144회
-#     끊기면 다시 실행 -> 끝난 run은 건너뜀 (이미 끝난 shared / split 72회는 건너뜀)
-bash scripts/matup_split.sh optim
-#     파라미터 맞춘 두 arm만: bash scripts/matup_split.sh optim matup_split_x1,matup_split_x3
-
-# 진행 상황 / 로그 / 중지
-bash scripts/matup_split.sh status
-tail -f runs/logs/matup_split_optim.log
-bash scripts/matup_split.sh stop optim
-
-
-[6] 평가 (평가 재질 12개, 모든 arm)
----------------------------------------------------------------------
-# 6-1 DeepTex arm 추론 (공유 renloss_21, 분할 nb23 / nb7 중 체크포인트가 있는 것)
-bash scripts/eval.sh infer
-
-# 6-2 몽타주 - 육안 비교 (6-1 다음, score 없이 가능. 백그라운드, 몇 분)
-#     실험별 폴더 안에 종류별 폴더 (runs/eval/<이름>/montage/<실험>/...). 파일 이름 앞에도 실험 이름:
-#       deeptex_shared_vs_split/    행: GT | bilinear | DeepTex 공유(renloss_21) / 분할 arm 전부
-#       matup_shared_vs_split/      행: GT | bilinear | MatUp 공유 MLP s0 / 분할 MLP s0
+# 6-2 몽타주 - 육안 비교 (6-1 다음, score 없이 가능. 백그라운드, 몇 분). 파일 이름 앞에 실험 이름
 #     overview/<실험>_overview_<맵>.png  재질 12개 x arm 한 장 (baseColor/normal/roughness/metallic/render/error)
 #                                         -> 먼저 이것부터 보기
 #     material/<실험>_<재질>.png         열: baseColor normal roughness metallic | 렌더 EVAL / grazing | |렌더-GT| x4 (+PSNR)
 #     zoom/<실험>_<재질>_zoom.png        노란 박스 영역(디테일이 가장 많은 96x96 texel)을 확대한 것
-bash scripts/eval.sh montage
-#     예전 montage.py로 그린 평평한 파일(montage/<실험>_*.png)은 다시 그리지 않고 폴더로 옮기기:
-#       bash scripts/eval.sh tidy
-#     MatUp seed 전부: bash scripts/eval.sh montage main --seeds 0,1,2
-#     줌 위치 직접 지정 (crop 좌표 y,x): bash scripts/eval.sh montage main --zoom 64 --zoom-at 200,120 --material <재질>
+bash scripts/eval.sh montage deeptex/40k
+bash scripts/eval.sh montage matup/ep10
+#     MatUp seed 전부: bash scripts/eval.sh montage matup/ep10 --seeds 0,1,2
+#     줌 위치 직접 지정 (crop 좌표 y,x): bash scripts/eval.sh montage deeptex/40k --zoom 64 --zoom-at 200,120 --material <재질>
 
 # 6-3 지표 계산: 맵 PSNR/SSIM/normal 각도, 렌더 PSNR/l2,1/LPIPS/FLIP (모든 arm height = GT)
-bash scripts/eval.sh score
+bash scripts/eval.sh score deeptex/40k
+bash scripts/eval.sh score matup/ep10
 
-# 진행 상황
+# 진행 상황 / 중지
 bash scripts/eval.sh status
+bash scripts/eval.sh stop score
 
-# 6-4 (선택) 분할 arm의 중간 체크포인트 평가: 30k / 35k (학습이 마지막 3개만 남김: 30k/35k/40k)
-#     분할 arm은 그 step의 체크포인트, 공유 renloss_21은 main과 같은 체크포인트.
-#     결과는 이름을 따로: runs/eval/step30k/, runs/eval/step35k/ (main은 그대로)
-#     한 단계씩 EXIT 0 확인 후 다음 (infer 끝 줄 written: 에 분할 arm들이 있어야 함)
-bash scripts/eval.sh infer step30k --step 30000
-bash scripts/eval.sh montage step30k
-bash scripts/eval.sh score step30k
-bash scripts/eval.sh infer step35k --step 35000
-bash scripts/eval.sh montage step35k
-bash scripts/eval.sh score step35k
+# (한 번만) 예전 이름 runs/eval/main, step30k, step35k의 maps/를 새 폴더로 옮김 (git pull 후)
+bash scripts/eval.sh migrate
 
-# 결과를 다른 PC로 (.gitignore가 runs/eval/*/report.json, summary.md, montage/만 올림. maps/는 안 올라감)
+# 결과를 다른 PC로 (.gitignore가 report.json, summary.md, montage/만 올림. maps/는 안 올라감)
 # external/matup_egsr (untracked content) 표시는 SwinIR 가중치 등이라 add 하지 않음
-git add runs/eval && git commit -m "split results" && git push
+git add -A runs/eval && git commit -m "split results" && git push
 
 
 [결과 위치]
@@ -167,4 +129,4 @@ runs/deeptex/deeptex_split_nb7_b8/checkpoints/     분할 nb=7, 재질 8개/step
 runs/deeptex/deeptex_split_nb*_rmgrey/checkpoints/  분할, RM 손실을 회색 이미지로 계산한 체크포인트
 runs/matup_split/cache/<재질>/                      MatUp LR 렌더, SwinIR 렌더 캐시
 runs/matup_split/<arm>/s<k>/<재질>/                 MatUp 결과 맵 (+ run.json)
-runs/eval/<이름>/                                   report.json, summary.md, maps/, montage/
+runs/eval/<실험>/<체크포인트>/                      report.json, summary.md, maps/, montage/
