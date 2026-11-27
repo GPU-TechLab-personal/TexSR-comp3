@@ -155,7 +155,12 @@ def main():
                 raw = {i: in_maps[i] for i in (0, 1, 3)}      # albedo, metallic, alpha
                 out = clamped(in_maps)
                 for i, r in raw.items():
-                    out[i] = r + (out[i] - r).detach()
+                    # forward is exactly clamp(r): r - r.detach() is exactly 0. The earlier
+                    # r + (clamp(r) - r).detach() lost the clamp in float32 once |r| > 2^24
+                    # (a split sub-network can drive z that far when nothing bounds it), e.g.
+                    # alpha 1e8 + (1 - 1e8) = 0; the likely cause of the eval self-check failure
+                    # on matup_split_st (render_opt.png off by a full LSB range).
+                    out[i] = out[i].detach() + (r - r.detach())
                 return out
             du.get_renorm_clamped_maps = st_clamped
         if args.probe:
