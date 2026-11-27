@@ -205,11 +205,16 @@ $$
    - `matup_split_x1`: $h=104$, 309,719개 (공유의 **1.001배**). DeepTex nb7(0.93배)에 해당합니다.
    - `matup_split_x3`: $h=227$, 927,302개 (공유의 **2.996배**). DeepTex nb23(3배)에 해당합니다.
    - 기존 `matup_split`($h=128$, 1.32배)은 "그룹마다 공유와 같은 모양의 MLP"라는 점에서 nb23과 같은 설계지만, 첫 층 때문에 파라미터는 1.32배입니다.
+4. **(진단 arm) metallic 정규화 끄기:** `matup_shared_noreg`, `matup_split_noreg`는 각각 공유, 분할($h=128$)과 같고 $\alpha_{\text{reg}}=0$만 다릅니다(MatUp `--alpha_reg`, 기본 0.1).
+   - 정규화항은 $\alpha_{\text{reg}}\,\overline{(\Pi(z_m)-s_m)^2}$입니다. clamp $\Pi$ 뒤에 걸려 있어 metallic이 경계에 붙으면 gradient가 함께 0이 됩니다.
+   - ep10 결과에서 분할 arm의 일부 seed는 채널 하나 이상이 clamp 경계에 붙은 채로 끝났습니다(plastic albedo 전체 0, roofing B 0, brick_wall roughness 1). 이 arm은 그 원인이 정규화항인지 가립니다.
+   - 분할에서 albedo MLP는 $z_m$에 닿지 않으므로 $\nabla_{\varphi_a}$(정규화항)$\equiv0$입니다. 그래서 정규화항이 원인이라면 RM 쪽 사망(roughness 고정)만 바뀌고 albedo 사망은 그대로여야 합니다.
+   - 짝 비교는 `matup_split_noreg` − `matup_shared_noreg`입니다(정규화 조건이 같은 쌍). 정규화 효과는 같은 seed의 `*_noreg` − 기존 arm으로 봅니다.
 
 **바뀌지 않는 것**
 - 손실 $\mathcal L$이 그대로입니다. render 손실은 하나뿐이고 그룹별 항이 없으므로, DeepTex와 달리 $w_g$를 조정할 필요가 없습니다.
 - 세 MLP의 파라미터 전체를 Adam 하나로 함께 최적화합니다. MatUp은 원래 공동 학습입니다. Adam은 파라미터마다 따로 적응하므로, Adam을 셋으로 나눈 것과 같습니다.
-- 그대로인 것: SwinIR-L(릴리스 가중치), 목표 렌더 $\tilde I_l$(모든 arm과 seed가 같은 캐시를 씀), 빛, epoch 10, 배치 128, 학습률, $\alpha_{\text{reg}}$, height 처리(위치에만 사용).
+- 그대로인 것: SwinIR-L(릴리스 가중치), 목표 렌더 $\tilde I_l$(모든 arm과 seed가 같은 캐시를 씀), 빛, epoch 10, 배치 128, 학습률, $\alpha_{\text{reg}}$(B1-4의 `*_noreg`만 0), height 처리(위치에만 사용).
 - 실험상 차이: seed를 3개 돌려 노이즈 수준을 함께 보고합니다.
 
 **SwinIR-L은 왜 나누지 않는가:** MatUp의 SwinIR-L은 맵이 아니라 렌더 이미지를 업스케일합니다. 렌더에는 모든 맵이 섞여 있으므로, 맵 그룹으로 나눌 대상이 아닙니다.

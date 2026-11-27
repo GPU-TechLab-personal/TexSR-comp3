@@ -19,12 +19,16 @@ Report column order (summary.md, report.json):
   matup_split_s0..s2    MatUp, three group MLPs per material (width 128, 1.32x), seed k
   matup_split_x1_s<k>, matup_split_x3_s<k>
                         the same at width 104 (1.00x) / 227 (3.00x the shared MLP)
+  matup_shared_noreg_s<k>, matup_split_noreg_s<k>
+                        shared / split (width 128) with MatUp's metallic regulariser off
+                        (--alpha_reg 0, SPLIT_THEORY B1-4)
 
 Pairs (split vs its shared counterpart, paired per material):
   deeptex_split_nb23 - deeptex_renloss_21, deeptex_split_nb7 - deeptex_renloss_21,
   deeptex_split_nb7_b8 - deeptex_renloss_21 (not data-matched: 4x the crops),
   deeptex_split_nb*_rmgrey - deeptex_renloss_21,
-  matup_split*_s<k> - matup_shared_s<k> for every split arm and seed k.
+  matup_split*_s<k> - matup_shared_s<k> for every split arm and seed k
+  (matup_split_noreg_s<k> - matup_shared_noreg_s<k>: the same regulariser on both sides).
 """
 
 import os
@@ -36,8 +40,14 @@ MATSYNTH_ROOT = "/data/TexSR-data/matsynth"
 MATUP_RUNS = "/workspace/runs/matup_split"
 
 SEEDS = (0, 1, 2)
-MATUP_ARMS = ("matup_shared", "matup_split", "matup_split_x1", "matup_split_x3")
-MATUP_SPLIT_ARMS = MATUP_ARMS[1:]
+MATUP_ARMS = ("matup_shared", "matup_split", "matup_split_x1", "matup_split_x3",
+              "matup_shared_noreg", "matup_split_noreg")
+MATUP_SPLIT_ARMS = tuple(a for a in MATUP_ARMS if a.startswith("matup_split"))
+
+
+def matup_counterpart(arm):
+    """The shared arm a split arm is paired with: same metallic regulariser."""
+    return "matup_shared_noreg" if arm.endswith("_noreg") else "matup_shared"
 
 # DeepTextures arms: config, default checkpoint dir, and how the generator(s) sit
 # in the tf.train.Checkpoint.
@@ -94,6 +104,8 @@ DISPLAY = {
     "matup_split": "MatUp split MLP",
     "matup_split_x1": "MatUp split MLP 1x",
     "matup_split_x3": "MatUp split MLP 3x",
+    "matup_shared_noreg": "MatUp shared MLP, no metallic reg",
+    "matup_split_noreg": "MatUp split MLP, no metallic reg",
 }
 
 
@@ -122,7 +134,7 @@ def pairs(seeds=SEEDS):
            ("deeptex_split_nb7_b8", "deeptex_renloss_21"),
            ("deeptex_split_nb23_rmgrey", "deeptex_renloss_21"),
            ("deeptex_split_nb7_rmgrey", "deeptex_renloss_21")]
-    out += [(matup_key(arm, s), matup_key("matup_shared", s))
+    out += [(matup_key(arm, s), matup_key(matup_counterpart(arm), s))
             for arm in MATUP_SPLIT_ARMS for s in seeds]
     return out
 

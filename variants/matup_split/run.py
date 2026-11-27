@@ -25,6 +25,9 @@ main.py imports them (MatUp's files on disk are never edited):
    the three sub-MLPs width W instead of MatUp's 128 (parameter-matched arms).
 4. THE SEED. main_optim seeds numpy and torch with 1996 (main_optim.py:36-37).
    --seed S makes those two calls seed S instead; S = 1996 is MatUp as released.
+5. THE METALLIC REGULARISER. --alpha-reg X is passed to main.py as --alpha_reg X
+   (weight of the metallic term, train.loss_fn; MatUp's default 0.1). Only the
+   *_noreg arms set it (0, docs/SPLIT_THEORY.md B1-4); omitted, MatUp's default holds.
 
 Outputs: MatUp writes <out>/<timestamp>/{baseColor,metallic,normal,roughness,render}_opt.png
 (512^2 with an 8 px border, DirectX normals). This file adds <out>/run.json
@@ -42,6 +45,7 @@ import time
 REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), *[os.pardir] * 2))
 MATUP = os.path.join(REPO, "external", "matup_egsr")
 MATUP_SEED = 1996                      # main_optim.py:36-37
+MATUP_ALPHA_REG = 0.1                  # main.py --alpha_reg default
 N_LIGHTS = 100                         # main.py --nb_lights default
 
 
@@ -59,6 +63,8 @@ def main():
     ap.add_argument("--seed", type=int, default=MATUP_SEED)
     ap.add_argument("--split-width", type=int, default=0,
                     help="split only: sub-MLP hidden width (0 = MatUp's --hid_layer_width, 128)")
+    ap.add_argument("--alpha-reg", type=float, default=None,
+                    help="optim: metallic regulariser weight (main.py --alpha_reg; default MatUp's 0.1)")
     ap.add_argument("--out", default="", help="optim: output folder of this run")
     args = ap.parse_args()
 
@@ -129,6 +135,8 @@ def main():
             "--input_mat", svbrdf + "/", "--render_dir", render_dir + "/",
             "--upsamplings_dir", up_dir + "/",
             "--output_folder", (args.out or os.path.join(args.cache, "_unused")) + "/"]
+    if args.stage == "optim" and args.alpha_reg is not None:
+        argv += ["--alpha_reg", repr(args.alpha_reg)]
     print("[matup_split] %s" % " ".join(argv), flush=True)
     sys.argv = argv
     t0 = time.time()
@@ -147,6 +155,7 @@ def main():
     with open(os.path.join(args.out, "run.json"), "w") as f:
         json.dump({"material": os.path.basename(os.path.normpath(args.material)),
                    "mlp": args.mlp, "split_width": args.split_width or None, "seed": args.seed,
+                   "alpha_reg": MATUP_ALPHA_REG if args.alpha_reg is None else args.alpha_reg,
                    "params": info["built"].get("params"), "seconds": round(dt, 1),
                    "maps": os.path.relpath(os.path.dirname(outs[-1]), args.out),
                    "cache": args.cache}, f, indent=2)

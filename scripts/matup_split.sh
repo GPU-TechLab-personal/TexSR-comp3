@@ -9,7 +9,8 @@
 #                                         12 materials x arms x seeds {0,1,2} (detached, ~1-2 min per
 #                                         run; rerun skips finished runs). Arms: matup_shared,
 #                                         matup_split (width 128, 1.32x), matup_split_x1 (width 104,
-#                                         1.00x), matup_split_x3 (width 227, 3.00x); default all four
+#                                         1.00x), matup_split_x3 (width 227, 3.00x), matup_shared_noreg /
+#                                         matup_split_noreg (metallic regulariser off); default all six
 #   bash scripts/matup_split.sh status    containers, log tail, runs done
 #   bash scripts/matup_split.sh stop STAGE
 #
@@ -64,7 +65,7 @@ case "${1:-}" in
       [ -f "$LOGS/$n.log" ] && tr '\r' '\n' < "$LOGS/$n.log" | grep -v '^\s*$' | tail -"${LINES:-6}" | cut -c1-200
     done
     [ -d runs/matup_split/cache ] && echo "cache: $(ls runs/matup_split/cache | wc -l) materials"
-    for arm in matup_shared matup_split matup_split_x1 matup_split_x3; do
+    for arm in matup_shared matup_split matup_split_x1 matup_split_x3 matup_shared_noreg matup_split_noreg; do
       for k in 0 1 2; do
         d=runs/matup_split/$arm/s$k
         [ -d "$d" ] && echo "$arm s$k: $(ls "$d"/*/run.json 2>/dev/null | wc -l) done"
@@ -72,5 +73,5 @@ case "${1:-}" in
     done
     nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu --format=csv,noheader ;;
   *)
-    sed -n '2,17p' "$0"; exit 1 ;;
+    sed -n '2,18p' "$0"; exit 1 ;;
 esac

@@ -24,10 +24,12 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 EVAL_SET = "/data/TexSR-data/matsynth"
 OUT = "/workspace/runs/matup_split"
-# arm -> (--mlp, --split-width); 0 = MatUp's width 128. x1 / x3: parameter-matched to
-# 1x / 3x the shared MLP (split_mlp.WIDTHS, SPLIT_THEORY B1-3).
-ARMS = {"matup_shared": ("shared", 0), "matup_split": ("split", 0),
-        "matup_split_x1": ("split", 104), "matup_split_x3": ("split", 227)}
+# arm -> (--mlp, --split-width, --alpha-reg); width 0 = MatUp's 128, alpha_reg None = MatUp's
+# 0.1. x1 / x3: parameter-matched to 1x / 3x the shared MLP (split_mlp.WIDTHS, SPLIT_THEORY
+# B1-3). *_noreg: the metallic regulariser off (SPLIT_THEORY B1-4), otherwise as without.
+ARMS = {"matup_shared": ("shared", 0, None), "matup_split": ("split", 0, None),
+        "matup_split_x1": ("split", 104, None), "matup_split_x3": ("split", 227, None),
+        "matup_shared_noreg": ("shared", 0, 0.0), "matup_split_noreg": ("split", 0, 0.0)}
 SEEDS = {0: 1996, 1: 1997, 2: 1998}
 
 
@@ -90,11 +92,13 @@ def main():
                 if os.path.isfile(os.path.join(out, "run.json")):
                     print("[driver] %s s%d %s: done" % (arm, k, name))
                     continue
-                mlp, width = ARMS[arm]
+                mlp, width, alpha_reg = ARMS[arm]
                 cmd = [sys.executable, run_py, "--material", mat, "--cache", cache,
                        "--stage", "optim", "--mlp", mlp, "--seed", str(SEEDS[k]), "--out", out]
                 if width:
                     cmd += ["--split-width", str(width)]
+                if alpha_reg is not None:
+                    cmd += ["--alpha-reg", repr(alpha_reg)]
                 if run(cmd):
                     failed.append((arm, k, name))
 

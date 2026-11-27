@@ -158,7 +158,7 @@ case "$STAGE" in
       d=runs/deeptex/$a/checkpoints/esrgan_40k
       [ -d "$d" ] && echo "checkpoints $d: $(ls "$d" | grep -o 'ckpt-[0-9]*' | sort -u | tr '\n' ' ')"
     done
-    for a in matup_shared matup_split matup_split_x1 matup_split_x3; do
+    for a in matup_shared matup_split matup_split_x1 matup_split_x3 matup_shared_noreg matup_split_noreg; do
       [ -d runs/matup_split/$a ] && echo "MatUp $a: $(ls runs/matup_split/$a/s*/*/*/baseColor_opt.png 2>/dev/null | wc -l) run(s) with _opt maps"
     done
     nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu,temperature.gpu --format=csv,noheader ;;
