@@ -139,6 +139,17 @@ bash scripts/eval.sh score
 # 진행 상황
 bash scripts/eval.sh status
 
+# 6-4 (선택) 분할 arm의 중간 체크포인트 평가: 30k / 35k (학습이 마지막 3개만 남김: 30k/35k/40k)
+#     분할 arm은 그 step의 체크포인트, 공유 renloss_21은 main과 같은 체크포인트.
+#     결과는 이름을 따로: runs/eval/step30k/, runs/eval/step35k/ (main은 그대로)
+#     한 단계씩 EXIT 0 확인 후 다음 (infer 끝 줄 written: 에 분할 arm들이 있어야 함)
+bash scripts/eval.sh infer step30k --step 30000
+bash scripts/eval.sh montage step30k
+bash scripts/eval.sh score step30k
+bash scripts/eval.sh infer step35k --step 35000
+bash scripts/eval.sh montage step35k
+bash scripts/eval.sh score step35k
+
 # 결과를 다른 PC로 (.gitignore가 runs/eval/*/report.json, summary.md, montage/만 올림. maps/는 안 올라감)
 # external/matup_egsr (untracked content) 표시는 SwinIR 가중치 등이라 add 하지 않음
 git add runs/eval && git commit -m "split results" && git push

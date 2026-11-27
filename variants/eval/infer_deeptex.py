@@ -43,6 +43,12 @@ deeptex_sr.py). Restore checks are deeptex_sr's / deeptex_compare's: the
 checkpoint index and shards resolve, every generator variable is matched
 (assert_existing_objects_matched) and restoring changed the weights.
 
+--step N takes each split arm's checkpoint saved at step N (split/train.py keeps
+30k / 35k / 40k) instead of the latest, matched by the `step` variable stored in
+the checkpoint, not by the ckpt-<k> number; an arm without that step is skipped.
+The shared arm keeps its own latest checkpoint, so the paired comparison is
+split@N against the shared model as evaluated in main. Give it its own --name.
+
 A checkpoint dir that is missing or holds no checkpoint skips that arm with a
 warning. An arm whose checkpoint exists but cannot be restored is reported as
 FAILED and the remaining arms still run. Exit 0 when at least one arm was
@@ -54,6 +60,7 @@ removed, so a stale map from an earlier checkpoint can never survive.
 """
 
 import argparse
+import glob
 import json
 import os
 import sys
@@ -89,16 +96,45 @@ ALL_FILES = [j[0] + ".png" for j in SHARED_JOBS] + ["sr_manifest.json"]
 
 # ------------------------------------------------------------------ checkpoints
 
-def find_checkpoint(key, ckpt_dir):
-    """deeptex_sr.check_checkpoint, but a missing checkpoint is a skip, not exit 3."""
+def saved_step(prefix):
+    """The `step` variable stored in a checkpoint, or None."""
+    try:
+        return int(tf.train.load_checkpoint(prefix).get_tensor("step/.ATTRIBUTES/VARIABLE_VALUE"))
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def checkpoint_at(key, ckpt_dir, want):
+    """The prefix in ckpt_dir whose stored step is `want` (split/train.py keeps the
+    last three saves, 30k / 35k / 40k), or None with the steps that are there."""
+    have = []
+    for idx in sorted(glob.glob(os.path.join(ckpt_dir, "ckpt-*.index"))):
+        prefix = idx[:-len(".index")]
+        s = saved_step(prefix)
+        if s == want:
+            return prefix
+        have.append("%s=%s" % (os.path.basename(prefix), s))
+    print("[warn] %s: no checkpoint at step %d in %s (there: %s) - arm skipped"
+          % (key, want, ckpt_dir, ", ".join(have) or "none"))
+    return None
+
+
+def find_checkpoint(key, ckpt_dir, want_step=None):
+    """deeptex_sr.check_checkpoint, but a missing checkpoint is a skip, not exit 3.
+    want_step: the checkpoint saved at that step instead of the latest one."""
     if not os.path.isdir(ckpt_dir):
         print("[warn] %s: checkpoint dir %s does not exist - arm skipped" % (key, ckpt_dir))
         return None
     if not tf.train.latest_checkpoint(ckpt_dir):
         print("[warn] %s: no checkpoint in %s - arm skipped" % (key, ckpt_dir))
         return None
+    explicit = ""
+    if want_step is not None:
+        explicit = checkpoint_at(key, ckpt_dir, want_step)
+        if explicit is None:
+            return None
     try:
-        return deeptex_sr.check_checkpoint(ckpt_dir, "")
+        return deeptex_sr.check_checkpoint(ckpt_dir, explicit)
     except SystemExit:
         print("[warn] %s: checkpoint in %s is incomplete (above) - arm skipped" % (key, ckpt_dir))
         return None
@@ -275,6 +311,10 @@ def main():
                     help="comma-separated subset of %s, or 'all'" % ",".join(A.DEEPTEX_ORDER))
     ap.add_argument("--ckpt", action="append", default=[],
                     help="ARM=CHECKPOINT_DIR, overrides arms.py's default (repeatable)")
+    ap.add_argument("--step", type=int, default=None,
+                    help="split arms: the checkpoint saved at this step (30000 / 35000 / 40000) "
+                         "instead of the latest; the shared arm always uses its own latest. "
+                         "Use a separate --name, e.g. step30k")
     ap.add_argument("--material", default="")
     ap.add_argument("--tile-size", type=int, default=0)
     ap.add_argument("--overlap", type=int, default=16)
@@ -307,8 +347,10 @@ def main():
             print("[infer] %s: nothing in %s, using the locally trained %s"
                   % (key, ckpt_dir, fallback))
             ckpt_dir = fallback
-        print("[infer] %s (%s) checkpoint dir %s" % (key, spec["kind"], ckpt_dir))
-        found = find_checkpoint(key, ckpt_dir)
+        want = args.step if spec["kind"] == "split" else None
+        print("[infer] %s (%s) checkpoint dir %s%s" % (
+            key, spec["kind"], ckpt_dir, "" if want is None else ", step %d" % want))
+        found = find_checkpoint(key, ckpt_dir, want)
         if found is None:
             skipped_arms.append(key)
             continue

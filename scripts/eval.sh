@@ -3,9 +3,11 @@
 # Two stages in two containers; results in runs/eval/<NAME>/ (NAME defaults to main).
 # Run from the repo root in Git Bash (or any Linux shell):
 #
-#   bash scripts/eval.sh infer [NAME]          DeepTex arms -> runs/eval/<NAME>/maps/<arm>/   (deeptex container, detached)
+#   bash scripts/eval.sh infer [NAME] [ARGS]   DeepTex arms -> runs/eval/<NAME>/maps/<arm>/   (deeptex container, detached)
 #                                              every arm of variants/eval/arms.py whose checkpoint exists;
-#                                              a missing checkpoint is skipped with a warning
+#                                              a missing checkpoint is skipped with a warning.
+#                                              ARGS go to infer_deeptex.py, e.g. --step 30000 (split arms
+#                                              at that checkpoint, shared at its latest; use NAME step30k)
 #   bash scripts/eval.sh montage [NAME] [ARGS] every arm vs GT as pictures -> runs/eval/<NAME>/montage/
 #                                              (matup container, detached; needs infer, not score);
 #                                              ARGS go to montage.py, e.g. --seeds 0,1,2 --zoom 64 --zoom-at 200,120
@@ -51,7 +53,9 @@ detached() {  # stage, service, shell command
 
 case "$STAGE" in
   infer)
-    detached infer deeptex "python /workspace/variants/eval/infer_deeptex.py --name $NAME" ;;
+    EXTRA=""
+    for a in "$@"; do EXTRA="$EXTRA '${a//\'/}'"; done
+    detached infer deeptex "python /workspace/variants/eval/infer_deeptex.py --name $NAME$EXTRA" ;;
   montage)
     EXTRA=""
     for a in "$@"; do EXTRA="$EXTRA '${a//\'/}'"; done
@@ -93,5 +97,5 @@ case "$STAGE" in
     done
     nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu,temperature.gpu --format=csv,noheader ;;
   *)
-    sed -n '2,19p' "$0"; exit 1 ;;
+    sed -n '2,23p' "$0"; exit 1 ;;
 esac
