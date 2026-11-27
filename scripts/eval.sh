@@ -14,6 +14,8 @@
 #                                                     detached; DeepTex needs infer first); ARGS -> montage.py, e.g. --seeds 0,1,2
 #   bash scripts/eval.sh score   RUN [ARGS]           bilinear + the RUN's arms, every metric -> <RUN>/{report.json,summary.md}
 #                                                     (matup container, detached); ARGS -> evaluate.py, e.g. --no-perceptual
+#   bash scripts/eval.sh split   RUN                  cut the RUN's montage sheets per seed -> <RUN>/montage/by_seed/s<k>/
+#                                                     (montage does this itself; for sheets made before, or pulled from git)
 #   bash scripts/eval.sh status                       what is running, log tails, what each RUN has written
 #   bash scripts/eval.sh stop STAGE                   stop a detached stage (infer / montage / score)
 #   bash scripts/eval.sh migrate                      move local maps/ of the old runs/eval/{main,step30k,step35k}
@@ -34,7 +36,7 @@ EXPERIMENTS="deeptex_shared_vs_split matup_shared_vs_split"   # montage.py EXPER
 mkdir -p "$LOGS" runs/cache/nv runs/cache/torch
 if docker compose version >/dev/null 2>&1; then DC="docker compose"; else DC="docker-compose"; fi
 
-usage() { sed -n '2,26p' "$0"; exit 1; }
+usage() { sed -n '2,28p' "$0"; exit 1; }
 
 STAGE=${1:-}
 [ $# -gt 0 ] && shift
@@ -90,6 +92,11 @@ case "$STAGE" in
         detached score matup "export TORCH_HOME=/workspace/runs/cache/torch; \
             python /workspace/variants/eval/evaluate.py --name $RUN --only $ONLY$EXTRA" ;;
     esac ;;
+  split)
+    [ $# -gt 0 ] || usage
+    parse_run "$1"
+    [ -f runs/eval/$RUN/montage/montage.json ] || { echo "no runs/eval/$RUN/montage/montage.json - run montage first" >&2; exit 1; }
+    ( cd docker && $DC run --rm -T matup python /workspace/variants/eval/split_sheets.py /workspace/runs/eval/$RUN ) ;;
   migrate)
     # old flat names -> experiment/checkpoint; only the local maps/ (git moved the rest)
     mv_maps() {  # old dir, new run dir, glob of arm folders
@@ -137,6 +144,9 @@ case "$STAGE" in
         if [ -d "$d"montage ]; then
           c() { ls "$d"montage/$1/*.png 2>/dev/null | wc -l || true; }
           echo "   montage: $(c material) material, $(c zoom) zoom, $(c overview) overview"
+          for k in "$d"montage/by_seed/s*/; do
+            [ -d "$k" ] && echo "   montage/by_seed/$(basename "$k"): $(ls "$k"*/*.png 2>/dev/null | wc -l || true) sheet(s)"
+          done
         fi
         [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
       done

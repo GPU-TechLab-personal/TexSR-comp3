@@ -102,6 +102,8 @@ bash scripts/eval.sh infer deeptex/30k
 bash scripts/eval.sh montage deeptex/40k
 bash scripts/eval.sh montage matup/ep10
 #     MatUp seed 전부: bash scripts/eval.sh montage matup/ep10 --seeds 0,1,2
+#       -> montage/by_seed/s0,s1,s2/ 에 seed별 sheet도 같이 생김 (GT, bilinear + 그 seed의 arm만)
+#     git으로 받은 sheet를 seed별로 자르기만: bash scripts/eval.sh split matup/ep10  (몇 초)
 #     줌 위치 직접 지정 (crop 좌표 y,x): bash scripts/eval.sh montage deeptex/40k --zoom 64 --zoom-at 200,120 --material <재질>
 
 # 6-3 지표 계산: 맵 PSNR/SSIM/normal 각도, 렌더 PSNR/l2,1/LPIPS/FLIP (모든 arm height = GT)

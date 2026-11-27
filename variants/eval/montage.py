@@ -54,6 +54,8 @@ OUTPUTS  <eval-root>/<name>/montage/{material,zoom,overview}/, one folder per ki
   montage.json (in montage/)  per material: border, crop, zoom window, sources, EVAL
                               PSNR (whole crop) per row, missing rows, files (relative
                               to montage/)
+  by_seed/s<k>/<kind>/        with two or more --seeds: every sheet again with GT,
+                              bilinear and seed k's rows only (split_sheets.py)
   Earlier layouts' sheets are removed on every run: montage/<exp>/<kind>/ and the flat
   montage/<exp>_*.png, and the first version's <material>.png, <material>_zoom.png,
   overview_<key>.png.
@@ -78,6 +80,7 @@ from matup.renderer import Renderer  # noqa: E402
 from variants.eval import arms as A  # noqa: E402
 from variants.eval import evaluate as E  # noqa: E402
 from variants.eval import sheets as S  # noqa: E402
+from variants.eval import split_sheets  # noqa: E402
 from variants.eval.matup_maps import crop  # noqa: E402
 from variants.util.report import images as rimg  # noqa: E402
 
@@ -405,6 +408,8 @@ def main():
                             "heat_gain": S.HEAT_GAIN, "cell": args.cell, "zoom": args.zoom,
                             "zoom_cell": args.zoom_cell, "materials": infos}), fh, indent=1)
     print("[montage] %d material(s) -> %s" % (len(infos), out))
+    if not args.material:                  # a one-material run would cut sheets it did not write
+        split_sheets.split_run(base)
     if skipped:
         print("[montage] arms with no output (not drawn): " +
               "; ".join("%s (%s)" % kv for kv in skipped))
