@@ -82,10 +82,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_0559_brick_uneven_stones.png",
-    "deeptex_shared_vs_split_0559_brick_uneven_stones_zoom.png",
-    "matup_shared_vs_split_0559_brick_uneven_stones.png",
-    "matup_shared_vs_split_0559_brick_uneven_stones_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_0559_brick_uneven_stones.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_0559_brick_uneven_stones_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_0559_brick_uneven_stones.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_0559_brick_uneven_stones_zoom.png"
    ]
   },
   {
@@ -126,10 +126,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_0844_syntetic_foam.png",
-    "deeptex_shared_vs_split_0844_syntetic_foam_zoom.png",
-    "matup_shared_vs_split_0844_syntetic_foam.png",
-    "matup_shared_vs_split_0844_syntetic_foam_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_0844_syntetic_foam.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_0844_syntetic_foam_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_0844_syntetic_foam.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_0844_syntetic_foam_zoom.png"
    ]
   },
   {
@@ -170,10 +170,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_1587_cobblestones.png",
-    "deeptex_shared_vs_split_1587_cobblestones_zoom.png",
-    "matup_shared_vs_split_1587_cobblestones.png",
-    "matup_shared_vs_split_1587_cobblestones_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_1587_cobblestones.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_1587_cobblestones_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_1587_cobblestones.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_1587_cobblestones_zoom.png"
    ]
   },
   {
@@ -214,10 +214,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_2119_corten_steel.png",
-    "deeptex_shared_vs_split_2119_corten_steel_zoom.png",
-    "matup_shared_vs_split_2119_corten_steel.png",
-    "matup_shared_vs_split_2119_corten_steel_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_2119_corten_steel.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_2119_corten_steel_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_2119_corten_steel.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_2119_corten_steel_zoom.png"
    ]
   },
   {
@@ -258,10 +258,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_acg_concrete_026.png",
-    "deeptex_shared_vs_split_acg_concrete_026_zoom.png",
-    "matup_shared_vs_split_acg_concrete_026.png",
-    "matup_shared_vs_split_acg_concrete_026_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_acg_concrete_026.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_acg_concrete_026_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_acg_concrete_026.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_acg_concrete_026_zoom.png"
    ]
   },
   {
@@ -302,10 +302,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_acg_metal_026.png",
-    "deeptex_shared_vs_split_acg_metal_026_zoom.png",
-    "matup_shared_vs_split_acg_metal_026.png",
-    "matup_shared_vs_split_acg_metal_026_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_acg_metal_026.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_acg_metal_026_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_acg_metal_026.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_acg_metal_026_zoom.png"
    ]
   },
   {
@@ -346,10 +346,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_acg_plastic_009.png",
-    "deeptex_shared_vs_split_acg_plastic_009_zoom.png",
-    "matup_shared_vs_split_acg_plastic_009.png",
-    "matup_shared_vs_split_acg_plastic_009_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_acg_plastic_009.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_acg_plastic_009_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_acg_plastic_009.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_acg_plastic_009_zoom.png"
    ]
   },
   {
@@ -390,10 +390,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_acg_roofing_tiles_006.png",
-    "deeptex_shared_vs_split_acg_roofing_tiles_006_zoom.png",
-    "matup_shared_vs_split_acg_roofing_tiles_006.png",
-    "matup_shared_vs_split_acg_roofing_tiles_006_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_acg_roofing_tiles_006.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_acg_roofing_tiles_006_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_acg_roofing_tiles_006.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_acg_roofing_tiles_006_zoom.png"
    ]
   },
   {
@@ -434,10 +434,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_acg_wood_floor_060.png",
-    "deeptex_shared_vs_split_acg_wood_floor_060_zoom.png",
-    "matup_shared_vs_split_acg_wood_floor_060.png",
-    "matup_shared_vs_split_acg_wood_floor_060_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_acg_wood_floor_060.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_acg_wood_floor_060_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_acg_wood_floor_060.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_acg_wood_floor_060_zoom.png"
    ]
   },
   {
@@ -478,10 +478,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_tc_metal_029.png",
-    "deeptex_shared_vs_split_tc_metal_029_zoom.png",
-    "matup_shared_vs_split_tc_metal_029.png",
-    "matup_shared_vs_split_tc_metal_029_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_tc_metal_029.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_tc_metal_029_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_tc_metal_029.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_tc_metal_029_zoom.png"
    ]
   },
   {
@@ -522,10 +522,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_th_brick_wall_005.png",
-    "deeptex_shared_vs_split_th_brick_wall_005_zoom.png",
-    "matup_shared_vs_split_th_brick_wall_005.png",
-    "matup_shared_vs_split_th_brick_wall_005_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_th_brick_wall_005.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_th_brick_wall_005_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_th_brick_wall_005.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_th_brick_wall_005_zoom.png"
    ]
   },
   {
@@ -566,10 +566,10 @@
     "rule": "busiest GT EVAL render window"
    },
    "files": [
-    "deeptex_shared_vs_split_th_brown_mud_leaves_001.png",
-    "deeptex_shared_vs_split_th_brown_mud_leaves_001_zoom.png",
-    "matup_shared_vs_split_th_brown_mud_leaves_001.png",
-    "matup_shared_vs_split_th_brown_mud_leaves_001_zoom.png"
+    "deeptex_shared_vs_split/material/deeptex_shared_vs_split_th_brown_mud_leaves_001.png",
+    "deeptex_shared_vs_split/zoom/deeptex_shared_vs_split_th_brown_mud_leaves_001_zoom.png",
+    "matup_shared_vs_split/material/matup_shared_vs_split_th_brown_mud_leaves_001.png",
+    "matup_shared_vs_split/zoom/matup_shared_vs_split_th_brown_mud_leaves_001_zoom.png"
    ]
   }
  ]

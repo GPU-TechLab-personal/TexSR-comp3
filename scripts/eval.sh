@@ -8,9 +8,11 @@
 #                                              a missing checkpoint is skipped with a warning.
 #                                              ARGS go to infer_deeptex.py, e.g. --step 30000 (split arms
 #                                              at that checkpoint, shared at its latest; use NAME step30k)
-#   bash scripts/eval.sh montage [NAME] [ARGS] every arm vs GT as pictures -> runs/eval/<NAME>/montage/
-#                                              (matup container, detached; needs infer, not score);
-#                                              ARGS go to montage.py, e.g. --seeds 0,1,2 --zoom 64 --zoom-at 200,120
+#   bash scripts/eval.sh montage [NAME] [ARGS] every arm vs GT as pictures -> runs/eval/<NAME>/montage/<exp>/
+#                                              {material,zoom,overview}/ (matup container, detached; needs
+#                                              infer, not score); ARGS go to montage.py, e.g. --seeds 0,1,2
+#   bash scripts/eval.sh tidy                  move flat montage/<exp>_*.png sheets (older montage.py) into
+#                                              montage/<exp>/{material,zoom,overview}/ in every runs/eval/*/ (no redraw)
 #   bash scripts/eval.sh score [NAME] [ARGS]   bilinear + MatUp + every metric -> runs/eval/<NAME>/{report.json,summary.md}
 #                                              (matup container, detached); ARGS go to evaluate.py, e.g. --no-perceptual
 #   bash scripts/eval.sh status                what is running, log tails, what each stage has written
@@ -27,6 +29,7 @@ export MSYS_NO_PATHCONV=1
 REPO=$(cd "$(dirname "$0")/.." && pwd)
 cd "$REPO"
 LOGS=runs/logs
+EXPERIMENTS="deeptex_shared_vs_split matup_shared_vs_split"   # montage.py EXPERIMENTS
 mkdir -p "$LOGS" runs/cache/nv runs/cache/torch
 if docker compose version >/dev/null 2>&1; then DC="docker compose"; else DC="docker-compose"; fi
 
@@ -66,6 +69,26 @@ case "$STAGE" in
     # LPIPS's AlexNet weights are downloaded once into runs/cache/torch (TORCH_HOME).
     detached score matup "export TORCH_HOME=/workspace/runs/cache/torch; \
             python /workspace/variants/eval/evaluate.py --name $NAME$EXTRA" ;;
+  tidy)
+    for d in runs/eval/*/montage; do
+      [ -d "$d" ] || continue
+      moved=0
+      for f in "$d"/*.png; do
+        [ -f "$f" ] || continue
+        b=$(basename "$f")
+        for e in $EXPERIMENTS; do
+          case "$b" in
+            "${e}"_overview_*.png) k=overview ;;
+            "${e}"_*_zoom.png) k=zoom ;;
+            "${e}"_*.png) k=material ;;
+            *) continue ;;
+          esac
+          mkdir -p "$d/$e/$k" && mv -f "$f" "$d/$e/$k/$b" && moved=$((moved + 1))
+          break
+        done
+      done
+      echo "$d: $moved sheet(s) moved into <exp>/{material,zoom,overview}/"
+    done ;;
   stop)
     # `stop infer` parses "infer" as NAME above
     docker stop "eval_${NAME:?}" ;;
@@ -82,10 +105,13 @@ case "$STAGE" in
       for a in "$d"maps/*/; do
         [ -d "$a" ] && echo "   maps $(basename "$a"): $(ls -d "$a"*/ 2>/dev/null | wc -l) material(s)"
       done
-      for e in deeptex_shared_vs_split matup_shared_vs_split; do
-        [ -d "$d/montage" ] && n=$(ls "$d"montage/${e}_*_zoom.png 2>/dev/null | wc -l) && [ "$n" -gt 0 ] && \
-          echo "   montage $e: $n material(s), $(ls "$d"montage/${e}_overview_*.png 2>/dev/null | wc -l) overview(s)"
+      for e in $EXPERIMENTS; do
+        m="$d"montage/$e
+        [ -d "$m" ] && n=$(ls "$m"/material/*.png 2>/dev/null | wc -l) && [ "$n" -gt 0 ] && \
+          echo "   montage $e: $n material(s), $(ls "$m"/zoom/*.png 2>/dev/null | wc -l) zoom, $(ls "$m"/overview/*.png 2>/dev/null | wc -l) overview(s)"
       done
+      n=$(ls "$d"montage/*_shared_vs_split_*.png 2>/dev/null | wc -l)
+      [ "$n" -gt 0 ] && echo "   montage: $n flat sheet(s) of an older montage.py - bash scripts/eval.sh tidy"
       [ -f "$d/summary.md" ] && echo "   summary.md $(date -r "$d/summary.md" +%FT%T)"
     done
     for a in deeptex_split_nb23 deeptex_split_nb7 deeptex_split_nb7_b8 deeptex_split_nb23_rmgrey deeptex_split_nb7_rmgrey; do
@@ -97,5 +123,5 @@ case "$STAGE" in
     done
     nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu,temperature.gpu --format=csv,noheader ;;
   *)
-    sed -n '2,23p' "$0"; exit 1 ;;
+    sed -n '2,25p' "$0"; exit 1 ;;
 esac

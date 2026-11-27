@@ -123,13 +123,16 @@ bash scripts/matup_split.sh stop optim
 bash scripts/eval.sh infer
 
 # 6-2 몽타주 - 육안 비교 (6-1 다음, score 없이 가능. 백그라운드, 몇 분)
-#     실험마다 따로, 파일 이름 앞에 실험 이름 (runs/eval/main/montage/):
-#       deeptex_shared_vs_split_*   행: GT | bilinear | DeepTex 공유(renloss_21) / 분할 nb23 / 분할 nb7
-#       matup_shared_vs_split_*     행: GT | bilinear | MatUp 공유 MLP s0 / 분할 MLP s0
-#     <실험>_<재질>.png           열: baseColor normal roughness metallic | 렌더 EVAL / grazing | |렌더-GT| x4 (+PSNR)
-#     <실험>_<재질>_zoom.png      노란 박스 영역(디테일이 가장 많은 96x96 texel)을 확대한 것
-#     <실험>_overview_<맵>.png    재질 12개 x arm 한 장 (baseColor/normal/roughness/metallic/render/error)
+#     실험별 폴더 안에 종류별 폴더 (runs/eval/<이름>/montage/<실험>/...). 파일 이름 앞에도 실험 이름:
+#       deeptex_shared_vs_split/    행: GT | bilinear | DeepTex 공유(renloss_21) / 분할 arm 전부
+#       matup_shared_vs_split/      행: GT | bilinear | MatUp 공유 MLP s0 / 분할 MLP s0
+#     overview/<실험>_overview_<맵>.png  재질 12개 x arm 한 장 (baseColor/normal/roughness/metallic/render/error)
+#                                         -> 먼저 이것부터 보기
+#     material/<실험>_<재질>.png         열: baseColor normal roughness metallic | 렌더 EVAL / grazing | |렌더-GT| x4 (+PSNR)
+#     zoom/<실험>_<재질>_zoom.png        노란 박스 영역(디테일이 가장 많은 96x96 texel)을 확대한 것
 bash scripts/eval.sh montage
+#     예전 montage.py로 그린 평평한 파일(montage/<실험>_*.png)은 다시 그리지 않고 폴더로 옮기기:
+#       bash scripts/eval.sh tidy
 #     MatUp seed 전부: bash scripts/eval.sh montage main --seeds 0,1,2
 #     줌 위치 직접 지정 (crop 좌표 y,x): bash scripts/eval.sh montage main --zoom 64 --zoom-at 200,120 --material <재질>
 

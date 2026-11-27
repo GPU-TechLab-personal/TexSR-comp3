@@ -39,20 +39,24 @@ EXPERIMENTS  one set of sheets each, the experiment in every file name (<exp>):
   out of that material's sheets (--keep-missing draws an n/a row instead). An
   experiment with no arm at all writes nothing.
 
-OUTPUTS  <eval-root>/<name>/montage/
-  <exp>_<material>.png        the whole crop; the zoom window outlined in yellow
-  <exp>_<material>_zoom.png   the same rows and columns on the zoom window, texels
+OUTPUTS  <eval-root>/<name>/montage/<exp>/{material,zoom,overview}/, one folder per
+         experiment and per kind of sheet; every file name still starts with <exp>
+  material/<exp>_<material>.png        the whole crop; the zoom window outlined in yellow
+  zoom/<exp>_<material>_zoom.png       the same rows and columns on the zoom window, texels
                               enlarged (nearest). Window: --zoom texels square, at
                               --zoom-at y,x (top-left, crop coordinates) or, by
                               default, where the GT EVAL_LIGHT render has the most
                               |grad| (sheets.busiest_window); the same for both
                               experiments.
-  <exp>_overview_<key>.png    materials down, rows across, for key in baseColor,
+  overview/<exp>_overview_<key>.png    materials down, rows across, for key in baseColor,
                               normal, roughness, metallic, render (EVAL_LIGHT), error
-  montage.json                per material: border, crop, zoom window, sources, EVAL
-                              PSNR (whole crop) per row, missing rows, files
-  The first version's names (<material>.png, <material>_zoom.png, overview_<key>.png)
-  are removed when their replacements are written.
+  montage.json (in montage/)  per material: border, crop, zoom window, sources, EVAL
+                              PSNR (whole crop) per row, missing rows, files (relative
+                              to montage/)
+  Earlier layouts' files are removed when their replacements are written: the flat
+  montage/<exp>_*.png of the second version and the first version's <material>.png,
+  <material>_zoom.png, overview_<key>.png. scripts/eval.sh tidy moves flat sheets
+  into the folders without redrawing them.
 """
 import argparse
 import glob
@@ -228,6 +232,14 @@ def remove_if(path):
         os.remove(path)
 
 
+def sheet_path(out, prefix, kind, fname):
+    """montage/<exp>/<kind>/<fname>; removes the flat montage/<fname> it replaces."""
+    d = os.path.join(out, prefix, kind)
+    os.makedirs(d, exist_ok=True)
+    remove_if(os.path.join(out, fname))
+    return os.path.join(d, fname)
+
+
 def write_material(out, info, rows, mask_hw, args):
     """One full and one zoom sheet per experiment that has a row for this material;
     returns {row key: row} for the overviews."""
@@ -268,13 +280,13 @@ def write_material(out, info, rows, mask_hw, args):
         for c in full_rows[0][2][:6]:                 # the GT row: where the zoom is
             S.draw_box(c, box, side)
         f_full, f_zoom = "%s_%s.png" % (prefix, name), "%s_%s_zoom.png" % (prefix, name)
-        S.write_png(os.path.join(out, f_full),
+        S.write_png(sheet_path(out, prefix, "material", f_full),
                     S.sheet("%s  -  %s  -  %s" % (title, name, args.name), notes, HEADS,
                             full_rows, args.cell))
-        S.write_png(os.path.join(out, f_zoom),
+        S.write_png(sheet_path(out, prefix, "zoom", f_zoom),
                     S.sheet("%s  -  %s  -  zoom  -  %s" % (title, name, args.name), znotes,
                             HEADS, sheet_rows(sel, args.zoom_cell, box), args.zoom_cell))
-        info["files"] += [f_full, f_zoom]
+        info["files"] += ["%s/material/%s" % (prefix, f_full), "%s/zoom/%s" % (prefix, f_zoom)]
     return {r["key"]: r for r in present}
 
 
@@ -309,10 +321,11 @@ def main():
     ap.add_argument("--matup-root", default=A.MATUP_RUNS)
     ap.add_argument("--seeds", default="0", help="MatUp seed indices k shown (default 0)")
     ap.add_argument("--material", default="", help="one material (default: all)")
-    ap.add_argument("--cell", type=int, default=256, help="cell size of <exp>_<material>.png")
+    ap.add_argument("--cell", type=int, default=256,
+                    help="cell size of material/<exp>_<material>.png")
     ap.add_argument("--zoom", type=int, default=96, help="zoom window, texels square")
     ap.add_argument("--zoom-cell", type=int, default=288,
-                    help="cell size of <exp>_<material>_zoom.png")
+                    help="cell size of zoom/<exp>_<material>_zoom.png")
     ap.add_argument("--zoom-at", default="", help="y,x top-left of the zoom window (crop coords)")
     ap.add_argument("--ov-cell", type=int, default=160, help="cell size of the overviews")
     ap.add_argument("--no-overview", action="store_true")
@@ -371,7 +384,7 @@ def main():
                         "error": "|render - GT| x%g EVAL_LIGHT, EVAL PSNR" % S.HEAT_GAIN
                         }.get(k, k)
                 rows_k = [(mat, [cells[i] for i in idx]) for mat, cells in ov[k]]
-                S.write_png(os.path.join(out, "%s_overview_%s.png" % (prefix, k)),
+                S.write_png(sheet_path(out, prefix, "overview", "%s_overview_%s.png" % (prefix, k)),
                             S.overview("%s  -  %s  -  %s  -  %d materials" % (
                                 title, what, args.name, len(rows_k)),
                                 rows_k, [heads[i] for i in idx], [groups[i] for i in idx],
